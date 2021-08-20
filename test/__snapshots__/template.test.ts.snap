@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`template empty 1`] = `
+Object {
+  "components": Set {},
+  "identifiers": Set {},
+}
+`;
+
+exports[`template expressions 1`] = `
+Object {
+  "components": Set {
+    "HelloWorld",
+  },
+  "identifiers": Set {
+    "foo",
+    "bar",
+    "foobar",
+  },
+}
+`;
+
+exports[`template ref 1`] = `
+Object {
+  "components": Set {},
+  "identifiers": Set {
+    "foo",
+  },
+}
+`;
+
+exports[`template v-bind 1`] = `
+Object {
+  "components": Set {},
+  "identifiers": Set {
+    "foo",
+    "bar",
+  },
+}
+`;
+
+exports[`template v-if 1`] = `
+Object {
+  "components": Set {},
+  "identifiers": Set {
+    "foo",
+  },
+}
+`;
+
+exports[`template v-on 1`] = `
+Object {
+  "components": Set {},
+  "identifiers": Set {
+    "foo",
+    "bar",
+  },
+}
+`;

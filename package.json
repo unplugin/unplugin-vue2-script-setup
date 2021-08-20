@@ -1,0 +1,65 @@
+{
+  "name": "vue2-script-setup-transform",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/antfu/vue2-script-setup-transform/issues"
+  },
+  "homepage": "https://github.com/antfu/vue2-script-setup-transform#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfu/vue2-script-setup-transform.git"
+  },
+  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublishOnly": "nr build",
+    "dev": "nr build --watch",
+    "start": "esno src/index.ts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --no-splitting",
+    "play": "npm -C playground run dev",
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "nr lint -- --fix",
+    "test": "jest",
+    "test:update": "jest -u"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.7.0",
+    "@antfu/ni": "^0.7.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.4.12",
+    "bumpp": "^6.0.6",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "esno": "^0.8.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.4",
+    "tsup": "^4.13.1",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.15.3",
+    "@babel/traverse": "^7.15.0",
+    "@babel/types": "^7.15.0",
+    "@vue/shared": "^3.2.4",
+    "estree-walker": "^3.0.0",
+    "htmlparser2": "^6.1.0",
+    "magic-string": "^0.25.7"
+  }
+}
