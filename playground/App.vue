@@ -24,3 +24,9 @@ function dec() {
 
 const decText = '<b>Dec</b>'
 </script>
+
+<script lang="ts">
+export default {
+  name: 'App'
+}
+</script>

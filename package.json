@@ -14,7 +14,6 @@
   "funding": "https://github.com/sponsors/antfu",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
-  "sideEffects": false,
   "bugs": {
     "url": "https://github.com/antfu/vue2-script-setup-transform/issues"
   },
@@ -54,11 +53,11 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/generator": "^7.15.0",
     "@babel/parser": "^7.15.3",
     "@babel/traverse": "^7.15.0",
-    "@babel/types": "^7.15.0",
     "@vue/shared": "^3.2.4",
-    "estree-walker": "^3.0.0",
     "htmlparser2": "^6.1.0",
     "magic-string": "^0.25.7"
   }

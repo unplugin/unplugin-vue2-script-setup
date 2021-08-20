@@ -1,24 +1,25 @@
 import MagicString from 'magic-string'
-import { parseScriptSetup, parseVueSFC } from './parse'
+import { transformScriptSetup, parseVueSFC } from './parse'
 
 export function transform(sfc: string) {
   const s = new MagicString(sfc)
   const result = parseVueSFC(sfc)
-  const script = parseScriptSetup(result)
+  const { code } = transformScriptSetup(result)
 
-  const full = [
-    '',
-    ...script.imports,
-    'const __sfc_main = {}',
-    `__sfc_main.setup = ${script.fn}`,
-    'export default __sfc_main',
-    '',
-  ].join('\n')
+  const attributes = {
+    ...result.script.attributes,
+    ...result.scriptSetup.attributes,
+  }
+  delete attributes.setup
+  const attr = Object.entries(attributes)
+    .map(([key, value]) => value ? `${key}="${value}"` : key)
+    .join(' ')
 
+  s.remove(result.script.start, result.script.end)
   s.overwrite(
-    result.scriptSetup.contentStart,
-    result.scriptSetup.contentEnd,
-    full,
+    result.scriptSetup.start,
+    result.scriptSetup.end,
+    `<script ${attr}>\n${code}\n</script>`,
   )
 
   return s.toString()

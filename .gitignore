@@ -79,3 +79,5 @@ dist
 
 # IDE
 .idea
+
+temp.ts

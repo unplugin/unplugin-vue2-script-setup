@@ -9,7 +9,7 @@ Bring `<script setup>` to Vue 2
 - [x] POC
 - [ ] Components registration
 - [ ] Compile time macros
-- [ ] Merge with normal scripts
+- [x] Merge with normal scripts
 
 ## Sponsors
 

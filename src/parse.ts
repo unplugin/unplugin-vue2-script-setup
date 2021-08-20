@@ -1,8 +1,9 @@
 import { Parser as HTMLParser } from 'htmlparser2'
+import { types } from '@babel/core'
 import { parse, ParserOptions, ParserPlugin } from '@babel/parser'
 import { isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import traverse from '@babel/traverse'
-import MagicString from 'magic-string'
+import generate from '@babel/generator'
 
 interface TagMeta {
   start: number
@@ -94,13 +95,13 @@ export function parseVueSFC(code: string): ParseResult {
         templateLevel -= 1
 
       if (inScriptSetup && name === 'script') {
-        scriptSetup.end = parser.endIndex!
+        scriptSetup.end = parser.endIndex! + 1
         scriptSetup.contentEnd = parser.startIndex
         scriptSetup.content = code.slice(scriptSetup.contentStart, scriptSetup.contentEnd)
         inScriptSetup = false
       }
       if (inScript && name === 'script') {
-        script.end = parser.endIndex!
+        script.end = parser.endIndex! + 1
         script.contentEnd = parser.startIndex
         script.content = code.slice(script.contentStart, script.contentEnd)
         inScript = false
@@ -138,9 +139,9 @@ export function getIdentifiersFromCode(code: string, identifiers = new Set<strin
   return identifiers
 }
 
-export function parseScriptSetup(result: ParseResult) {
-  const code = result.scriptSetup.content
-  const s = new MagicString(code)
+export function transformScriptSetup(result: ParseResult) {
+  if (result.scriptSetup.attributes.lang !== result.script.attributes.lang)
+    throw new SyntaxError('<script setup> language must be the same as <script>')
 
   const plugins: ParserPlugin[] = []
   if (result.scriptSetup.attributes.lang === 'ts')
@@ -151,32 +152,70 @@ export function parseScriptSetup(result: ParseResult) {
     plugins.push('typescript', 'jsx')
 
   const identifiers = new Set<string>()
-  const ast = parse(code, {
+  const scriptSetupAst = parse(result.scriptSetup.content, {
+    sourceType: 'module',
+    plugins,
+  })
+  const scriptAst = parse(result.script.content || 'export default {}', {
     sourceType: 'module',
     plugins,
   })
 
-  const imports: string[] = []
-
-  traverse(ast as any, {
+  traverse(scriptSetupAst as any, {
     Identifier(path) {
       identifiers.add(path.node.name)
-    },
-    ImportDeclaration(path) {
-      imports.push(code.slice(path.node.start!, path.node.end!))
-      s.remove(path.node.start!, path.node.end!)
     },
   })
 
   const returns = Array.from(identifiers).filter(i => result.template.identifiers.has(i))
 
-  s.prepend('() => {')
-  s.append(`\nreturn { ${returns.join(',')} }\n}`)
+  const imports = scriptSetupAst.program.body.filter(n => n.type === 'ImportDeclaration')
+  const body = scriptSetupAst.program.body.filter(n => n.type !== 'ImportDeclaration')
+  // TODO: apply macros
+  const returnStatement = types.returnStatement(
+    types.objectExpression(
+      returns.map((i) => {
+        const id = types.identifier(i)
+        return types.objectProperty(id, id, false, true)
+      }),
+    ),
+  )
+  const setup = types.arrowFunctionExpression([], types.blockStatement([
+    ...body,
+    returnStatement as any,
+  ]))
+
+  scriptAst.program.body.unshift(...imports)
+
+  // replace `export default` with a temproray variable
+  traverse(scriptAst as any, {
+    ExportDefaultDeclaration(path) {
+      const decl = path.node.declaration
+      path.replaceWith(
+        types.variableDeclaration('const', [
+          types.variableDeclarator(
+            types.identifier('__sfc_main'),
+            decl as any,
+          ),
+        ]),
+      )
+    },
+  })
+
+  // inject setup function
+  scriptAst.program.body.push(
+    types.expressionStatement(
+      types.assignmentExpression('=', types.memberExpression(types.identifier('__sfc_main'), types.identifier('setup')), setup),
+    ) as any,
+  )
+
+  // re-export
+  scriptAst.program.body.push(
+    types.exportDefaultDeclaration(types.identifier('__sfc_main')) as any,
+  )
 
   return {
-    imports,
-    returns,
-    ast,
-    fn: s.toString(),
+    ast: scriptAst,
+    code: generate(scriptAst as any).code,
   }
 }
