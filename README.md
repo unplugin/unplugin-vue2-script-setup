@@ -12,6 +12,7 @@ Bring `<script setup>` to Vue 2
 - [x] Merge with normal scripts
 - [x] Vite plugin
 - [x] Webpack plugin
+- [ ] Top-level await
 
 ## Sponsors
 

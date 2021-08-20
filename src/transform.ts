@@ -1,5 +1,6 @@
 import MagicString from 'magic-string'
-import { transformScriptSetup, parseVueSFC } from './parse'
+import { parseVueSFC } from './parse'
+import { transformScriptSetup } from './transformScriptSetup'
 
 export function transform(sfc: string, id?: string) {
   const s = new MagicString(sfc)
