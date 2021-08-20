@@ -10,6 +10,8 @@ Bring `<script setup>` to Vue 2
 - [x] Components registration
 - [ ] Compile time macros
 - [x] Merge with normal scripts
+- [x] Vite plugin
+- [x] Webpack plugin
 
 ## Sponsors
 

@@ -1,14 +1,14 @@
 import MagicString from 'magic-string'
 import { transformScriptSetup, parseVueSFC } from './parse'
 
-export function transform(sfc: string) {
+export function transform(sfc: string, id?: string) {
   const s = new MagicString(sfc)
-  const result = parseVueSFC(sfc)
+  const result = parseVueSFC(sfc, id)
   const { code } = transformScriptSetup(result)
 
   const attributes = {
-    ...result.script.attributes,
-    ...result.scriptSetup.attributes,
+    ...result.script.attrs,
+    ...result.scriptSetup.attrs,
   }
   delete attributes.setup
   const attr = Object.entries(attributes)
@@ -22,5 +22,8 @@ export function transform(sfc: string) {
     `<script ${attr}>\n${code}\n</script>`,
   )
 
-  return s.toString()
+  return {
+    code: s.toString(),
+    get map() { return s.generateMap() },
+  }
 }

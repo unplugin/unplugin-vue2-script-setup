@@ -16,6 +16,7 @@ interface TagMeta {
 }
 
 export interface ParseResult {
+  id?: string
   template: {
     components: Set<string>
     identifiers: Set<string>
@@ -24,7 +25,7 @@ export interface ParseResult {
   script: TagMeta
 }
 
-export function parseVueSFC(code: string): ParseResult {
+export function parseVueSFC(code: string, id?: string): ParseResult {
   const components = new Set<string>()
   const expressions = new Set<string>()
   const identifiers = new Set<string>()
@@ -125,6 +126,7 @@ export function parseVueSFC(code: string): ParseResult {
   expressions.forEach(exp => getIdentifiersFromCode(exp, identifiers))
 
   return {
+    id,
     template: {
       components,
       identifiers,
@@ -169,6 +171,7 @@ export function transformScriptSetup(result: ParseResult) {
     plugins,
   })
 
+  // get all identifiers in `<script setup>`
   traverse(scriptSetupAst as any, {
     Identifier(path) {
       identifiers.add(path.node.name)

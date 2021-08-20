@@ -9,6 +9,14 @@
     ".": {
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./vite-plugin": {
+      "require": "./dist/vite-plugin.js",
+      "import": "./dist/vite-plugin.mjs"
+    },
+    "./webpack-plugin": {
+      "require": "./dist/webpack-plugin.js",
+      "import": "./dist/webpack-plugin.mjs"
     }
   },
   "funding": "https://github.com/sponsors/antfu",
@@ -29,8 +37,7 @@
   "scripts": {
     "prepublishOnly": "nr build",
     "dev": "nr build --watch",
-    "start": "esno src/index.ts",
-    "build": "tsup src/index.ts --format cjs,esm --dts --no-splitting",
+    "build": "tsup src/index.ts src/vite-plugin.ts src/webpack-plugin.ts --format cjs,esm --dts --no-splitting",
     "play": "npm -C playground run dev",
     "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint \"{src,test}/**/*.ts\"",
@@ -50,7 +57,8 @@
     "jest": "^27.0.6",
     "ts-jest": "^27.0.4",
     "tsup": "^4.13.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "vite": "^2.5.0"
   },
   "dependencies": {
     "@babel/core": "^7.15.0",
@@ -59,6 +67,7 @@
     "@babel/traverse": "^7.15.0",
     "@vue/shared": "^3.2.4",
     "htmlparser2": "^6.1.0",
-    "magic-string": "^0.25.7"
+    "magic-string": "^0.25.7",
+    "unplugin": "^0.0.5"
   }
 }
