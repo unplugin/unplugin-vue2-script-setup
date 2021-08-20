@@ -1,7 +1,7 @@
 import { Parser as HTMLParser } from 'htmlparser2'
-import { types } from '@babel/core'
+import { types as t } from '@babel/core'
 import { parse, ParserOptions, ParserPlugin } from '@babel/parser'
-import { isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
+import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import traverse from '@babel/traverse'
 import generate from '@babel/generator'
 
@@ -11,7 +11,8 @@ interface TagMeta {
   contentStart: number
   contentEnd: number
   content: string
-  attributes: Record<string, string>
+  attrs: Record<string, string>
+  found: boolean
 }
 
 export interface ParseResult {
@@ -38,7 +39,8 @@ export function parseVueSFC(code: string): ParseResult {
     contentStart: 0,
     contentEnd: 0,
     content: '',
-    attributes: {},
+    attrs: {},
+    found: false,
   }
   const script: TagMeta = {
     start: 0,
@@ -46,7 +48,8 @@ export function parseVueSFC(code: string): ParseResult {
     contentStart: 0,
     contentEnd: 0,
     content: '',
-    attributes: {},
+    attrs: {},
+    found: false,
   }
 
   const parser = new HTMLParser({
@@ -56,7 +59,7 @@ export function parseVueSFC(code: string): ParseResult {
 
       if (templateLevel > 0) {
         if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
-          components.add(name)
+          components.add(capitalize(camelize(name)))
         Object.entries(attributes).forEach(([key, value]) => {
           if (!value)
             return
@@ -71,13 +74,15 @@ export function parseVueSFC(code: string): ParseResult {
           if ('setup' in attributes) {
             scriptSetup.start = parser.startIndex
             scriptSetup.contentStart = parser.endIndex! + 1
-            scriptSetup.attributes = attributes
+            scriptSetup.attrs = attributes
+            scriptSetup.found = true
             inScriptSetup = true
           }
           else {
             script.start = parser.startIndex
             script.contentStart = parser.endIndex! + 1
-            script.attributes = attributes
+            script.attrs = attributes
+            script.found = true
             inScript = true
           }
         }
@@ -140,16 +145,19 @@ export function getIdentifiersFromCode(code: string, identifiers = new Set<strin
 }
 
 export function transformScriptSetup(result: ParseResult) {
-  if (result.scriptSetup.attributes.lang !== result.script.attributes.lang)
+  if (result.script.found && result.scriptSetup.found && result.scriptSetup.attrs.lang !== result.script.attrs.lang)
     throw new SyntaxError('<script setup> language must be the same as <script>')
 
+  const lang = result.scriptSetup.attrs.lang || result.script.attrs.lang
   const plugins: ParserPlugin[] = []
-  if (result.scriptSetup.attributes.lang === 'ts')
+  if (lang === 'ts')
     plugins.push('typescript')
-  if (result.scriptSetup.attributes.lang === 'jsx')
+  else if (lang === 'jsx')
     plugins.push('jsx')
-  if (result.scriptSetup.attributes.lang === 'tsx')
+  else if (lang === 'tsx')
     plugins.push('typescript', 'jsx')
+  else if (lang !== 'js')
+    throw new SyntaxError(`Unsupported script language: ${lang}`)
 
   const identifiers = new Set<string>()
   const scriptSetupAst = parse(result.scriptSetup.content, {
@@ -168,33 +176,28 @@ export function transformScriptSetup(result: ParseResult) {
   })
 
   const returns = Array.from(identifiers).filter(i => result.template.identifiers.has(i))
+  const components = Array.from(identifiers).filter(i =>
+    result.template.components.has(i)
+    || result.template.components.has(camelize(i))
+    || result.template.components.has(capitalize(camelize(i))),
+  )
 
   const imports = scriptSetupAst.program.body.filter(n => n.type === 'ImportDeclaration')
-  const body = scriptSetupAst.program.body.filter(n => n.type !== 'ImportDeclaration')
+  const scriptSetupBody = scriptSetupAst.program.body.filter(n => n.type !== 'ImportDeclaration')
   // TODO: apply macros
-  const returnStatement = types.returnStatement(
-    types.objectExpression(
-      returns.map((i) => {
-        const id = types.identifier(i)
-        return types.objectProperty(id, id, false, true)
-      }),
-    ),
-  )
-  const setup = types.arrowFunctionExpression([], types.blockStatement([
-    ...body,
-    returnStatement as any,
-  ]))
 
+  // append `<script setup>` imports to `<script>`
   scriptAst.program.body.unshift(...imports)
 
   // replace `export default` with a temproray variable
+  // `const __sfc_main = { ... }`
   traverse(scriptAst as any, {
     ExportDefaultDeclaration(path) {
       const decl = path.node.declaration
       path.replaceWith(
-        types.variableDeclaration('const', [
-          types.variableDeclarator(
-            types.identifier('__sfc_main'),
+        t.variableDeclaration('const', [
+          t.variableDeclarator(
+            t.identifier('__sfc_main'),
             decl as any,
           ),
         ]),
@@ -203,15 +206,63 @@ export function transformScriptSetup(result: ParseResult) {
   })
 
   // inject setup function
-  scriptAst.program.body.push(
-    types.expressionStatement(
-      types.assignmentExpression('=', types.memberExpression(types.identifier('__sfc_main'), types.identifier('setup')), setup),
-    ) as any,
-  )
+  // `__sfc_main.setup = () => {}`
+  if (scriptSetupBody.length) {
+    const returnStatement = t.returnStatement(
+      t.objectExpression(
+        returns.map((i) => {
+          const id = t.identifier(i)
+          return t.objectProperty(id, id, false, true)
+        }),
+      ),
+    )
+
+    scriptAst.program.body.push(
+      t.expressionStatement(
+        t.assignmentExpression('=',
+          t.memberExpression(t.identifier('__sfc_main'), t.identifier('setup')),
+          t.arrowFunctionExpression([], t.blockStatement([
+            ...scriptSetupBody,
+            returnStatement as any,
+          ])),
+        ),
+      ) as any,
+    )
+  }
+
+  // inject components
+  // `__sfc_main.components = Object.assign({ ... }, __sfc_main.components)`
+  if (components.length) {
+    const componentsObject = t.objectExpression(
+      components.map((i) => {
+        const id = t.identifier(i)
+        return t.objectProperty(id, id, false, true)
+      }),
+    )
+
+    scriptAst.program.body.push(
+      t.expressionStatement(
+        t.assignmentExpression('=',
+          t.memberExpression(t.identifier('__sfc_main'), t.identifier('components')),
+          t.callExpression(
+            t.memberExpression(t.identifier('Object'), t.identifier('assign')),
+            [
+              componentsObject,
+              t.memberExpression(
+                t.identifier('__sfc_main'),
+                t.identifier('components'),
+              ),
+            ],
+          ),
+        ),
+      ) as any,
+    )
+  }
 
   // re-export
+  // `export default __sfc_main`
   scriptAst.program.body.push(
-    types.exportDefaultDeclaration(types.identifier('__sfc_main')) as any,
+    t.exportDefaultDeclaration(t.identifier('__sfc_main')) as any,
   )
 
   return {

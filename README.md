@@ -7,7 +7,7 @@ Bring `<script setup>` to Vue 2
 ## Status
 
 - [x] POC
-- [ ] Components registration
+- [x] Components registration
 - [ ] Compile time macros
 - [x] Merge with normal scripts
 
