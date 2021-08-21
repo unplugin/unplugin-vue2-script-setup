@@ -20,6 +20,8 @@ import VueComposisionAPI from '@vue/composition-api'
 Vue.use(VueComposisionAPI)
 ```
 
+See [`playground/`](./playground/) as an example.
+
 ###### Vite
 
 ```ts
@@ -89,7 +91,6 @@ const Vue2SFC = transform(`
 It's made possible by transforming the SFC back to normal `<script>` and let the Vue 2 SFC compiler handle the rest.
 
 </details>
-
 
 ## Sponsors
 
