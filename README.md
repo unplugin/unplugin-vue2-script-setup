@@ -38,6 +38,24 @@ export default defineConfig({
 })
 ```
 
+###### Nuxt
+
+```bash
+npm i @nuxtjs/composition-api
+```
+
+```ts
+// nuxt.config.js
+export default {
+  buildModules: [
+    '@nuxtjs/composition-api/module',
+    'vue2-script-setup-transform/nuxt',
+  ],
+}
+```
+
+See [`examples/nuxt`](./examples/nuxt).
+
 ###### Webpack
 
 ```ts

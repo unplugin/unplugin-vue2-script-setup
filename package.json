@@ -17,6 +17,10 @@
     "./webpack-plugin": {
       "require": "./dist/webpack-plugin.js",
       "import": "./dist/webpack-plugin.mjs"
+    },
+    "./nuxt": {
+      "require": "./dist/nuxt.js",
+      "import": "./dist/nuxt.mjs"
     }
   },
   "funding": "https://github.com/sponsors/antfu",
@@ -38,7 +42,7 @@
   "scripts": {
     "prepublishOnly": "nr build",
     "dev": "nr build --watch",
-    "build": "tsup src/index.ts src/vite-plugin.ts src/webpack-plugin.ts --format cjs,esm --dts --no-splitting",
+    "build": "rimraf dist && tsup src/index.ts src/vite-plugin.ts src/webpack-plugin.ts src/nuxt.ts --format cjs,esm --dts",
     "play": "npm -C playground run dev",
     "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint \"{src,test}/**/*.ts\"",
@@ -57,6 +61,7 @@
     "eslint-plugin-jest": "^24.4.0",
     "esno": "^0.9.1",
     "jest": "^27.0.6",
+    "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "tsup": "^4.14.0",
     "typescript": "^4.3.5",
@@ -71,6 +76,6 @@
     "@vue/shared": "^3.2.4",
     "htmlparser2": "^6.1.0",
     "magic-string": "^0.25.7",
-    "unplugin": "^0.0.5"
+    "unplugin": "^0.0.6"
   }
 }
