@@ -15,9 +15,9 @@ Install [`@vue/composition-api`](https://github.com/vuejs/composition-api) in yo
 
 ```ts
 import Vue from 'vue'
-import VueComposisionAPI from '@vue/composition-api'
+import VueCompositionAPI from '@vue/composition-api'
 
-Vue.use(VueComposisionAPI)
+Vue.use(VueCompositionAPI)
 ```
 
 See [`playground/`](./playground/) as an example.
