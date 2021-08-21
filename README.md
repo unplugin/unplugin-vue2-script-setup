@@ -112,7 +112,7 @@ npm i -D @vue/runtime-dom
 
 ###### ESLint
 
-If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
+If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: false` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
 
 ## Progress
 
