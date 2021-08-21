@@ -4,6 +4,7 @@ import { camelize, capitalize } from '@vue/shared'
 import traverse from '@babel/traverse'
 import generate from '@babel/generator'
 import { ParseResult } from './types'
+import { applyMacros } from './macros'
 
 export function transformScriptSetup(result: ParseResult) {
   if (result.script.found && result.scriptSetup.found && result.scriptSetup.attrs.lang !== result.script.attrs.lang)
@@ -30,7 +31,13 @@ export function transformScriptSetup(result: ParseResult) {
     plugins,
   })
 
+  const imports = scriptSetupAst.program.body.filter(n => n.type === 'ImportDeclaration')
+  const nodes = scriptSetupAst.program.body.filter(n => n.type !== 'ImportDeclaration')
+
+  const { nodes: scriptSetupBody, props } = applyMacros(nodes)
+
   // get all identifiers in `<script setup>`
+  scriptSetupAst.program.body = [...imports, ...nodes]
   traverse(scriptSetupAst as any, {
     Identifier(path) {
       identifiers.add(path.node.name)
@@ -43,8 +50,6 @@ export function transformScriptSetup(result: ParseResult) {
     || result.template.components.has(capitalize(camelize(i))),
   )
 
-  const imports = scriptSetupAst.program.body.filter(n => n.type === 'ImportDeclaration')
-  const scriptSetupBody = scriptSetupAst.program.body.filter(n => n.type !== 'ImportDeclaration')
   // TODO: apply macros
   // append `<script setup>` imports to `<script>`
   scriptAst.program.body.unshift(...imports)
@@ -67,9 +72,22 @@ export function transformScriptSetup(result: ParseResult) {
     },
   })
 
+  // inject props function
+  // `__sfc_main.props = { ... }`
+  if (props) {
+    scriptAst.program.body.push(
+      t.expressionStatement(
+        t.assignmentExpression('=',
+          t.memberExpression(__sfc, t.identifier('props')),
+          props as any,
+        ),
+      ) as any,
+    )
+  }
+
   // inject setup function
   // `__sfc_main.setup = () => {}`
-  if (scriptSetupBody.length) {
+  if (nodes.length) {
     const returnStatement = t.returnStatement(
       t.objectExpression(
         returns.map((i) => {
@@ -83,7 +101,10 @@ export function transformScriptSetup(result: ParseResult) {
       t.expressionStatement(
         t.assignmentExpression('=',
           t.memberExpression(__sfc, t.identifier('setup')),
-          t.arrowFunctionExpression([], t.blockStatement([
+          t.arrowFunctionExpression([
+            t.identifier('__props'),
+            t.identifier('__ctx'),
+          ], t.blockStatement([
             ...scriptSetupBody,
             returnStatement as any,
           ])),

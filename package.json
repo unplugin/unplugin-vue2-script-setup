@@ -65,6 +65,7 @@
     "@babel/generator": "^7.15.0",
     "@babel/parser": "^7.15.3",
     "@babel/traverse": "^7.15.0",
+    "@babel/types": "^7.15.0",
     "@vue/shared": "^3.2.4",
     "htmlparser2": "^6.1.0",
     "magic-string": "^0.25.7",

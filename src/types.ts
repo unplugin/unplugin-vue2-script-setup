@@ -17,3 +17,9 @@ export interface ParseResult {
   scriptSetup: TagMeta
   script: TagMeta
 }
+
+export interface PropTypeData {
+  key: string
+  type: string[]
+  required: boolean
+}

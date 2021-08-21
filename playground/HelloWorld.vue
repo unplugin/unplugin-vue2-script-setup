@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>{{msg}}</h3>
     <button @click="inc">
       Inc
     </button>
@@ -10,6 +11,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from '@vue/composition-api'
+
+const props = defineProps({
+  msg: {
+    type: String,
+  },
+})
+
+const emit = defineEmits()
 
 const count = ref(0)
 const doubled = computed(() => count.value * 2)

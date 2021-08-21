@@ -13,6 +13,7 @@ Bring `<script setup>` to Vue 2
 - [x] Vite plugin
 - [x] Webpack plugin
 - [ ] Top-level await
+- [ ] Global types
 
 ## Sponsors
 
