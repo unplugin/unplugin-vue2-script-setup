@@ -86,15 +86,32 @@ const Vue2SFC = transform(`
 `)
 ```
 
+## IDE
+
+We recommend using [VS Code](https://code.visualstudio.com/) with [Volar](https://github.com/johnsoncodehk/volar) to get the best experience (You might want to disable Vetur if you have it).
+
+When using Volar, you will need to install `@vue/runtime-dom` as devDependencies to make it work on Vue 2.
+
+```bash
+npm i -D @vue/runtime-dom
+```
+
+[Learn more](https://github.com/johnsoncodehk/volar#using)
+
+###### ESLint
+
+If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
+
 ## Status
 
-- [x] POC
+- [x] PoC
 - [x] Components registration
 - [x] Compile time macros `defineProps` `defineEmits` `withDefaults`
+- [x] Global types
 - [x] Merge with normal scripts
 - [x] Vite plugin
 - [x] Webpack plugin
-- [x] Global types
+- [x] Nuxt module
 - [ ] Top-level await
 
 ## How?

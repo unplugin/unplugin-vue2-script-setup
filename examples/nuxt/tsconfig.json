@@ -10,6 +10,7 @@
     ],
     "esModuleInterop": true,
     "allowJs": true,
+    "noUnusedLocals": true,
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
