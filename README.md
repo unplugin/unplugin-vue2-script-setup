@@ -11,7 +11,7 @@ npm i -D vue2-script-setup-transform
 npm i @vue/composition-api
 ```
 
-Install [`@vue/composition-api`](https://github.com/vuejs/composition-api) in your App's entry (this enables the `setup()` hook).
+Install [`@vue/composition-api`](https://github.com/vuejs/composition-api) in your App's entry (it enables the `setup()` hook):
 
 ```ts
 import Vue from 'vue'
@@ -20,9 +20,8 @@ import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueCompositionAPI)
 ```
 
--------
-
-###### Vite
+<details>
+<summary>Vite</summary><br>
 
 ```ts
 // vite.config.ts
@@ -40,9 +39,10 @@ export default defineConfig({
 
 Example: [`playground/`](./playground/)
 
--------
+</details>
 
-###### Nuxt
+<details>
+<summary>Nuxt</summary><br>
 
 ```bash
 npm i @nuxtjs/composition-api
@@ -60,9 +60,10 @@ export default {
 
 Example: [`examples/nuxt`](./examples/nuxt)
 
--------
+</details>
 
-###### Webpack
+<details>
+<summary>Webpack</summary><br>
 
 ```ts
 // webpack.config.js
@@ -76,9 +77,10 @@ module.exports = {
 }
 ```
 
--------
+</details>
 
-###### JavaScript API
+<details>
+<summary>JavaScript API</summary><br>
 
 ```ts
 import { transform } from 'vue2-script-setup-transform'
@@ -93,6 +95,8 @@ const Vue2SFC = transform(`
 </script>
 `)
 ```
+
+</details>
 
 ## IDE
 
@@ -110,7 +114,7 @@ npm i -D @vue/runtime-dom
 
 If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
 
-## Status
+## Progress
 
 - [x] PoC
 - [x] Components registration
@@ -131,7 +135,7 @@ If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warni
 
 ![image](https://user-images.githubusercontent.com/11247099/130307245-20f9342e-377b-4565-b55d-1b91741b5c0f.png)
 
-It's made possible by transforming the SFC back to normal `<script>` and let the Vue 2 SFC compiler handle the rest.
+It's made possible by transforming the `<script setup>` syntax back to normal `<script>` and let the Vue 2 SFC compiler handle the rest.
 
 </details>
 
