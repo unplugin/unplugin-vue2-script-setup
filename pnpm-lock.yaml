@@ -13,6 +13,7 @@ importers:
       '@babel/types': ^7.15.0
       '@types/jest': ^26.0.24
       '@types/node': ^16.4.12
+      '@vue/composition-api': ^1.1.1
       '@vue/shared': ^3.2.4
       bumpp: ^6.0.6
       eslint: ^7.32.0
@@ -41,6 +42,7 @@ importers:
       '@antfu/ni': 0.7.0
       '@types/jest': 26.0.24
       '@types/node': 16.4.12
+      '@vue/composition-api': 1.1.1
       bumpp: 6.0.6
       eslint: 7.32.0
       eslint-plugin-jest: 24.4.0_eslint@7.32.0+typescript@4.3.5
@@ -1445,6 +1447,14 @@ packages:
       vue-template-es2015-compiler: 1.9.1
     optionalDependencies:
       prettier: 1.19.1
+    dev: true
+
+  /@vue/composition-api/1.1.1:
+    resolution: {integrity: sha512-LduQZICuBuwij541PgLsuxY/W/TA51xkSy2mBrRgnwQuqvb9YHdFguc0TwWTCAFq/EiwHWqsCb/SDYMkf01tCA==}
+    peerDependencies:
+      vue: '>= 2.5 < 3'
+    dependencies:
+      tslib: 2.3.1
     dev: true
 
   /@vue/composition-api/1.1.1_vue@2.6.14:
@@ -5786,7 +5796,6 @@ packages:
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
-    dev: false
 
   /tsup/4.13.1_typescript@4.3.5:
     resolution: {integrity: sha512-OSJjTe8Kj+mm0gagg6Ory5vNm2NkQ11IfaDMjgGA3DDco0c2G5kObLkqmRDTmvFqw24mF2knfDMnq7vEuD5+7w==}
