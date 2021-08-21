@@ -13,7 +13,7 @@
 import { ref, computed, watch } from '@vue/composition-api'
 
 const props = withDefaults(defineProps<{ msg: string; name: string | number }>(), { msg: 'Hello' })
-const emit = defineEmits()
+const emit = defineEmits(['update'])
 
 const count = ref(0)
 const doubled = computed(() => count.value * 2)

@@ -74,8 +74,8 @@ const Vue2SFC = transform(`
 - [x] Merge with normal scripts
 - [x] Vite plugin
 - [x] Webpack plugin
+- [x] Global types
 - [ ] Top-level await
-- [ ] Global types
 
 ## Sponsors
 

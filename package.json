@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -32,7 +32,8 @@
   },
   "keywords": [],
   "files": [
-    "dist"
+    "dist",
+    "*.d.ts"
   ],
   "scripts": {
     "prepublishOnly": "nr build",
