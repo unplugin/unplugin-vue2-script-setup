@@ -20,7 +20,7 @@ import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueCompositionAPI)
 ```
 
-See [`playground/`](./playground/) as an example.
+-------
 
 ###### Vite
 
@@ -38,6 +38,10 @@ export default defineConfig({
 })
 ```
 
+Example: [`playground/`](./playground/)
+
+-------
+
 ###### Nuxt
 
 ```bash
@@ -54,7 +58,9 @@ export default {
 }
 ```
 
-See [`examples/nuxt`](./examples/nuxt).
+Example: [`examples/nuxt`](./examples/nuxt)
+
+-------
 
 ###### Webpack
 
@@ -69,6 +75,8 @@ module.exports = {
   ]
 }
 ```
+
+-------
 
 ###### JavaScript API
 
