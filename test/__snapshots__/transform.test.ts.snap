@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transform App.vue 1`] = `
+"<template>
+  <div>
+    <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import HelloWorld from './HelloWorld.vue';
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  function onUpdate(e: any) {
+    console.log(e);
+  }
+
+  return {
+    onUpdate
+  };
+};
+
+__sfc_main.components = Object.assign({
+  HelloWorld
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform HelloWorld.vue 1`] = `
+"<template>
+  <div>
+    <h3>{{ msg }}, {{ name }}</h3>
+    <button @click=\\"inc\\">
+      Inc
+    </button>
+    <div>{{ count }} x 2 = {{ doubled }}</div>
+    <button @click=\\"dec()\\" v-html=\\"decText\\" />
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { ref, computed, watch } from '@vue/composition-api';
+const __sfc_main = {
+  name: 'App'
+};
+__sfc_main.props = {
+  msg: {
+    key: \\"msg\\",
+    required: false,
+    type: [String],
+    default: 'Hello'
+  },
+  name: {
+    key: \\"name\\",
+    required: true,
+    type: [String, Number]
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const props = __props;
+  const emit = __ctx.emit;
+  const count = ref(0);
+  const doubled = computed(() => count.value * 2);
+
+  function inc() {
+    count.value += 1;
+  }
+
+  function dec() {
+    count.value += 1;
+  }
+
+  const decText = '<b>Dec</b>';
+  watch(count, value => emit('update', value));
+  return {
+    count,
+    doubled,
+    inc,
+    dec,
+    decText
+  };
+};
+
+export default __sfc_main;
+</script>
+
+
+"
+`;

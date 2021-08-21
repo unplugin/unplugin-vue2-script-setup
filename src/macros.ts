@@ -1,26 +1,18 @@
+// modified from https://github.com/vuejs/vue-next/blob/main/packages/compiler-sfc/src/compileScript.ts
+
 import {
   Node,
-  Declaration,
-  ObjectPattern,
   ObjectExpression,
-  ArrayPattern,
-  Identifier,
-  ExportSpecifier,
-  Function as FunctionNode,
   TSType,
   TSTypeLiteral,
   TSFunctionType,
   ObjectProperty,
-  ArrayExpression,
   Statement,
   CallExpression,
-  RestElement,
   TSInterfaceBody,
-  AwaitExpression,
-  VariableDeclarator,
-  VariableDeclaration,
 } from '@babel/types'
 import { types as t } from '@babel/core'
+import { parseExpression } from '@babel/parser'
 import { PropTypeData } from './types'
 
 // Special compiler macros
@@ -32,12 +24,10 @@ const WITH_DEFAULTS = 'withDefaults'
 export function applyMacros(nodes: Statement[]) {
   let hasDefinePropsCall = false
   let hasDefineEmitCall = false
-  const hasDefineExposeCall = false
   let propsRuntimeDecl: Node | undefined
   let propsRuntimeDefaults: Node | undefined
   let propsTypeDecl: TSTypeLiteral | TSInterfaceBody | undefined
   let propsTypeDeclRaw: Node | undefined
-  let propsIdentifier: string | undefined
   let emitsRuntimeDecl: Node | undefined
   let emitsTypeDecl:
   | TSFunctionType
@@ -45,7 +35,11 @@ export function applyMacros(nodes: Statement[]) {
   | TSInterfaceBody
   | undefined
   let emitsTypeDeclRaw: Node | undefined
-  let emitIdentifier: string | undefined
+
+  // props/emits declared via types
+  const typeDeclaredProps: Record<string, PropTypeData> = {}
+  // record declared types for runtime props type generation
+  const declaredTypes: Record<string, string[]> = {}
 
   function error(
     msg: string,
@@ -196,58 +190,55 @@ export function applyMacros(nodes: Statement[]) {
     return false
   }
 
-  /* function genRuntimeProps(props: Record<string, PropTypeData>) {
+  function genRuntimeProps(props: Record<string, PropTypeData>) {
     const keys = Object.keys(props)
     if (!keys.length)
-      return ''
+      return undefined
 
     // check defaults. If the default object is an object literal with only
     // static properties, we can directly generate more optimzied default
     // decalrations. Otherwise we will have to fallback to runtime merging.
-    const hasStaticDefaults
-      = propsRuntimeDefaults
+    const hasStaticDefaults = propsRuntimeDefaults
       && propsRuntimeDefaults.type === 'ObjectExpression'
       && propsRuntimeDefaults.properties.every(
         node => node.type === 'ObjectProperty' && !node.computed,
       )
 
-    let propsDecls = `{
-    ${keys
-    .map((key) => {
-      let defaultString: string | undefined
-      if (hasStaticDefaults) {
-        const prop = (
-          propsRuntimeDefaults as ObjectExpression
-        ).properties.find(
-          (node: any) => node.key.name === key,
-        ) as ObjectProperty
-        if (prop) {
-          // prop has corresponding static default value
-          defaultString = `default: ${source.slice(
-            prop.value.start! + startOffset,
-            prop.value.end! + startOffset,
-          )}`
-        }
-      }
+    return t.objectExpression(
+      Object.entries(props).map(([key, value]) => {
+        const prop = hasStaticDefaults
+          ? (propsRuntimeDefaults as ObjectExpression).properties.find((node: any) => node.key.name === key) as ObjectProperty
+          : undefined
 
-      const { type, required } = props[key]
-      return `${key}: { type: ${toRuntimeTypeString(
-        type,
-      )}, required: ${required}${
-        defaultString ? `, ${defaultString}` : ''
-      } }`
-    })
-    .join(',\n    ')}\n  }`
+        if (prop)
+          value.required = false
 
-    if (propsRuntimeDefaults && !hasStaticDefaults) {
-      propsDecls = `${helper('mergeDefaults')}(${propsDecls}, ${source.slice(
-        propsRuntimeDefaults.start! + startOffset,
-        propsRuntimeDefaults.end! + startOffset,
-      )})`
+        const entries = Object.entries(value).map(([key, value]) =>
+          key === 'type'
+            ? t.objectProperty(t.identifier(key), t.arrayExpression(value.map((i: any) => t.identifier(i))) as any)
+            : t.objectProperty(t.identifier(key), parseExpression(JSON.stringify(value)) as any),
+        )
+
+        if (prop)
+          entries.push(t.objectProperty(t.identifier('default'), prop.value as any))
+
+        return t.objectProperty(
+          t.identifier(key),
+          t.objectExpression(entries),
+        )
+      }),
+    )
+  }
+
+  function getProps() {
+    if (propsRuntimeDecl)
+      return propsRuntimeDecl
+
+    if (propsTypeDecl) {
+      extractRuntimeProps(propsTypeDecl, typeDeclaredProps, declaredTypes)
+      return genRuntimeProps(typeDeclaredProps)
     }
-
-    return `\n  props: ${propsDecls} as unknown as undefined,`
-  } */
+  }
 
   nodes = nodes
     .map((node) => {
@@ -273,7 +264,7 @@ export function applyMacros(nodes: Statement[]) {
 
   return {
     nodes,
-    props: propsRuntimeDecl,
+    props: getProps(),
   }
 }
 
@@ -289,4 +280,116 @@ function isCallOf(
       ? node.callee.name === test
       : test(node.callee.name))
   )
+}
+
+function extractRuntimeProps(
+  node: TSTypeLiteral | TSInterfaceBody,
+  props: Record<string, PropTypeData>,
+  declaredTypes: Record<string, string[]>,
+) {
+  const members = node.type === 'TSTypeLiteral' ? node.members : node.body
+  for (const m of members) {
+    if (
+      (m.type === 'TSPropertySignature' || m.type === 'TSMethodSignature')
+      && m.key.type === 'Identifier'
+    ) {
+      let type
+      if (m.type === 'TSMethodSignature') {
+        type = ['Function']
+      }
+      else if (m.typeAnnotation) {
+        type = inferRuntimeType(
+          m.typeAnnotation.typeAnnotation,
+          declaredTypes,
+        )
+      }
+      props[m.key.name] = {
+        key: m.key.name,
+        required: !m.optional,
+        type: type || ['null'],
+      }
+    }
+  }
+}
+
+function inferRuntimeType(
+  node: TSType,
+  declaredTypes: Record<string, string[]>,
+): string[] {
+  switch (node.type) {
+    case 'TSStringKeyword':
+      return ['String']
+    case 'TSNumberKeyword':
+      return ['Number']
+    case 'TSBooleanKeyword':
+      return ['Boolean']
+    case 'TSObjectKeyword':
+      return ['Object']
+    case 'TSTypeLiteral':
+      // TODO (nice to have) generate runtime property validation
+      return ['Object']
+    case 'TSFunctionType':
+      return ['Function']
+    case 'TSArrayType':
+    case 'TSTupleType':
+      // TODO (nice to have) generate runtime element type/length checks
+      return ['Array']
+
+    case 'TSLiteralType':
+      switch (node.literal.type) {
+        case 'StringLiteral':
+          return ['String']
+        case 'BooleanLiteral':
+          return ['Boolean']
+        case 'NumericLiteral':
+        case 'BigIntLiteral':
+          return ['Number']
+        default:
+          return ['null']
+      }
+
+    case 'TSTypeReference':
+      if (node.typeName.type === 'Identifier') {
+        if (declaredTypes[node.typeName.name])
+          return declaredTypes[node.typeName.name]
+
+        switch (node.typeName.name) {
+          case 'Array':
+          case 'Function':
+          case 'Object':
+          case 'Set':
+          case 'Map':
+          case 'WeakSet':
+          case 'WeakMap':
+            return [node.typeName.name]
+          case 'Record':
+          case 'Partial':
+          case 'Readonly':
+          case 'Pick':
+          case 'Omit':
+          case 'Exclude':
+          case 'Extract':
+          case 'Required':
+          case 'InstanceType':
+            return ['Object']
+        }
+      }
+      return ['null']
+
+    case 'TSParenthesizedType':
+      return inferRuntimeType(node.typeAnnotation, declaredTypes)
+    case 'TSUnionType':
+      return [
+        ...new Set(
+          [].concat(
+            ...(node.types.map(t => inferRuntimeType(t, declaredTypes)) as any),
+          ),
+        ),
+      ]
+    case 'TSIntersectionType':
+      return ['Object']
+
+    default:
+      return ['null'] // no runtime check
+  }
 }

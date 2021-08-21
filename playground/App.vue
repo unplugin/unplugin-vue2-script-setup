@@ -1,9 +1,13 @@
 <template>
   <div>
-    <hello-world msg="Hi"/>
+    <hello-world name="Vue 2" @update="onUpdate" />
   </div>
 </template>
 
 <script setup lang="ts">
 import HelloWorld from './HelloWorld.vue'
+
+function onUpdate(e: any) {
+  console.log(e)
+}
 </script>
