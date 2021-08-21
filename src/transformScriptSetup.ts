@@ -10,7 +10,7 @@ export function transformScriptSetup(result: ParseResult) {
   if (result.script.found && result.scriptSetup.found && result.scriptSetup.attrs.lang !== result.script.attrs.lang)
     throw new SyntaxError('<script setup> language must be the same as <script>')
 
-  const lang = result.scriptSetup.attrs.lang || result.script.attrs.lang
+  const lang = result.scriptSetup.attrs.lang || result.script.attrs.lang || 'js'
   const plugins: ParserPlugin[] = []
   if (lang === 'ts')
     plugins.push('typescript')
