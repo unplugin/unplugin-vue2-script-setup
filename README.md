@@ -39,7 +39,7 @@ export default defineConfig({
 
 Example: [`playground/`](./playground/)
 
-</details>
+<br></details>
 
 <details>
 <summary>Nuxt</summary><br>
@@ -58,9 +58,11 @@ export default {
 }
 ```
 
+> This module works for both Nuxt 2 and [Nuxt Vite](https://github.com/nuxt/vite)
+
 Example: [`examples/nuxt`](./examples/nuxt)
 
-</details>
+<br></details>
 
 <details>
 <summary>Webpack</summary><br>
@@ -77,7 +79,7 @@ module.exports = {
 }
 ```
 
-</details>
+<br></details>
 
 <details>
 <summary>JavaScript API</summary><br>
@@ -96,7 +98,7 @@ const Vue2SFC = transform(`
 `)
 ```
 
-</details>
+<br></details>
 
 ## IDE
 
@@ -113,6 +115,10 @@ npm i -D @vue/runtime-dom
 ###### ESLint
 
 If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
+
+## Recommendations
+
+If you enjoy using `<script setup>`, you might also want to try [`vue-global-api`](https://github.com/antfu/vue-global-api) to improve the DX even further. 
 
 ## Progress
 
@@ -137,7 +143,7 @@ If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warni
 
 It's made possible by transforming the `<script setup>` syntax back to normal `<script>` and let the Vue 2 SFC compiler handle the rest.
 
-</details>
+<br></details>
 
 ## Sponsors
 
