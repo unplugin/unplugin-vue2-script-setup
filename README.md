@@ -77,6 +77,20 @@ const Vue2SFC = transform(`
 - [x] Global types
 - [ ] Top-level await
 
+## How?
+
+<details>
+  <summary>
+    👀
+  </summary>
+
+![image](https://user-images.githubusercontent.com/11247099/130307245-20f9342e-377b-4565-b55d-1b91741b5c0f.png)
+
+It's made possible by transforming the SFC back to normal `<script>` and let the Vue 2 SFC compiler handle the rest.
+
+</details>
+
+
 ## Sponsors
 
 <p align="center">
