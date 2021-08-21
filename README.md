@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/vue2-script-setup-transform?color=a1b858&label=)](https://www.npmjs.com/package/vue2-script-setup-transform)
 
-Bring `<script setup>` to Vue 2.
+Bring [`<script setup>`](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md) to Vue 2.
 
 ## Install
 
@@ -11,7 +11,7 @@ npm i -D vue2-script-setup-transform
 npm i @vue/composition-api
 ```
 
-Install `@vue/composition-api` in your App's entry:
+Install [`@vue/composition-api`](https://github.com/vuejs/composition-api) in your App's entry (this enables the `setup()` hook).
 
 ```ts
 import Vue from 'vue'
