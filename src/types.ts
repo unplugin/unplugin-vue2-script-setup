@@ -21,12 +21,6 @@ export interface ParsedSFC {
   script: ScriptTagMeta
 }
 
-export interface PropTypeData {
-  key: string
-  type: string[]
-  required: boolean
-}
-
 export interface ScriptSetupTransformOptions {
   astTransforms?: {
     script?: (ast: Program) => Program

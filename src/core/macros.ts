@@ -13,13 +13,18 @@ import {
 } from '@babel/types'
 import { types as t } from '@babel/core'
 import { parseExpression } from '@babel/parser'
-import { PropTypeData } from '../types'
 
 // Special compiler macros
 const DEFINE_PROPS = 'defineProps'
 const DEFINE_EMITS = 'defineEmits'
 const DEFINE_EXPOSE = 'defineExpose'
 const WITH_DEFAULTS = 'withDefaults'
+
+export interface PropTypeData {
+  key: string
+  type: string[]
+  required: boolean
+}
 
 export function applyMacros(nodes: Statement[]) {
   let hasDefinePropsCall = false
