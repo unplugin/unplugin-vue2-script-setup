@@ -252,6 +252,20 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform playground Bar.vue 1`] = `
+"<template>
+  <div>Bar</div>
+</template>
+"
+`;
+
+exports[`transform playground Foo.vue 1`] = `
+"<template>
+  <div>Foo</div>
+</template>
+"
+`;
+
 exports[`transform playground HelloWorld.vue 1`] = `
 "<template>
   <div>
@@ -261,11 +275,14 @@ exports[`transform playground HelloWorld.vue 1`] = `
     </button>
     <div>{{ count }} x 2 = {{ doubled }}</div>
     <button @click=\\"dec()\\" v-html=\\"decText\\" />
+    <component :is=\\"count > 2 ? Foo : Bar\\" />
   </div>
 </template>
 
 <script lang=\\"ts\\">
 import { ref, computed, watch } from '@vue/composition-api';
+import Foo from './Foo.vue';
+import Bar from './Bar.vue';
 const __sfc_main = {
   name: 'App'
 };
@@ -294,12 +311,14 @@ __sfc_main.setup = (__props, __ctx) => {
   }
 
   function dec() {
-    count.value += 1;
+    count.value -= 1;
   }
 
   const decText = '<b>Dec</b>';
   watch(count, value => emit('update', value));
   return {
+    Foo,
+    Bar,
     count,
     doubled,
     inc,
