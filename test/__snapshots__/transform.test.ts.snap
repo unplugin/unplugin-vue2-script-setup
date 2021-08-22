@@ -86,7 +86,7 @@ exports[`transform fixture VFor.vue 1`] = `
 "<template>
   <div>
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
-      {{ index }}: {{ item }}
+      {{ item }}
     </div>
   </div>
 </template>
@@ -108,6 +108,7 @@ __sfc_main.setup = (__props, __ctx) => {
     name: 'Item 4',
     value: 4
   }];
+  const index = 0;
   return {
     items
   };

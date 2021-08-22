@@ -44,8 +44,9 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
           if (!value)
             return
           if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
-            if (key === 'v-if')
-              expressions.add(`for (let ${value}) {}`)
+            if (key === 'v-for')
+              // we strip out delectations for v-for before `in` or `of`
+              expressions.add(`(${value.replace(/^.*?\w(?:in|of)\w/, '')})`)
             else
               expressions.add(`(${value})`)
           }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(item, index) in items" :key="item">
-      {{ index }}: {{ item }}
+      {{ item }}
     </div>
   </div>
 </template>
@@ -13,4 +13,6 @@ const items = [
   { name: 'Item 3', value: 3 },
   { name: 'Item 4', value: 4 },
 ]
+
+const index = 0
 </script>
