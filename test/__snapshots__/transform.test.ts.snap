@@ -22,6 +22,66 @@ export default __sfc_main;
 
 exports[`transform fixture Empty.vue 1`] = `""`;
 
+exports[`transform fixture Macros.vue 1`] = `
+"<template>
+  <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
+</template>
+
+<script >
+const __sfc_main = {};
+__sfc_main.props = {
+  msg: String
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const props = __props;
+  const emit = __ctx.emit;
+  return {
+    props,
+    emit
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture MacrosType.vue 1`] = `
+"<template>
+  <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+__sfc_main.props = {
+  msg: {
+    key: \\"msg\\",
+    required: false,
+    type: [String],
+    default: 'Hello'
+  },
+  value: {
+    key: \\"value\\",
+    required: true,
+    type: [Number]
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const props = __props;
+  const emit = __ctx.emit;
+  return {
+    props,
+    emit
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixture Object1.vue 1`] = `
 "<template>
   <div>
