@@ -10,10 +10,13 @@ describe('parse', () => {
       ['import * as foo from "z"', ['foo']],
       ['function foo(bar) {const a = z}', ['foo']],
       ['console.log(foo)', []],
-      ['const { data } = toRefs(state)', ['data']],
+      ['var { data } = toRefs(state)', ['data']],
       ['const { data, ...args } = bar', ['data', 'args']],
-      ['const { foo: bar } = bar', ['foo']],
+      ['const { foo: bar } = bar', ['bar']],
+      ['const { foo: { a, b: c, d: { e: [f] } } } = { bar }', ['a', 'c', 'f']],
       ['let [a, b,, ...c] = bar', ['a', 'b', 'c']],
+      ['let [a, b, [c, {d}],, ...e] = bar', ['a', 'b', 'c', 'd', 'e']],
+      ['class A extends B {}', ['A']],
     ]
 
     for (const [input, output] of cases) {
@@ -31,15 +34,19 @@ describe('parse', () => {
     const cases: [string, string[]][] = [
       ['foo', ['foo']],
       ['foo.bar', ['foo']],
-      ['foo(bar, console.log)', ['foo', 'bar', 'console']],
+      ['foo(bar, console.log, ...args)', ['foo', 'bar', 'console', 'args']],
+      ['foo(bar())', ['foo', 'bar']],
       ['for (let x in foo) {}', ['foo']],
       ['for (let [x, idx] of foo) {}', ['foo']],
       ['a + b', ['a', 'b']],
       ['a ? "" : b < c', ['a', 'b', 'c']],
-      ['a == b && a === c', ['a', 'b', 'c']],
-      ['({ a, b, ...args, [c]: 1 })', ['a', 'b', 'args', 'c']],
+      ['a == b && a === c || d != e', ['a', 'b', 'c', 'd', 'e']],
+      ['({ a, b, ...args, [c]: 1, d: e, f: { g } })', ['a', 'b', 'args', 'c', 'e', 'g']],
       ['!a', ['a']],
-      ['[a,b,...args]', ['a', 'b', 'args']],
+      ['!!c', ['c']],
+      ['[a,b,[c,{d}],...args]', ['a', 'b', 'c', 'd', 'args']],
+      ['new Foo(a,[b])', ['Foo', 'a', 'b']],
+      ['new RC.Foo()', ['RC']],
     ]
 
     for (const [input, output] of cases) {

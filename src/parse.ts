@@ -1,6 +1,6 @@
 import { Parser as HTMLParser } from 'htmlparser2'
 import { parse } from '@babel/parser'
-import { PrivateName, Expression, Statement, SpreadElement } from '@babel/types'
+import { PrivateName, Expression, Statement, SpreadElement, Node } from '@babel/types'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParseResult, TagMeta } from './types'
 
@@ -133,29 +133,38 @@ export function getIdentifiersDeclaration(nodes: Statement[], identifiers = new 
         identifiers.add(specifier.local.name)
     }
     else if (node.type === 'VariableDeclaration') {
-      for (const declarator of node.declarations) {
-        if (declarator.id.type === 'Identifier') {
-          identifiers.add(declarator.id.name)
+      function handleVariableId(node: Node) {
+        if (node.type === 'Identifier') {
+          identifiers.add(node.name)
         }
-        else if (declarator.id.type === 'ObjectPattern') {
-          for (const property of declarator.id.properties) {
-            if (property.type === 'ObjectProperty' && property.key.type === 'Identifier')
-              identifiers.add(property.key.name)
+        else if (node.type === 'ObjectPattern') {
+          for (const property of node.properties) {
+            if (property.type === 'ObjectProperty')
+              handleVariableId(property.value)
             else if (property.type === 'RestElement' && property.argument.type === 'Identifier')
               identifiers.add(property.argument.name)
           }
         }
-        else if (declarator.id.type === 'ArrayPattern') {
-          for (const element of declarator.id.elements) {
+        else if (node.type === 'ArrayPattern') {
+          for (const element of node.elements) {
             if (element?.type === 'Identifier')
               identifiers.add(element.name)
             else if (element?.type === 'RestElement' && element.argument.type === 'Identifier')
               identifiers.add(element.argument.name)
+            else if (element?.type === 'ObjectPattern' || element?.type === 'ArrayPattern')
+              handleVariableId(element)
           }
         }
       }
+
+      for (const declarator of node.declarations)
+        handleVariableId(declarator.id)
     }
     else if (node.type === 'FunctionDeclaration') {
+      if (node.id)
+        identifiers.add(node.id.name)
+    }
+    else if (node.type === 'ClassDeclaration') {
       if (node.id)
         identifiers.add(node.id.name)
     }
@@ -180,11 +189,9 @@ export function getIdentifiersUsage(node?: Expression | SpreadElement | PrivateN
     getIdentifiersUsage(node.object, identifiers)
   }
   else if (node.type === 'CallExpression') {
-    // @ts-expect-error
-    getIdentifiersUsage(node.callee, identifiers)
+    getIdentifiersUsage(node.callee as Expression, identifiers)
     node.arguments.forEach((arg) => {
-      // @ts-expect-error
-      getIdentifiersUsage(arg, identifiers)
+      getIdentifiersUsage(arg as Expression, identifiers)
     })
   }
   else if (node.type === 'BinaryExpression' || node.type === 'LogicalExpression') {
@@ -204,10 +211,14 @@ export function getIdentifiersUsage(node?: Expression | SpreadElement | PrivateN
   }
   else if (node.type === 'ObjectExpression') {
     node.properties.forEach((prop) => {
-      if (prop.type === 'ObjectProperty')
-        getIdentifiersUsage(prop.key, identifiers)
-      else if (prop.type === 'SpreadElement')
+      if (prop.type === 'ObjectProperty') {
+        if (prop.computed)
+          getIdentifiersUsage(prop.key, identifiers)
+        getIdentifiersUsage(prop.value as Expression, identifiers)
+      }
+      else if (prop.type === 'SpreadElement') {
         getIdentifiersUsage(prop, identifiers)
+      }
     })
   }
   else if (node.type === 'ArrayExpression') {
@@ -217,6 +228,12 @@ export function getIdentifiersUsage(node?: Expression | SpreadElement | PrivateN
   }
   else if (node.type === 'SpreadElement') {
     getIdentifiersUsage(node.argument, identifiers)
+  }
+  else if (node.type === 'NewExpression') {
+    getIdentifiersUsage(node.callee as Expression, identifiers)
+    node.arguments.forEach((arg) => {
+      getIdentifiersUsage(arg as Expression, identifiers)
+    })
   }
   // else {
   //   console.log(node)
