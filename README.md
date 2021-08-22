@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/vue2-script-setup-transform?color=a1b858&label=)](https://www.npmjs.com/package/vue2-script-setup-transform)
 
-Bring [`<script setup>`](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md) to Vue 2.
+Bring [`<script setup>`](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to Vue 2.
 
 ## Install
 
@@ -88,12 +88,10 @@ Example: [`examples/vue-cli`](./examples/vue-cli)
 
 ```ts
 // webpack.config.js
-import ScriptSetup from 'vue2-script-setup-transform/webpack-plugin'
-
 module.exports = {
   /* ... */
   plugins: [
-    ScriptSetup()
+    require('vue2-script-setup-transform/webpack-plugin').default()
   ]
 }
 ```
