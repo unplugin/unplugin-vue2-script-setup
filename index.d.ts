@@ -1,2 +1,2 @@
-import './global'
+import './shims'
 export * from './dist/index'

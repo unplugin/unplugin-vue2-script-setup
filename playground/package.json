@@ -8,7 +8,6 @@
     "vue": "^2.6.14"
   },
   "devDependencies": {
-    "@vue/reactivity": "^3.2.4",
     "vite": "^2.5.0",
     "vite-plugin-inspect": "^0.2.2",
     "vite-plugin-vue2": "^1.8.1",
