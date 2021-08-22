@@ -65,6 +65,25 @@ Example: [`examples/nuxt`](./examples/nuxt)
 <br></details>
 
 <details>
+<summary>Vue CLI</summary><br>
+
+```ts
+// vue.config.js
+
+module.exports = {
+  configureWebpack: {
+    plugins: [
+      require('vue2-script-setup-transform/webpack-plugin').default(),
+    ],
+  },
+}
+```
+
+Example: [`examples/vue-cli`](./examples/vue-cli)
+
+<br></details>
+
+<details>
 <summary>Webpack</summary><br>
 
 ```ts
