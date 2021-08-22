@@ -7,8 +7,13 @@ describe('parse', () => {
       ['var a = 1', ['a']],
       ['import { foo, t as bar } from "z"', ['foo', 'bar']],
       ['import foo from "z"', ['foo']],
+      ['import * as foo from "z"', ['foo']],
       ['function foo(bar) {const a = z}', ['foo']],
       ['console.log(foo)', []],
+      ['const { data } = toRefs(state)', ['data']],
+      ['const { data, ...args } = bar', ['data', 'args']],
+      ['const { foo: bar } = bar', ['foo']],
+      ['let [a, b,, ...c] = bar', ['a', 'b', 'c']],
     ]
 
     for (const [input, output] of cases) {
@@ -30,9 +35,11 @@ describe('parse', () => {
       ['for (let x in foo) {}', ['foo']],
       ['for (let [x, idx] of foo) {}', ['foo']],
       ['a + b', ['a', 'b']],
-      ['a ? "" : b', ['a', 'b']],
+      ['a ? "" : b < c', ['a', 'b', 'c']],
       ['a == b && a === c', ['a', 'b', 'c']],
-      ['({ a, b })', ['a', 'b']],
+      ['({ a, b, ...args, [c]: 1 })', ['a', 'b', 'args', 'c']],
+      ['!a', ['a']],
+      ['[a,b,...args]', ['a', 'b', 'args']],
     ]
 
     for (const [input, output] of cases) {

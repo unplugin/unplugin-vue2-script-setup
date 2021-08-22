@@ -46,6 +46,30 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixture ObjectDestructure.vue 1`] = `
+"<template>
+  <div></div>
+</template>
+
+<script >
+import { toRefs, reactive } from 'vue';
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const state = reactive({
+    data: 'hello'
+  });
+  const {
+    data
+  } = toRefs(state);
+  return {};
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixture TemplateOnly.vue 1`] = `
 "<template>
   <div>

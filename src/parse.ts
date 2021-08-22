@@ -1,6 +1,6 @@
 import { Parser as HTMLParser } from 'htmlparser2'
 import { parse } from '@babel/parser'
-import { PrivateName, Expression, Statement } from '@babel/types'
+import { PrivateName, Expression, Statement, SpreadElement } from '@babel/types'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParseResult, TagMeta } from './types'
 
@@ -34,6 +34,9 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
 
   const parser = new HTMLParser({
     onopentag(name, attributes) {
+      if (!name)
+        return
+
       if (name === 'template')
         templateLevel += 1
 
@@ -131,8 +134,25 @@ export function getIdentifiersDeclaration(nodes: Statement[], identifiers = new 
     }
     else if (node.type === 'VariableDeclaration') {
       for (const declarator of node.declarations) {
-        // @ts-expect-error
-        identifiers.add(declarator.id.name)
+        if (declarator.id.type === 'Identifier') {
+          identifiers.add(declarator.id.name)
+        }
+        else if (declarator.id.type === 'ObjectPattern') {
+          for (const property of declarator.id.properties) {
+            if (property.type === 'ObjectProperty' && property.key.type === 'Identifier')
+              identifiers.add(property.key.name)
+            else if (property.type === 'RestElement' && property.argument.type === 'Identifier')
+              identifiers.add(property.argument.name)
+          }
+        }
+        else if (declarator.id.type === 'ArrayPattern') {
+          for (const element of declarator.id.elements) {
+            if (element?.type === 'Identifier')
+              identifiers.add(element.name)
+            else if (element?.type === 'RestElement' && element.argument.type === 'Identifier')
+              identifiers.add(element.argument.name)
+          }
+        }
       }
     }
     else if (node.type === 'FunctionDeclaration') {
@@ -146,7 +166,7 @@ export function getIdentifiersDeclaration(nodes: Statement[], identifiers = new 
   return identifiers
 }
 
-export function getIdentifiersUsage(node?: Expression | PrivateName | Statement, identifiers = new Set<string>()) {
+export function getIdentifiersUsage(node?: Expression | SpreadElement | PrivateName | Statement | null, identifiers = new Set<string>()) {
   if (!node)
     return identifiers
 
@@ -171,6 +191,9 @@ export function getIdentifiersUsage(node?: Expression | PrivateName | Statement,
     getIdentifiersUsage(node.left, identifiers)
     getIdentifiersUsage(node.right, identifiers)
   }
+  else if (node.type === 'UnaryExpression') {
+    getIdentifiersUsage(node.argument, identifiers)
+  }
   else if (node.type === 'ForOfStatement' || node.type === 'ForInStatement') {
     getIdentifiersUsage(node.right, identifiers)
   }
@@ -181,9 +204,19 @@ export function getIdentifiersUsage(node?: Expression | PrivateName | Statement,
   }
   else if (node.type === 'ObjectExpression') {
     node.properties.forEach((prop) => {
-      // @ts-expect-error
-      getIdentifiersUsage(prop.value, identifiers)
+      if (prop.type === 'ObjectProperty')
+        getIdentifiersUsage(prop.key, identifiers)
+      else if (prop.type === 'SpreadElement')
+        getIdentifiersUsage(prop, identifiers)
     })
+  }
+  else if (node.type === 'ArrayExpression') {
+    node.elements.forEach((element) => {
+      getIdentifiersUsage(element, identifiers)
+    })
+  }
+  else if (node.type === 'SpreadElement') {
+    getIdentifiersUsage(node.argument, identifiers)
   }
   // else {
   //   console.log(node)

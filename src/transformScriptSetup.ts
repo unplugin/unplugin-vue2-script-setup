@@ -40,13 +40,17 @@ export function transformScriptSetup(result: ParseResult) {
   // get all identifiers in `<script setup>`
   getIdentifiersDeclaration([...imports, ...nodes], identifiers)
 
-  const returns = Array.from(identifiers).filter(i => result.template.identifiers.has(i))
-  const components = Array.from(identifiers).filter(i => result.template.components.has(i)
-    || result.template.components.has(camelize(i))
-    || result.template.components.has(capitalize(camelize(i))),
-  )
+  // filter out identifiers that are used in `<template>`
+  const returns = Array.from(identifiers)
+    .filter(Boolean)
+    .filter(i => result.template.identifiers.has(i))
+  const components = Array.from(identifiers)
+    .filter(Boolean)
+    .filter(i => result.template.components.has(i)
+      || result.template.components.has(camelize(i))
+      || result.template.components.has(capitalize(camelize(i))),
+    )
 
-  // TODO: apply macros
   // append `<script setup>` imports to `<script>`
   scriptAst.program.body.unshift(...imports)
 
