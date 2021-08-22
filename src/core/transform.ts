@@ -1,15 +1,15 @@
 import MagicString from 'magic-string'
-import { parseVueSFC } from './parse'
+import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
 
-export function transform(sfc: string, id?: string) {
-  const s = new MagicString(sfc)
-  const result = parseVueSFC(sfc, id)
-  const { code } = transformScriptSetup(result)
+export function transform(input: string, id?: string) {
+  const s = new MagicString(input)
+  const sfc = parseSFC(input, id)
+  const { code } = transformScriptSetup(sfc)
 
   const attributes = {
-    ...result.script.attrs,
-    ...result.scriptSetup.attrs,
+    ...sfc.script.attrs,
+    ...sfc.scriptSetup.attrs,
   }
   delete attributes.setup
   const attr = Object.entries(attributes)
@@ -19,11 +19,11 @@ export function transform(sfc: string, id?: string) {
   if (code) {
     const block = `<script ${attr}>\n${code}\n</script>`
 
-    s.remove(result.script.start, result.script.end)
-    if (result.scriptSetup.start !== result.scriptSetup.end) {
+    s.remove(sfc.script.start, sfc.script.end)
+    if (sfc.scriptSetup.start !== sfc.scriptSetup.end) {
       s.overwrite(
-        result.scriptSetup.start,
-        result.scriptSetup.end,
+        sfc.scriptSetup.start,
+        sfc.scriptSetup.end,
         block,
       )
     }

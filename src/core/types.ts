@@ -1,4 +1,6 @@
-export interface TagMeta {
+import { Program } from '@babel/types'
+
+export interface ScriptTagMeta {
   start: number
   end: number
   contentStart: number
@@ -6,20 +8,29 @@ export interface TagMeta {
   content: string
   attrs: Record<string, string>
   found: boolean
+  ast: Program
 }
 
-export interface ParseResult {
+export interface ParsedSFC {
   id?: string
   template: {
     components: Set<string>
     identifiers: Set<string>
   }
-  scriptSetup: TagMeta
-  script: TagMeta
+  scriptSetup: ScriptTagMeta
+  script: ScriptTagMeta
 }
 
 export interface PropTypeData {
   key: string
   type: string[]
   required: boolean
+}
+
+export interface ScriptSetupTransformOptions {
+
+}
+
+export interface ScriptSetupTransformContext {
+
 }

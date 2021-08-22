@@ -1,8 +1,8 @@
 import { parse } from '@babel/parser'
-import { getIdentifiersDeclaration, getIdentifiersUsage } from '../src/parse'
+import { getIdentifierDeclarations, getIdentifierUsages } from '../src/core/identifiers'
 
-describe('parse', () => {
-  describe('should identifiers declaration', () => {
+describe('identifiers', () => {
+  describe('should identifier declarations', () => {
     const cases: [string, string[]][] = [
       ['var a = 1', ['a']],
       ['import { foo, t as bar } from "z"', ['foo', 'bar']],
@@ -25,12 +25,12 @@ describe('parse', () => {
           sourceType: 'module',
         })
 
-        expect(getIdentifiersDeclaration(ast.program.body)).toEqual(new Set(output))
+        expect(getIdentifierDeclarations(ast.program.body)).toEqual(new Set(output))
       })
     }
   })
 
-  describe('should identifiers usage', () => {
+  describe('should identifier usages', () => {
     const cases: [string, string[]][] = [
       ['foo', ['foo']],
       ['foo.bar', ['foo']],
@@ -53,7 +53,7 @@ describe('parse', () => {
       it(input, () => {
         const nodes = parse(input).program.body
         const i = new Set<string>()
-        nodes.forEach(node => getIdentifiersUsage(node, i))
+        nodes.forEach(node => getIdentifierUsages(node, i))
         expect(i).toEqual(new Set(output))
       })
     }

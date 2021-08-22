@@ -1,3 +1,3 @@
 import unplugin from './unplugin'
 
-export default unplugin.webpack
+export default unplugin.rollup

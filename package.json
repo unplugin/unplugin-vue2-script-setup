@@ -18,6 +18,14 @@
       "require": "./dist/webpack-plugin.js",
       "import": "./dist/webpack-plugin.mjs"
     },
+    "./rollup-plugin": {
+      "require": "./dist/rollup-plugin.js",
+      "import": "./dist/rollup-plugin.mjs"
+    },
+    "./unplugin": {
+      "require": "./dist/unplugin.js",
+      "import": "./dist/unplugin.mjs"
+    },
     "./nuxt": {
       "require": "./dist/nuxt.js",
       "import": "./dist/nuxt.mjs"
@@ -42,7 +50,7 @@
   "scripts": {
     "prepublishOnly": "nr build",
     "dev": "nr build --watch",
-    "build": "rimraf dist && tsup src/index.ts src/vite-plugin.ts src/webpack-plugin.ts src/nuxt.ts --format cjs,esm --dts",
+    "build": "rimraf dist && tsup 'src/*.ts' --format cjs,esm --dts",
     "play": "npm -C playground run dev",
     "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint \"{src,test}/**/*.ts\"",
