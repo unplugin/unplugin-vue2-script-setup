@@ -1,10 +1,10 @@
 import { Parser as HTMLParser } from 'htmlparser2'
 import { parse, ParserOptions } from '@babel/parser'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
-import { ParsedSFC, ScriptTagMeta } from './types'
+import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
 import { getIdentifierUsages } from './identifiers'
 
-export function parseSFC(code: string, id?: string): ParsedSFC {
+export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
   const components = new Set<string>()
   const expressions = new Set<string>()
   const identifiers = new Set<string>()
@@ -137,6 +137,9 @@ export function parseSFC(code: string, id?: string): ParsedSFC {
 
   scriptSetup.ast = parse(scriptSetup.content, parserOptions).program
   script.ast = parse(script.content || '', parserOptions).program
+
+  scriptSetup.ast = options?.astTransforms?.scriptSetup?.(scriptSetup.ast) || scriptSetup.ast
+  script.ast = options?.astTransforms?.script?.(script.ast) || script.ast
 
   return {
     id,

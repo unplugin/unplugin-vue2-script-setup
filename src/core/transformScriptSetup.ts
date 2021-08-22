@@ -2,11 +2,11 @@ import { types as t } from '@babel/core'
 import { camelize, capitalize } from '@vue/shared'
 import traverse from '@babel/traverse'
 import generate from '@babel/generator'
-import { ParsedSFC } from './types'
+import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
 
-export function transformScriptSetup(sfc: ParsedSFC) {
+export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransformOptions) {
   const { scriptSetup, script, template } = sfc
 
   const imports = scriptSetup.ast.body.filter(n => n.type === 'ImportDeclaration')
@@ -31,7 +31,7 @@ export function transformScriptSetup(sfc: ParsedSFC) {
     )
 
   // append `<script setup>` imports to `<script>`
-  const ast = t.program([
+  let ast = t.program([
     ...imports,
     ...script.ast.body,
   ])
@@ -139,7 +139,7 @@ export function transformScriptSetup(sfc: ParsedSFC) {
     )
   }
 
-  if (!hasBody) {
+  if (!hasBody && !options?.astTransforms) {
     return {
       ast: null,
       code: '',
@@ -151,6 +151,8 @@ export function transformScriptSetup(sfc: ParsedSFC) {
   ast.body.push(
     t.exportDefaultDeclaration(__sfc) as any,
   )
+
+  ast = options?.astTransforms?.post?.(ast, sfc) || ast
 
   return {
     ast,

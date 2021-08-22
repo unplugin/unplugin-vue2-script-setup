@@ -1,11 +1,12 @@
 import MagicString from 'magic-string'
+import { ScriptSetupTransformOptions } from '../types'
 import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
 
-export function transform(input: string, id?: string) {
+export function transform(input: string, id?: string, options?: ScriptSetupTransformOptions) {
   const s = new MagicString(input)
   const sfc = parseSFC(input, id)
-  const { code } = transformScriptSetup(sfc)
+  const { code } = transformScriptSetup(sfc, options)
 
   const attributes = {
     ...sfc.script.attrs,

@@ -28,9 +28,9 @@ export interface PropTypeData {
 }
 
 export interface ScriptSetupTransformOptions {
-
-}
-
-export interface ScriptSetupTransformContext {
-
+  astTransforms?: {
+    script?: (ast: Program) => Program
+    scriptSetup?: (ast: Program) => Program
+    post?: (ast: Program, sfc: ParsedSFC) => Program
+  }
 }

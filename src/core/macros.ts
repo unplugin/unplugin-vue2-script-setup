@@ -13,7 +13,7 @@ import {
 } from '@babel/types'
 import { types as t } from '@babel/core'
 import { parseExpression } from '@babel/parser'
-import { PropTypeData } from './types'
+import { PropTypeData } from '../types'
 
 // Special compiler macros
 const DEFINE_PROPS = 'defineProps'
