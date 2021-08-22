@@ -16,12 +16,21 @@ export function transform(sfc: string, id?: string) {
     .map(([key, value]) => value ? `${key}="${value}"` : key)
     .join(' ')
 
-  s.remove(result.script.start, result.script.end)
-  s.overwrite(
-    result.scriptSetup.start,
-    result.scriptSetup.end,
-    `<script ${attr}>\n${code}\n</script>`,
-  )
+  if (code) {
+    const block = `<script ${attr}>\n${code}\n</script>`
+
+    s.remove(result.script.start, result.script.end)
+    if (result.scriptSetup.start !== result.scriptSetup.end) {
+      s.overwrite(
+        result.scriptSetup.start,
+        result.scriptSetup.end,
+        block,
+      )
+    }
+    else {
+      s.prependLeft(0, `${block}\n`)
+    }
+  }
 
   return {
     code: s.toString(),

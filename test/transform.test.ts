@@ -1,14 +1,36 @@
 import { resolve } from 'path'
 import { promises as fs } from 'fs'
+import fg from 'fast-glob'
 import { transform } from '../src'
 
 describe('transform', () => {
-  it('App.vue', async() => {
-    const fixture = await fs.readFile(resolve(__dirname, '../playground/App.vue'), 'utf-8')
-    expect(transform(fixture).code).toMatchSnapshot()
+  describe('playground', () => {
+    const root = resolve(__dirname, '../playground')
+    const files = fg.sync('*.vue', {
+      cwd: root,
+      onlyFiles: true,
+    })
+
+    for (const file of files) {
+      it(file, async() => {
+        const fixture = await fs.readFile(resolve(root, file), 'utf-8')
+        expect(transform(fixture).code).toMatchSnapshot()
+      })
+    }
   })
-  it('HelloWorld.vue', async() => {
-    const fixture = await fs.readFile(resolve(__dirname, '../playground/HelloWorld.vue'), 'utf-8')
-    expect(transform(fixture).code).toMatchSnapshot()
+
+  describe('fixture', () => {
+    const root = resolve(__dirname, 'fixtures')
+    const files = fg.sync('*.vue', {
+      cwd: root,
+      onlyFiles: true,
+    })
+
+    for (const file of files) {
+      it(file, async() => {
+        const fixture = await fs.readFile(resolve(root, file), 'utf-8')
+        expect(transform(fixture).code).toMatchSnapshot()
+      })
+    }
   })
 })

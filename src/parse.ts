@@ -1,7 +1,7 @@
 import { Parser as HTMLParser } from 'htmlparser2'
-import { parse, ParserOptions } from '@babel/parser'
+import { parse } from '@babel/parser'
+import { PrivateName, Expression, Statement } from '@babel/types'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
-import traverse from '@babel/traverse'
 import { ParseResult, TagMeta } from './types'
 
 export function parseVueSFC(code: string, id?: string): ParseResult {
@@ -43,8 +43,12 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
         Object.entries(attributes).forEach(([key, value]) => {
           if (!value)
             return
-          if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':'))
-            expressions.add(value)
+          if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
+            if (key === 'v-if')
+              expressions.add(`for (let ${value}) {}`)
+            else
+              expressions.add(`(${value})`)
+          }
           if (key === 'ref')
             identifiers.add(value)
         })
@@ -71,7 +75,7 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
     ontext(text) {
       if (templateLevel > 0) {
         Array.from(text.matchAll(/\{\{(.*?)\}\}/g)).forEach(([, expression]) => {
-          expressions.add(expression)
+          expressions.add(`(${expression})`)
         })
       }
     },
@@ -102,7 +106,10 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
   parser.write(code)
   parser.end()
 
-  expressions.forEach(exp => getIdentifiersFromCode(exp, identifiers))
+  expressions.forEach((exp) => {
+    const nodes = parse(exp).program.body
+    nodes.forEach(node => getIdentifiersUsage(node, identifiers))
+  })
 
   return {
     id,
@@ -115,12 +122,70 @@ export function parseVueSFC(code: string, id?: string): ParseResult {
   }
 }
 
-export function getIdentifiersFromCode(code: string, identifiers = new Set<string>(), options: ParserOptions = {}) {
-  const ast = parse(code, options) as any
-  traverse(ast, {
-    Identifier(path) {
-      identifiers.add(path.node.name)
-    },
-  })
+export function getIdentifiersDeclaration(nodes: Statement[], identifiers = new Set<string>()) {
+  for (const node of nodes) {
+    if (node.type === 'ImportDeclaration') {
+      for (const specifier of node.specifiers)
+        identifiers.add(specifier.local.name)
+    }
+    else if (node.type === 'VariableDeclaration') {
+      for (const declarator of node.declarations) {
+        // @ts-expect-error
+        identifiers.add(declarator.id.name)
+      }
+    }
+    else if (node.type === 'FunctionDeclaration') {
+      if (node.id)
+        identifiers.add(node.id.name)
+    }
+    // else {
+    //   console.log(node)
+    // }
+  }
+  return identifiers
+}
+
+export function getIdentifiersUsage(node?: Expression | PrivateName | Statement, identifiers = new Set<string>()) {
+  if (!node)
+    return identifiers
+
+  if (node.type === 'ExpressionStatement') {
+    getIdentifiersUsage(node.expression, identifiers)
+  }
+  else if (node.type === 'Identifier') {
+    identifiers.add(node.name)
+  }
+  else if (node.type === 'MemberExpression') {
+    getIdentifiersUsage(node.object, identifiers)
+  }
+  else if (node.type === 'CallExpression') {
+    // @ts-expect-error
+    getIdentifiersUsage(node.callee, identifiers)
+    node.arguments.forEach((arg) => {
+      // @ts-expect-error
+      getIdentifiersUsage(arg, identifiers)
+    })
+  }
+  else if (node.type === 'BinaryExpression' || node.type === 'LogicalExpression') {
+    getIdentifiersUsage(node.left, identifiers)
+    getIdentifiersUsage(node.right, identifiers)
+  }
+  else if (node.type === 'ForOfStatement' || node.type === 'ForInStatement') {
+    getIdentifiersUsage(node.right, identifiers)
+  }
+  else if (node.type === 'ConditionalExpression') {
+    getIdentifiersUsage(node.test, identifiers)
+    getIdentifiersUsage(node.consequent, identifiers)
+    getIdentifiersUsage(node.alternate, identifiers)
+  }
+  else if (node.type === 'ObjectExpression') {
+    node.properties.forEach((prop) => {
+      // @ts-expect-error
+      getIdentifiersUsage(prop.value, identifiers)
+    })
+  }
+  // else {
+  //   console.log(node)
+  // }
   return identifiers
 }

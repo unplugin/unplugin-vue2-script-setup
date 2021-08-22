@@ -1,6 +1,124 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`transform App.vue 1`] = `
+exports[`transform fixture DynamicStyle.vue 1`] = `
+"<template>
+  <div :style=\\"{ color, border: '1px' }\\" />
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const color = computed(() => 'red');
+  return {
+    color
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture Empty.vue 1`] = `""`;
+
+exports[`transform fixture Object1.vue 1`] = `
+"<template>
+  <div>
+    {{ data }} {{ title }}
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const data = {
+    title: 'Template Only'
+  };
+  return {
+    data
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture TemplateOnly.vue 1`] = `
+"<template>
+  <div>
+    <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
+      {{ index }}: {{ item }}
+    </div>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const items = [{
+    name: 'Item 1',
+    value: 1
+  }, {
+    name: 'Item 2',
+    value: 2
+  }, {
+    name: 'Item 3',
+    value: 3
+  }, {
+    name: 'Item 4',
+    value: 4
+  }];
+  return {
+    items
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture VFor.vue 1`] = `
+"<template>
+  <div>
+    <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
+      {{ index }}: {{ item }}
+    </div>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const items = [{
+    name: 'Item 1',
+    value: 1
+  }, {
+    name: 'Item 2',
+    value: 2
+  }, {
+    name: 'Item 3',
+    value: 3
+  }, {
+    name: 'Item 4',
+    value: 4
+  }];
+  return {
+    items
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform playground App.vue 1`] = `
 "<template>
   <div>
     <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
@@ -29,7 +147,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform HelloWorld.vue 1`] = `
+exports[`transform playground HelloWorld.vue 1`] = `
 "<template>
   <div>
     <h3>{{ msg }}, {{ name }}</h3>

@@ -5,6 +5,7 @@ import traverse from '@babel/traverse'
 import generate from '@babel/generator'
 import { ParseResult } from './types'
 import { applyMacros } from './macros'
+import { getIdentifiersDeclaration } from './parse'
 
 export function transformScriptSetup(result: ParseResult) {
   if (result.script.found && result.scriptSetup.found && result.scriptSetup.attrs.lang !== result.script.attrs.lang)
@@ -26,7 +27,7 @@ export function transformScriptSetup(result: ParseResult) {
     sourceType: 'module',
     plugins,
   })
-  const scriptAst = parse(result.script.content || 'export default {}', {
+  const scriptAst = parse(result.script.content || '', {
     sourceType: 'module',
     plugins,
   })
@@ -37,12 +38,7 @@ export function transformScriptSetup(result: ParseResult) {
   const { nodes: scriptSetupBody, props } = applyMacros(nodes)
 
   // get all identifiers in `<script setup>`
-  scriptSetupAst.program.body = [...imports, ...nodes]
-  traverse(scriptSetupAst as any, {
-    Identifier(path) {
-      identifiers.add(path.node.name)
-    },
-  })
+  getIdentifiersDeclaration([...imports, ...nodes], identifiers)
 
   const returns = Array.from(identifiers).filter(i => result.template.identifiers.has(i))
   const components = Array.from(identifiers).filter(i => result.template.components.has(i)
@@ -56,10 +52,13 @@ export function transformScriptSetup(result: ParseResult) {
 
   const __sfc = t.identifier('__sfc_main')
 
+  let hasBody = false
+
   // replace `export default` with a temproray variable
   // `const __sfc_main = { ... }`
   traverse(scriptAst as any, {
     ExportDefaultDeclaration(path) {
+      hasBody = true
       const decl = path.node.declaration
       path.replaceWith(
         t.variableDeclaration('const', [
@@ -72,9 +71,22 @@ export function transformScriptSetup(result: ParseResult) {
     },
   })
 
+  // inject `const __sfc_main = {}` if `<script>` has default export
+  if (!hasBody) {
+    scriptAst.program.body.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          __sfc,
+          t.objectExpression([]),
+        ),
+      ]),
+    )
+  }
+
   // inject props function
   // `__sfc_main.props = { ... }`
   if (props) {
+    hasBody = true
     scriptAst.program.body.push(
       t.expressionStatement(
         t.assignmentExpression('=',
@@ -88,6 +100,7 @@ export function transformScriptSetup(result: ParseResult) {
   // inject setup function
   // `__sfc_main.setup = () => {}`
   if (nodes.length) {
+    hasBody = true
     const returnStatement = t.returnStatement(
       t.objectExpression(
         returns.map((i) => {
@@ -116,6 +129,7 @@ export function transformScriptSetup(result: ParseResult) {
   // inject components
   // `__sfc_main.components = Object.assign({ ... }, __sfc_main.components)`
   if (components.length) {
+    hasBody = true
     const componentsObject = t.objectExpression(
       components.map((i) => {
         const id = t.identifier(i)
@@ -137,6 +151,13 @@ export function transformScriptSetup(result: ParseResult) {
         ),
       ) as any,
     )
+  }
+
+  if (!hasBody) {
+    return {
+      ast: null,
+      code: '',
+    }
   }
 
   // re-export
