@@ -47,6 +47,26 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixture MacrosPure.vue 1`] = `
+"<template>
+  <div>{{ msg }}</div>
+</template>
+
+<script >
+const __sfc_main = {};
+__sfc_main.props = {
+  msg: String
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  return {};
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixture MacrosType.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">{{ msg }}</div>

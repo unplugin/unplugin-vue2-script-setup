@@ -241,7 +241,11 @@ export function applyMacros(nodes: Statement[]) {
   }
 
   nodes = nodes
-    .map((node) => {
+    .map((raw: Node) => {
+      let node = raw
+      if (raw.type === 'ExpressionStatement')
+        node = raw.expression
+
       if (node.type === 'VariableDeclaration' && !node.declare) {
         const total = node.declarations.length
         for (let i = 0; i < total; i++) {
@@ -258,7 +262,7 @@ export function applyMacros(nodes: Statement[]) {
       if (processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node))
         return null
 
-      return node
+      return raw
     })
     .filter(Boolean) as Statement[]
 
