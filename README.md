@@ -129,6 +129,20 @@ npm i -D @vue/runtime-dom
 
 [Learn more](https://github.com/johnsoncodehk/volar#using)
 
+###### Global Types
+
+If the global types are missing for your IDE, update your `tsconfig.json` with:
+
+```jsonc
+{
+  "compilerOptions": {
+    "types": [
+      "vue2-script-setup-transform/types"
+    ]
+  }
+}
+```
+
 ###### ESLint
 
 If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
