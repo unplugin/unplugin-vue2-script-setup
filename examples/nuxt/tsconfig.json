@@ -9,6 +9,7 @@
       "DOM"
     ],
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
@@ -24,7 +25,8 @@
     },
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "vue2-script-setup-transform/types"
     ]
   },
   "exclude": [

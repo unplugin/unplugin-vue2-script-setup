@@ -62,6 +62,37 @@ export default {
 
 Example: [`examples/nuxt`](./examples/nuxt)
 
+###### TypeScript
+
+To use TypeScript with Nuxt, install the [`@nuxtjs/typescript-module`](https://typescript.nuxtjs.org/) but disable the type check:
+
+```bash
+npm i -D @nuxt/typescript-build vue-tsc
+```
+
+```ts
+// nuxt.config.js
+export default {
+  buildModules: [
+    ['@nuxt/typescript-build', { typeCheck: false }],
+    '@nuxtjs/composition-api/module',
+    'vue2-script-setup-transform/nuxt',
+  ],
+}
+```
+
+And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type check at build time:
+
+```jsonc
+// package.json
+{
+  "scripts": {
+    "dev": "nuxt",
+    "build": "vue-tsc --noEmit && nuxt build",
+  }
+}
+```
+
 <br></details>
 
 <details>
