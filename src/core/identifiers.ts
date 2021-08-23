@@ -34,11 +34,7 @@ export function getIdentifierDeclarations(nodes: Statement[], identifiers = new 
       for (const declarator of node.declarations)
         handleVariableId(declarator.id)
     }
-    else if (node.type === 'FunctionDeclaration') {
-      if (node.id)
-        identifiers.add(node.id.name)
-    }
-    else if (node.type === 'ClassDeclaration') {
+    else if (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration') {
       if (node.id)
         identifiers.add(node.id.name)
     }
@@ -67,9 +63,7 @@ export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateN
   }
   else if (node.type === 'CallExpression') {
     getIdentifierUsages(node.callee as Expression, identifiers)
-    node.arguments.forEach((arg) => {
-      getIdentifierUsages(arg as Expression, identifiers)
-    })
+    node.arguments.forEach(arg => getIdentifierUsages(arg as Expression, identifiers))
   }
   else if (node.type === 'BinaryExpression' || node.type === 'LogicalExpression') {
     getIdentifierUsages(node.left, identifiers)
@@ -99,24 +93,17 @@ export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateN
     })
   }
   else if (node.type === 'ArrayExpression') {
-    node.elements.forEach((element) => {
-      getIdentifierUsages(element, identifiers)
-    })
+    node.elements.forEach(element => getIdentifierUsages(element, identifiers))
   }
-  else if (node.type === 'SpreadElement') {
+  else if (node.type === 'SpreadElement' || node.type === 'ReturnStatement') {
     getIdentifierUsages(node.argument, identifiers)
   }
   else if (node.type === 'NewExpression') {
     getIdentifierUsages(node.callee as Expression, identifiers)
-    node.arguments.forEach((arg) => {
-      getIdentifierUsages(arg as Expression, identifiers)
-    })
+    node.arguments.forEach(arg => getIdentifierUsages(arg as Expression, identifiers))
   }
   else if (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
     getIdentifierUsages(node.body, identifiers)
-  }
-  else if (node.type === 'ReturnStatement') {
-    getIdentifierUsages(node.argument, identifiers)
   }
   // else {
   //   console.log(node)

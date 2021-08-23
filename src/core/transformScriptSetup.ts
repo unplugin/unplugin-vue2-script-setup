@@ -1,7 +1,8 @@
 import { types as t } from '@babel/core'
 import { camelize, capitalize } from '@vue/shared'
-import traverse from '@babel/traverse'
+import { Node, Statement } from '@babel/types'
 import generate from '@babel/generator'
+import { partition } from '@antfu/utils'
 import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
@@ -9,15 +10,19 @@ import { getIdentifierDeclarations } from './identifiers'
 export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransformOptions) {
   const { scriptSetup, script, template } = sfc
 
-  const imports = scriptSetup.ast.body.filter(n => n.type === 'ImportDeclaration')
-  const body = scriptSetup.ast.body.filter(n => n.type !== 'ImportDeclaration')
+  const { nodes: body, props } = applyMacros(scriptSetup.ast.body)
 
-  const { nodes: scriptSetupBody, props } = applyMacros(body)
+  const [hoisted, setupBody] = partition(
+    body,
+    n => n.type === 'ImportDeclaration'
+     || n.type === 'ExportNamedDeclaration'
+     || n.type.startsWith('TS'),
+  )
 
   // get all identifiers in `<script setup>`
   const declarations = new Set<string>()
-  getIdentifierDeclarations(imports, declarations)
-  getIdentifierDeclarations(body, declarations)
+  getIdentifierDeclarations(hoisted, declarations)
+  getIdentifierDeclarations(setupBody, declarations)
 
   // filter out identifiers that are used in `<template>`
   const returns = Array.from(declarations)
@@ -31,31 +36,28 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
     )
 
   // append `<script setup>` imports to `<script>`
-  let ast = t.program([
-    ...imports,
-    ...script.ast.body,
-  ])
 
   const __sfc = t.identifier('__sfc_main')
 
   let hasBody = false
 
-  // replace `export default` with a temproray variable
-  // `const __sfc_main = { ... }`
-  traverse(ast, {
-    ExportDefaultDeclaration(path) {
-      hasBody = true
-      const decl = path.node.declaration
-      path.replaceWith(
-        t.variableDeclaration('const', [
-          t.variableDeclarator(
-            __sfc,
-            decl as any,
-          ),
-        ]),
-      )
-    },
-  })
+  let ast = t.program(
+    [...hoisted, ...script.ast.body]
+      .map((node: Node) => {
+        // replace `export default` with a temproray variable
+        // `const __sfc_main = { ... }`
+        if (node.type === 'ExportDefaultDeclaration') {
+          hasBody = true
+          return t.variableDeclaration('const', [
+            t.variableDeclarator(
+              __sfc,
+              node.declaration as any,
+            ),
+          ])
+        }
+        return node
+      }) as Statement[],
+  )
 
   // inject `const __sfc_main = {}` if `<script>` has default export
   if (!hasBody) {
@@ -104,7 +106,7 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
             t.identifier('__props'),
             t.identifier('__ctx'),
           ], t.blockStatement([
-            ...scriptSetupBody,
+            ...setupBody,
             returnStatement as any,
           ])),
         ),

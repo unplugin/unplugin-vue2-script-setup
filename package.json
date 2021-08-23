@@ -66,6 +66,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",
     "@antfu/ni": "^0.7.0",
+    "@antfu/utils": "^0.2.4",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",
     "@vue/composition-api": "^1.1.1",

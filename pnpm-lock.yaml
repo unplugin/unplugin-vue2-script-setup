@@ -6,6 +6,7 @@ importers:
     specifiers:
       '@antfu/eslint-config': ^0.7.0
       '@antfu/ni': ^0.7.0
+      '@antfu/utils': ^0.2.4
       '@babel/core': ^7.15.0
       '@babel/generator': ^7.15.0
       '@babel/parser': ^7.15.3
@@ -43,6 +44,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config': 0.7.0_eslint@7.32.0+typescript@4.3.5
       '@antfu/ni': 0.7.0
+      '@antfu/utils': 0.2.4
       '@types/jest': 27.0.1
       '@types/node': 16.7.1
       '@vue/composition-api': 1.1.1
@@ -192,6 +194,12 @@ packages:
   /@antfu/ni/0.7.0:
     resolution: {integrity: sha512-wXtpUOMu3l5QWVXBrsaxCbgD2dbKQ1N/5ji7Xl3FTrfSb96+BElRhmaLyZd1A5U4TXz6S/FLR8jQQ3XJ78aHIQ==}
     hasBin: true
+    dev: true
+
+  /@antfu/utils/0.2.4:
+    resolution: {integrity: sha512-2bZNkVfL9IZESmvE26UKi8SzyvSoaIsGXDcnbHFMtmGMqUiB1fXpAJ1ijGf+tSqKRQ5yagck2U1Qk0p+705/kw==}
+    dependencies:
+      '@types/throttle-debounce': 2.1.0
     dev: true
 
   /@babel/code-frame/7.12.11:
@@ -2691,6 +2699,10 @@ packages:
     dependencies:
       '@types/webpack': 4.41.28
       terser: 4.8.0
+    dev: true
+
+  /@types/throttle-debounce/2.1.0:
+    resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
     dev: true
 
   /@types/uglify-js/3.13.1:

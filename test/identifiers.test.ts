@@ -45,7 +45,7 @@ describe('identifiers', () => {
       ['!a', ['a']],
       ['!!c', ['c']],
       ['[a,b,[c,{d}],...args]', ['a', 'b', 'c', 'd', 'args']],
-      ['new Foo(a,[b])', ['Foo', 'a', 'b']],
+      ['new Foo(a,[b,,c])', ['Foo', 'a', 'b', 'c']],
       ['new RC.Foo()', ['RC']],
       ['() => foo(bar)', ['foo', 'bar']],
       ['() => { foo() + bar; a }', ['foo', 'bar', 'a']],

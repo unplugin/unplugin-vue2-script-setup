@@ -27,7 +27,7 @@ exports[`transform fixture Macros.vue 1`] = `
   <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
 </template>
 
-<script >
+<script lang=\\"js\\">
 const __sfc_main = {};
 __sfc_main.props = {
   msg: String
@@ -57,11 +57,6 @@ const __sfc_main = {};
 __sfc_main.props = {
   msg: String
 };
-
-__sfc_main.setup = (__props, __ctx) => {
-  return {};
-};
-
 export default __sfc_main;
 </script>
 "
@@ -69,7 +64,9 @@ export default __sfc_main;
 
 exports[`transform fixture MacrosType.vue 1`] = `
 "<template>
-  <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
+  <div @click=\\"emit(props.msg)\\">
+    {{ msg }}
+  </div>
 </template>
 
 <script lang=\\"ts\\">
@@ -84,7 +81,73 @@ __sfc_main.props = {
   value: {
     key: \\"value\\",
     required: true,
-    type: [Number]
+    type: [Number, String]
+  },
+  data: {
+    key: \\"data\\",
+    required: false,
+    type: [Object]
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const props = __props;
+  const emit = __ctx.emit;
+  return {
+    props,
+    emit
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture MacrosType2.vue 1`] = `
+"<template>
+  <div @click=\\"emit(props.msg)\\">
+    {{ msg }}
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+export interface Props {
+  msg: string;
+  value: number | string;
+  data?: {
+    value: boolean;
+  };
+  arr?: [number, string, {}];
+  any: any;
+}
+const __sfc_main = {};
+__sfc_main.props = {
+  msg: {
+    key: \\"msg\\",
+    required: false,
+    type: [String],
+    default: 'Hello'
+  },
+  value: {
+    key: \\"value\\",
+    required: true,
+    type: [Number, String]
+  },
+  data: {
+    key: \\"data\\",
+    required: false,
+    type: [Object]
+  },
+  arr: {
+    key: \\"arr\\",
+    required: false,
+    type: [Array]
+  },
+  any: {
+    key: \\"any\\",
+    required: true,
+    type: [null]
   }
 };
 
@@ -147,6 +210,20 @@ __sfc_main.setup = (__props, __ctx) => {
 
 export default __sfc_main;
 </script>
+"
+`;
+
+exports[`transform fixture ScriptOnly.vue 1`] = `
+"<script lang=\\"ts\\">
+import { defineComponent } from '@vue/composition-api';
+
+const __sfc_main = defineComponent({
+  name: 'Hi'
+});
+
+export default __sfc_main;
+</script>
+
 "
 `;
 

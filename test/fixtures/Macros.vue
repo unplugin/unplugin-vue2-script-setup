@@ -2,10 +2,10 @@
   <div @click="emit(props.msg)">{{ msg }}</div>
 </template>
 
-<script setup>
+<script setup lang="js">
 const props = defineProps({
   msg: String,
 })
 
-const emit = defineEmits()
+const emit = defineEmits(['msg', 'update'])
 </script>

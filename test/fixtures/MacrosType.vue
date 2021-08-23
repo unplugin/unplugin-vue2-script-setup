@@ -1,10 +1,12 @@
 <template>
-  <div @click="emit(props.msg)">{{ msg }}</div>
+  <div @click="emit(props.msg)">
+    {{ msg }}
+  </div>
 </template>
 
 <script setup lang="ts">
 const props = withDefaults(
-  defineProps<{ msg: string; value: number }>(),
+  defineProps<{ msg: string; value: number | string; data?: { value: boolean } }>(),
   { msg: 'Hello' },
 )
 
