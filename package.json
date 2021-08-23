@@ -29,7 +29,12 @@
     "./nuxt": {
       "require": "./dist/nuxt.js",
       "import": "./dist/nuxt.mjs"
-    }
+    },
+    "./types": {
+      "require": "./dist/types.js",
+      "import": "./dist/types.mjs"
+    },
+    "./*": "./*"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
