@@ -245,6 +245,11 @@ export function applyMacros(nodes: Statement[]) {
     }
   }
 
+  function throwIfAwait(node: Node) {
+    if (node.type === 'AwaitExpression')
+      error('top-level await is not supported in Vue 2', node)
+  }
+
   nodes = nodes
     .map((raw: Node) => {
       let node = raw
@@ -260,12 +265,16 @@ export function applyMacros(nodes: Statement[]) {
               decl.init = t.memberExpression(t.identifier('__ctx'), t.identifier('emit')) as any
             else if (processDefineProps(decl.init) || processWithDefaults(decl.init))
               decl.init = t.identifier('__props') as any
+            else
+              throwIfAwait(decl.init)
           }
         }
       }
 
       if (processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node))
         return null
+
+      throwIfAwait(node)
 
       return raw
     })

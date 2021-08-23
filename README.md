@@ -161,7 +161,7 @@ If you enjoy using `<script setup>`, you might also want to try [`vue-global-api
 - [x] Vite plugin
 - [x] Webpack plugin
 - [x] Nuxt module
-- [ ] Top-level await
+- [ ] ~~Top-level await~~ (not supported)
 
 ## How?
 
