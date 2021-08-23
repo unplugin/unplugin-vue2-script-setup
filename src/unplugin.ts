@@ -11,7 +11,12 @@ export default createUnplugin<ScriptSetupTransformOptions>(options => ({
     return id.endsWith('.vue')
   },
   transform(code, id) {
-    if (scriptSetupRE.test(code))
-      return transform(code, id, options)
+    try {
+      if (scriptSetupRE.test(code))
+        return transform(code, id, options)
+    }
+    catch (e) {
+      this.error(e)
+    }
   },
 }))
