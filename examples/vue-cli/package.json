@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-tsc --noEmit && vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -12,8 +12,11 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11",
+    "vue-tsc": "^0.3.0",
     "vue2-script-setup-transform": "workspace:*"
   }
 }

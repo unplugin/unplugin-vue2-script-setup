@@ -88,7 +88,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 {
   "scripts": {
     "dev": "nuxt",
-    "build": "vue-tsc --noEmit && nuxt build",
+    "build": "vue-tsc --noEmit && nuxt build"
   }
 }
 ```
@@ -111,6 +111,40 @@ module.exports = {
 ```
 
 Example: [`examples/vue-cli`](./examples/vue-cli)
+
+###### TypeScript
+
+To use TypeScript with Vue CLI, install `@vue/cli-plugin-typescript` but disable the type check:
+
+```bash
+npm i -D @vue/cli-plugin-typescript vue-tsc
+```
+
+```ts
+module.exports = {
+  configureWebpack: {
+    plugins: [
+      require('vue2-script-setup-transform/webpack-plugin').default(),
+    ],
+  },
+  chainWebpack(config) {
+    // disable type check and let `vue-tsc` handles it
+    config.plugins.delete('fork-ts-checker')
+  },
+}
+```
+
+And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type check at build time:
+
+```jsonc
+// package.json
+{
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-tsc --noEmit && vue-cli-service build"
+  }
+}
+```
 
 <br></details>
 
