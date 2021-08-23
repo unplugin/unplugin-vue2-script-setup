@@ -47,6 +47,10 @@ describe('identifiers', () => {
       ['[a,b,[c,{d}],...args]', ['a', 'b', 'c', 'd', 'args']],
       ['new Foo(a,[b])', ['Foo', 'a', 'b']],
       ['new RC.Foo()', ['RC']],
+      ['() => foo(bar)', ['foo', 'bar']],
+      ['() => { foo() + bar; a }', ['foo', 'bar', 'a']],
+      ['(function () { foo() + bar })', ['foo', 'bar']],
+      ['function foobar() { return foo() + bar }', ['foo', 'bar']],
     ]
 
     for (const [input, output] of cases) {

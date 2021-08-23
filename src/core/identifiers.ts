@@ -53,7 +53,10 @@ export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateN
   if (!node)
     return identifiers
 
-  if (node.type === 'ExpressionStatement') {
+  if (node.type === 'BlockStatement') {
+    node.body.forEach(child => getIdentifierUsages(child, identifiers))
+  }
+  else if (node.type === 'ExpressionStatement') {
     getIdentifierUsages(node.expression, identifiers)
   }
   else if (node.type === 'Identifier') {
@@ -108,6 +111,12 @@ export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateN
     node.arguments.forEach((arg) => {
       getIdentifierUsages(arg as Expression, identifiers)
     })
+  }
+  else if (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+    getIdentifierUsages(node.body, identifiers)
+  }
+  else if (node.type === 'ReturnStatement') {
+    getIdentifierUsages(node.argument, identifiers)
   }
   // else {
   //   console.log(node)
