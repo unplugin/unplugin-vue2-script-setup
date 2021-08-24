@@ -233,7 +233,7 @@ If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warni
 
 ## Recommendations
 
-If you enjoy using `<script setup>`, you might also want to try [`vue-global-api`](https://github.com/antfu/vue-global-api) to improve the DX even further. 
+If you enjoy using `<script setup>`, you might also want to try [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) to improve the DX even further.
 
 ## Progress
 
