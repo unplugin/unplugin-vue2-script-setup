@@ -5,6 +5,6 @@ export default {
     // @vue/composition-api support
     '@nuxtjs/composition-api/module',
     // install the transformer
-    'vue2-script-setup-transform/nuxt',
+    'unplugin-vue2-script-setup/nuxt',
   ],
 }

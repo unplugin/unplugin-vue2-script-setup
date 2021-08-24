@@ -1,7 +1,7 @@
 {
-  "name": "vue2-script-setup-transform",
+  "name": "unplugin-vue2-script-setup",
   "version": "0.3.5",
-  "description": "",
+  "description": "Bring <script setup> to Vue 2",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "index.d.ts",
@@ -10,21 +10,17 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
-    "./vite-plugin": {
-      "require": "./dist/vite-plugin.js",
-      "import": "./dist/vite-plugin.mjs"
+    "./vite": {
+      "require": "./dist/vite.js",
+      "import": "./dist/vite.mjs"
     },
-    "./webpack-plugin": {
-      "require": "./dist/webpack-plugin.js",
-      "import": "./dist/webpack-plugin.mjs"
+    "./webpack": {
+      "require": "./dist/webpack.js",
+      "import": "./dist/webpack.mjs"
     },
-    "./rollup-plugin": {
-      "require": "./dist/rollup-plugin.js",
-      "import": "./dist/rollup-plugin.mjs"
-    },
-    "./unplugin": {
-      "require": "./dist/unplugin.js",
-      "import": "./dist/unplugin.mjs"
+    "./rollup": {
+      "require": "./dist/rollup.js",
+      "import": "./dist/rollup.mjs"
     },
     "./nuxt": {
       "require": "./dist/nuxt.js",
@@ -40,12 +36,12 @@
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/antfu/vue2-script-setup-transform/issues"
+    "url": "https://github.com/antfu/unplugin-vue2-script-setup/issues"
   },
-  "homepage": "https://github.com/antfu/vue2-script-setup-transform#readme",
+  "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/vue2-script-setup-transform.git"
+    "url": "git+https://github.com/antfu/unplugin-vue2-script-setup.git"
   },
   "keywords": [],
   "files": [
@@ -54,8 +50,8 @@
   ],
   "scripts": {
     "prepublishOnly": "nr build",
-    "dev": "nr build --watch",
-    "build": "rimraf dist && tsup 'src/*.ts' --format cjs,esm --dts",
+    "build": "rimraf dist && tsup 'src/*.ts' --format cjs,esm --dts && esno scripts/postbuild.ts",
+    "dev": "tsup 'src/*.ts' --watch src",
     "play": "npm -C playground run dev",
     "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint \"{src,test}/**/*.ts\"",

@@ -13,7 +13,7 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "vue2-script-setup-transform/types"
+      "unplugin-vue2-script-setup/types"
     ],
     "paths": {
       "@/*": [

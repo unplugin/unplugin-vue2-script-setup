@@ -1,13 +1,13 @@
-# vue2-script-setup-transform
+# unplugin-vue2-script-setup
 
-[![NPM version](https://img.shields.io/npm/v/vue2-script-setup-transform?color=a1b858&label=)](https://www.npmjs.com/package/vue2-script-setup-transform)
+[![NPM version](https://img.shields.io/npm/v/unplugin-vue2-script-setup?color=a1b858&label=)](https://www.npmjs.com/package/unplugin-vue2-script-setup)
 
 Bring [`<script setup>`](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to Vue 2.
 
 ## Install
 
 ```bash
-npm i -D vue2-script-setup-transform
+npm i -D unplugin-vue2-script-setup
 npm i @vue/composition-api
 ```
 
@@ -27,7 +27,7 @@ Vue.use(VueCompositionAPI)
 // vite.config.ts
 import { defineConfig } from 'vite'
 import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
-import ScriptSetup from 'vue2-script-setup-transform/vite-plugin'
+import ScriptSetup from 'unplugin-vue2-script-setup/vite'
 
 export default defineConfig({
   plugins: [
@@ -53,7 +53,7 @@ npm i @nuxtjs/composition-api
 export default {
   buildModules: [
     '@nuxtjs/composition-api/module',
-    'vue2-script-setup-transform/nuxt',
+    'unplugin-vue2-script-setup/nuxt',
   ],
 }
 ```
@@ -76,7 +76,7 @@ export default {
   buildModules: [
     ['@nuxt/typescript-build', { typeCheck: false }],
     '@nuxtjs/composition-api/module',
-    'vue2-script-setup-transform/nuxt',
+    'unplugin-vue2-script-setup/nuxt',
   ],
 }
 ```
@@ -104,7 +104,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 module.exports = {
   configureWebpack: {
     plugins: [
-      require('vue2-script-setup-transform/webpack-plugin').default(),
+      require('unplugin-vue2-script-setup/webpack')(),
     ],
   },
 }
@@ -124,7 +124,7 @@ npm i -D @vue/cli-plugin-typescript vue-tsc
 module.exports = {
   configureWebpack: {
     plugins: [
-      require('vue2-script-setup-transform/webpack-plugin').default(),
+      require('unplugin-vue2-script-setup/webpack')(),
     ],
   },
   chainWebpack(config) {
@@ -156,7 +156,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 module.exports = {
   /* ... */
   plugins: [
-    require('vue2-script-setup-transform/webpack-plugin').default()
+    require('unplugin-vue2-script-setup/webpack')()
   ]
 }
 ```
@@ -167,7 +167,7 @@ module.exports = {
 <summary>JavaScript API</summary><br>
 
 ```ts
-import { transform } from 'vue2-script-setup-transform'
+import { transform } from 'unplugin-vue2-script-setup'
 
 const Vue2SFC = transform(`
 <template>
@@ -202,7 +202,7 @@ If the global types are missing for your IDE, update your `tsconfig.json` with:
 {
   "compilerOptions": {
     "types": [
-      "vue2-script-setup-transform/types"
+      "unplugin-vue2-script-setup/types"
     ]
   }
 }

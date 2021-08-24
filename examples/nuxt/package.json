@@ -17,6 +17,6 @@
     "@nuxtjs/composition-api": "^0.27.0",
     "@vue/runtime-dom": "^3.2.4",
     "vue-tsc": "^0.3.0",
-    "vue2-script-setup-transform": "workspace:*"
+    "unplugin-vue2-script-setup": "workspace:*"
   }
 }

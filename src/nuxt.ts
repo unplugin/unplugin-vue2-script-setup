@@ -1,4 +1,4 @@
-import unplugin from './unplugin'
+import unplugin from '.'
 
 export default function(this: any) {
   // install webpack plugin
