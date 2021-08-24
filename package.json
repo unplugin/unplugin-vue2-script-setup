@@ -26,6 +26,9 @@
       "require": "./dist/nuxt.js",
       "import": "./dist/nuxt.mjs"
     },
+    "./jest": {
+      "require": "./jest.js"
+    },
     "./types": {
       "require": "./dist/types.js",
       "import": "./dist/types.mjs"
@@ -46,6 +49,7 @@
   "keywords": [],
   "files": [
     "dist",
+    "jest.js",
     "*.d.ts"
   ],
   "scripts": {

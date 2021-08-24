@@ -163,6 +163,25 @@ module.exports = {
 
 <br></details>
 
+
+<details>
+<summary>Jest</summary><br>
+
+```bash
+npm i -D vue-jest
+```
+
+```ts
+// jest.config.js
+module.exports = {
+  transform: {
+    '.*\\.(vue)$': 'unplugin-vue2-script-setup/jest',
+  },
+}
+```
+
+<br></details>
+
 <details>
 <summary>JavaScript API</summary><br>
 
