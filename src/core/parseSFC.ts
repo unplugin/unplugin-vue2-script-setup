@@ -51,7 +51,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
           if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
             if (key === 'v-for')
               // we strip out delectations for v-for before `in` or `of`
-              expressions.add(`(${value.replace(/^.*?\w(?:in|of)\w/, '')})`)
+              expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
             else
               expressions.add(`(${value})`)
           }

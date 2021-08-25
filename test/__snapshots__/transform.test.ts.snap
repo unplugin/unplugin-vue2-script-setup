@@ -269,6 +269,9 @@ exports[`transform fixture VFor.vue 1`] = `
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
       {{ item }}
     </div>
+    <div v-for=\\"{ cargo_key, in_of } in items2\\">
+      {{ cargo_key }}
+    </div>
   </div>
 </template>
 
@@ -289,9 +292,14 @@ __sfc_main.setup = (__props, __ctx) => {
     name: 'Item 4',
     value: 4
   }];
+  const items2 = [{
+    cargo_key: 'cargo_key',
+    in_of: 'in'
+  }];
   const index = 0;
   return {
-    items
+    items,
+    items2
   };
 };
 
