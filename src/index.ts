@@ -5,7 +5,7 @@ import { transform } from '.'
 export * from './core/transform'
 export * from './types'
 
-const scriptSetupRE = /<script\s+setup/
+const scriptSetupRE = /<script\s(.*\s)?setup(\s.*)?>/
 
 export default createUnplugin<ScriptSetupTransformOptions>(options => ({
   name: 'unplugin-vue2-script-setup',
