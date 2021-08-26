@@ -3,10 +3,9 @@ import type {
   UnwrapRef,
   ComputedRef,
   WritableComputedOptions,
-  DebuggerOptions,
   WritableComputedRef,
   ShallowUnwrapRef,
-} from '@vue/runtime-dom'
+} from '@vue/composition-api'
 
 declare const RefMarker: unique symbol
   type RefValue<T> = T & { [RefMarker]?: any }
@@ -62,11 +61,11 @@ declare function _$shallowRef<T>(arg?: T): RefValue<T>
 
 declare function _$computed<T>(
   getter: () => T,
-  debuggerOptions?: DebuggerOptions
+  // debuggerOptions?: DebuggerOptions
 ): ComputedRefValue<T>
 declare function _$computed<T>(
   options: WritableComputedOptions<T>,
-  debuggerOptions?: DebuggerOptions
+  // debuggerOptions?: DebuggerOptions
 ): WritableComputedRefValue<T>
 
 declare global {
