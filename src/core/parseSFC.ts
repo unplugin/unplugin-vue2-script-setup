@@ -149,5 +149,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
     },
     scriptSetup,
     script,
+    parserOptions,
+    extraDeclarations: [],
   }
 }

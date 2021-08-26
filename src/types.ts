@@ -1,4 +1,6 @@
-import { Program } from '@babel/types'
+import type { ParserOptions } from '@babel/parser'
+import type { Program, Node } from '@babel/types'
+import type { FilterPattern } from '@rollup/pluginutils'
 
 export interface ScriptTagMeta {
   start: number
@@ -19,6 +21,8 @@ export interface ParsedSFC {
   }
   scriptSetup: ScriptTagMeta
   script: ScriptTagMeta
+  parserOptions: ParserOptions
+  extraDeclarations: Node[]
 }
 
 export interface ScriptSetupTransformOptions {
@@ -27,4 +31,15 @@ export interface ScriptSetupTransformOptions {
     scriptSetup?: (ast: Program) => Program
     post?: (ast: Program, sfc: ParsedSFC) => Program
   }
+  refTransform?: boolean
 }
+
+export interface PluginOptions extends ScriptSetupTransformOptions {
+  include?: FilterPattern
+  exclude?: FilterPattern
+}
+
+export type TransformResult = {
+  code: string
+  readonly map: any
+} | null
