@@ -66,10 +66,10 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",
     "@antfu/ni": "^0.7.0",
-    "@antfu/utils": "^0.2.4",
+    "@antfu/utils": "^0.3.0",
     "@rollup/pluginutils": "^4.1.1",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.1",
+    "@types/node": "^16.7.2",
     "@vue/composition-api": "^1.1.3",
     "@vue/runtime-dom": "^3.2.6",
     "bumpp": "^6.0.6",
@@ -83,7 +83,7 @@
     "ts-jest": "^27.0.5",
     "tsup": "^4.14.0",
     "typescript": "^4.3.5",
-    "vite": "^2.5.0"
+    "vite": "^2.5.1"
   },
   "dependencies": {
     "@babel/core": "^7.15.0",
@@ -92,9 +92,9 @@
     "@babel/traverse": "^7.15.0",
     "@babel/types": "^7.15.0",
     "@vue/ref-transform": "^3.2.6",
-    "@vue/shared": "^3.2.4",
-    "htmlparser2": "^6.1.0",
+    "@vue/shared": "^3.2.6",
+    "htmlparser2": "^7.0.0",
     "magic-string": "^0.25.7",
-    "unplugin": "^0.0.8"
+    "unplugin": "^0.2.0"
   }
 }
