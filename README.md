@@ -238,7 +238,7 @@ If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warni
     Ref Sugar (take 2)
   </summary>
 
-In v0.5.x, we shipped the **experimental** [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369) implementation based on Vue 3's [`@vue/ref-transform`](https://github.com/vuejs/vue-next/tree/master/packages/ref-transform) package. **Use at your own risk!**
+In v0.5.x, we shipped the **experimental** [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369) implementation based on Vue 3's [`@vue/ref-transform`](https://github.com/vuejs/vue-next/tree/master/packages/ref-transform) package. Notice the syntax is not settled yet and might be changed in the future updates. **Use at your own risk!**
 
 To enabled it, pass the option:
 
