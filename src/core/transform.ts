@@ -1,44 +1,45 @@
 import MagicString from 'magic-string'
 import { shouldTransform as shouldTransformRefSugar, transform as transformRef } from '@vue/ref-transform'
-import { ScriptSetupTransformOptions, TransformResult } from '../types'
+import { ResolvedOptions, ScriptSetupTransformOptions, TransformResult } from '../types'
 import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
 import { transformSfcRefSugar } from './transformSfcRefSugar'
+import { resolveOptions } from './options'
 
-export const importHelpersFrom = '@vue/composition-api'
 const scriptSetupRE = /<script\s(.*\s)?setup(\s.*)?>/
 
 export function shouldTransform(code: string, id: string, options?: ScriptSetupTransformOptions): boolean {
-  if (options?.refTransform)
-    return true
-  return scriptSetupRE.test(code)
+  return (options?.refTransform && shouldTransformRefSugar(code)) || scriptSetupRE.test(code)
 }
 
 export function transform(input: string, id: string, options?: ScriptSetupTransformOptions): TransformResult {
+  if (!shouldTransform(input, id, options))
+    return null
+  const resolved = resolveOptions(options)
   if (!id.endsWith('.vue'))
-    return transformNonVue(input, id, options)
+    return transformNonVue(input, id, resolved)
   else
-    return transformVue(input, id, options)
+    return transformVue(input, id, resolved)
 }
 
-export function transformNonVue(input: string, id: string, options: ScriptSetupTransformOptions | undefined): TransformResult {
-  if (options?.refTransform && shouldTransformRefSugar(input)) {
+function transformNonVue(input: string, id: string, options: ResolvedOptions): TransformResult {
+  if (options.refTransform && shouldTransformRefSugar(input)) {
     return transformRef(input, {
       filename: id,
-      sourceMap: true,
-      importHelpersFrom,
+      sourceMap: options.sourceMap,
+      importHelpersFrom: options.importHelpersFrom,
     })
   }
   return null
 }
 
-export function transformVue(input: string, id: string, options: ScriptSetupTransformOptions | undefined): TransformResult {
+function transformVue(input: string, id: string, options: ResolvedOptions): TransformResult {
   const s = new MagicString(input)
 
   const sfc = parseSFC(input, id)
 
   if (options?.refTransform)
-    transformSfcRefSugar(sfc)
+    transformSfcRefSugar(sfc, options)
 
   const { code } = transformScriptSetup(sfc, options)
 
@@ -68,6 +69,8 @@ export function transformVue(input: string, id: string, options: ScriptSetupTran
   }
   return {
     code: s.toString(),
-    get map() { return s.generateMap() },
+    map: options.sourceMap
+      ? s.generateMap()
+      : null,
   }
 }

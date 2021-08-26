@@ -79,14 +79,14 @@ importers:
       vue-tsc: ^0.3.0
     dependencies:
       core-js: 3.16.2
-      nuxt: 2.15.8_typescript@4.3.5
+      nuxt: 2.15.8
     devDependencies:
       '@nuxt/types': 2.15.8
       '@nuxt/typescript-build': 2.1.0_@nuxt+types@2.15.8
       '@nuxtjs/composition-api': 0.27.0_nuxt@2.15.8
       '@vue/runtime-dom': 3.2.6
       unplugin-vue2-script-setup: link:../..
-      vue-tsc: 0.3.0_typescript@4.3.5
+      vue-tsc: 0.3.0
 
   examples/vue-cli:
     specifiers:
@@ -2001,13 +2001,13 @@ packages:
       - supports-color
     dev: false
 
-  /@nuxt/builder/2.15.8_typescript@4.3.5:
+  /@nuxt/builder/2.15.8:
     resolution: {integrity: sha512-WVhN874LFMdgRiJqpxmeKI+vh5lhCUBVOyR9PhL1m1V/GV3fb+Dqc1BKS6XgayrWAWavPLveCJmQ/FID0puOfQ==}
     dependencies:
       '@nuxt/devalue': 1.2.5
       '@nuxt/utils': 2.15.8
       '@nuxt/vue-app': 2.15.8
-      '@nuxt/webpack': 2.15.8_typescript@4.3.5
+      '@nuxt/webpack': 2.15.8
       chalk: 4.1.2
       chokidar: 3.5.2
       consola: 2.15.3
@@ -2290,7 +2290,7 @@ packages:
       vue-server-renderer: 2.6.14
     dev: false
 
-  /@nuxt/webpack/2.15.8_typescript@4.3.5:
+  /@nuxt/webpack/2.15.8:
     resolution: {integrity: sha512-CzJYFed23Ow/UK0+cI1FVthDre1p2qc8Q97oizG39d3/SIh3aUHjgj8c60wcR+RSxVO0FzZMXkmq02NmA7vWJg==}
     dependencies:
       '@babel/core': 7.15.0
@@ -2314,7 +2314,7 @@ packages:
       memory-fs: 0.5.0
       optimize-css-assets-webpack-plugin: 5.0.8_webpack@4.46.0
       pify: 5.0.0
-      pnp-webpack-plugin: 1.7.0_typescript@4.3.5
+      pnp-webpack-plugin: 1.7.0
       postcss: 7.0.36
       postcss-import: 12.0.1
       postcss-import-resolver: 2.0.0
@@ -2359,7 +2359,7 @@ packages:
       estree-walker: 2.0.2
       fs-extra: 9.1.0
       magic-string: 0.25.7
-      nuxt: 2.15.8_typescript@4.3.5
+      nuxt: 2.15.8
       ufo: 0.7.9
       upath: 2.0.1
     dev: true
@@ -10179,13 +10179,13 @@ packages:
   /num2fraction/1.2.2:
     resolution: {integrity: sha1-b2gragJ6Tp3fpFZM0lidHU5mnt4=}
 
-  /nuxt/2.15.8_typescript@4.3.5:
+  /nuxt/2.15.8:
     resolution: {integrity: sha512-ceK3qLg/Baj7J8mK9bIxqw9AavrF+LXqwYEreBdY/a4Sj8YV4mIvhqea/6E7VTCNNGvKT2sJ/TTJjtfQ597lTA==}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@nuxt/babel-preset-app': 2.15.8
-      '@nuxt/builder': 2.15.8_typescript@4.3.5
+      '@nuxt/builder': 2.15.8
       '@nuxt/cli': 2.15.8
       '@nuxt/components': 2.2.1
       '@nuxt/config': 2.15.8
@@ -10198,7 +10198,7 @@ packages:
       '@nuxt/utils': 2.15.8
       '@nuxt/vue-app': 2.15.8
       '@nuxt/vue-renderer': 2.15.8
-      '@nuxt/webpack': 2.15.8_typescript@4.3.5
+      '@nuxt/webpack': 2.15.8
     transitivePeerDependencies:
       - bufferutil
       - consola
@@ -10747,6 +10747,15 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /pnp-webpack-plugin/1.7.0:
+    resolution: {integrity: sha512-2Rb3vm+EXble/sMXNSu6eoBx8e79gKqhNq9F5ZWW6ERNCTE/Q0wQNne5541tE5vKjfM8hpNCYL+LGc1YTfI0dg==}
+    engines: {node: '>=6'}
+    dependencies:
+      ts-pnp: 1.2.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /pnp-webpack-plugin/1.7.0_typescript@4.1.6:
     resolution: {integrity: sha512-2Rb3vm+EXble/sMXNSu6eoBx8e79gKqhNq9F5ZWW6ERNCTE/Q0wQNne5541tE5vKjfM8hpNCYL+LGc1YTfI0dg==}
     engines: {node: '>=6'}
@@ -10755,15 +10764,6 @@ packages:
     transitivePeerDependencies:
       - typescript
     dev: true
-
-  /pnp-webpack-plugin/1.7.0_typescript@4.3.5:
-    resolution: {integrity: sha512-2Rb3vm+EXble/sMXNSu6eoBx8e79gKqhNq9F5ZWW6ERNCTE/Q0wQNne5541tE5vKjfM8hpNCYL+LGc1YTfI0dg==}
-    engines: {node: '>=6'}
-    dependencies:
-      ts-pnp: 1.2.0_typescript@4.3.5
-    transitivePeerDependencies:
-      - typescript
-    dev: false
 
   /portfinder/1.0.28:
     resolution: {integrity: sha512-Se+2isanIcEqf2XMHjyUKskczxbPH7dQnlMjXX6+dybayyHvAf/TCgyMRlzf/B6QDhAEFOGes0pzRo3by4AbMA==}
@@ -13339,6 +13339,16 @@ packages:
       typescript: 4.2.4
     dev: true
 
+  /ts-pnp/1.2.0:
+    resolution: {integrity: sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==}
+    engines: {node: '>=6'}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dev: false
+
   /ts-pnp/1.2.0_typescript@4.1.6:
     resolution: {integrity: sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==}
     engines: {node: '>=6'}
@@ -13350,18 +13360,6 @@ packages:
     dependencies:
       typescript: 4.1.6
     dev: true
-
-  /ts-pnp/1.2.0_typescript@4.3.5:
-    resolution: {integrity: sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==}
-    engines: {node: '>=6'}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      typescript: 4.3.5
-    dev: false
 
   /tsconfig-paths/3.9.0:
     resolution: {integrity: sha512-dRcuzokWhajtZWkQsDVKbWyY+jgcLC5sqJhg2PSgf4ZkH2aHPvaOY8YWGhmjb68b5qqTfasSsDO9k7RUiEmZAw==}
@@ -14143,6 +14141,15 @@ packages:
   /vue-template-es2015-compiler/1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
 
+  /vue-tsc/0.3.0:
+    resolution: {integrity: sha512-zaDRZBxwRIz1XjhNP92FqugG71st6BUMnA2EwPeXrAyzbEYVRz6TezNFceYl3QYqqN8CtaxbqUhaQEDj/ntoCA==}
+    hasBin: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      vscode-vue-languageservice: 0.27.7
+    dev: true
+
   /vue-tsc/0.3.0_typescript@4.1.6:
     resolution: {integrity: sha512-zaDRZBxwRIz1XjhNP92FqugG71st6BUMnA2EwPeXrAyzbEYVRz6TezNFceYl3QYqqN8CtaxbqUhaQEDj/ntoCA==}
     hasBin: true
@@ -14150,16 +14157,6 @@ packages:
       typescript: '*'
     dependencies:
       typescript: 4.1.6
-      vscode-vue-languageservice: 0.27.7
-    dev: true
-
-  /vue-tsc/0.3.0_typescript@4.3.5:
-    resolution: {integrity: sha512-zaDRZBxwRIz1XjhNP92FqugG71st6BUMnA2EwPeXrAyzbEYVRz6TezNFceYl3QYqqN8CtaxbqUhaQEDj/ntoCA==}
-    hasBin: true
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      typescript: 4.3.5
       vscode-vue-languageservice: 0.27.7
     dev: true
 

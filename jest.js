@@ -4,6 +4,7 @@ const { transform } = require('./dist/index')
 module.exports = {
   process(source, filename, ...args) {
     const transformed = transform(source, filename)
-    return require('vue-jest').process.call(this, transformed.code, filename, ...args)
+    const code = transformed ? transformed.code : source
+    return require('vue-jest').process.call(this, code, filename, ...args)
   },
 }

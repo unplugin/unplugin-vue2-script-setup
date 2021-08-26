@@ -1,7 +1,7 @@
 import { createUnplugin } from 'unplugin'
 import { createFilter } from '@rollup/pluginutils'
 import { PluginOptions } from './types'
-import { transform, shouldTransform } from './core'
+import { transform } from './core'
 
 export * from './core'
 export * from './types'
@@ -20,8 +20,7 @@ export default createUnplugin<PluginOptions>((options = {}) => {
     },
     transform(code, id) {
       try {
-        if (shouldTransform(code, id, options))
-          return transform(code, id, options)
+        return transform(code, id, options)
       }
       catch (e) {
         this.error(e)

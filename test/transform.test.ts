@@ -14,7 +14,7 @@ describe('transform', () => {
     for (const file of files) {
       it(file, async() => {
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
-        expect(transform(fixture, file)?.code).toMatchSnapshot()
+        expect(transform(fixture, file)?.code || fixture).toMatchSnapshot()
       })
     }
   })
@@ -31,7 +31,7 @@ describe('transform', () => {
         const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
 
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
-        expect(transform(fixture, file, { refTransform: true })?.code).toMatchSnapshot()
+        expect(transform(fixture, file, { refTransform: true })?.code || fixture).toMatchSnapshot()
 
         warn.mockRestore()
       })

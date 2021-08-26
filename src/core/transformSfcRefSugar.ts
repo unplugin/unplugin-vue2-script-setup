@@ -2,10 +2,9 @@ import { shouldTransform, transformAST } from '@vue/ref-transform'
 import MagicString from 'magic-string'
 import { parse } from '@babel/parser'
 import { types as t } from '@babel/core'
-import type { ParsedSFC } from '../types'
-import { importHelpersFrom } from './transform'
+import type { ParsedSFC, ResolvedOptions } from '../types'
 
-export function transformSfcRefSugar(sfc: ParsedSFC) {
+export function transformSfcRefSugar(sfc: ParsedSFC, options: ResolvedOptions) {
   const importedHelpers = new Set<string>()
 
   for (const script of [sfc.script, sfc.scriptSetup]) {
@@ -22,7 +21,7 @@ export function transformSfcRefSugar(sfc: ParsedSFC) {
     sfc.extraDeclarations = [
       t.importDeclaration(
         Array.from(importedHelpers).map(i => t.importSpecifier(t.identifier(`_${i}`), t.identifier(i))),
-        t.stringLiteral(importHelpersFrom),
+        t.stringLiteral(options.importHelpersFrom),
       ),
     ]
   }

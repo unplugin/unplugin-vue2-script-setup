@@ -1,6 +1,7 @@
 import type { ParserOptions } from '@babel/parser'
 import type { Program, Node } from '@babel/types'
 import type { FilterPattern } from '@rollup/pluginutils'
+import type { SourceMap } from 'rollup'
 
 export interface ScriptTagMeta {
   start: number
@@ -32,6 +33,8 @@ export interface ScriptSetupTransformOptions {
     post?: (ast: Program, sfc: ParsedSFC) => Program
   }
   refTransform?: boolean
+  importHelpersFrom?: string
+  sourceMap?: boolean
 }
 
 export interface PluginOptions extends ScriptSetupTransformOptions {
@@ -39,7 +42,9 @@ export interface PluginOptions extends ScriptSetupTransformOptions {
   exclude?: FilterPattern
 }
 
+export type ResolvedOptions = Required<ScriptSetupTransformOptions>
+
 export type TransformResult = {
   code: string
-  readonly map: any
+  readonly map: SourceMap | null
 } | null
