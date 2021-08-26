@@ -1,4 +1,5 @@
-import { Program } from '@babel/types'
+import type { Program } from '@babel/types'
+import type { FilterPattern } from '@rollup/pluginutils'
 
 export interface ScriptTagMeta {
   start: number
@@ -29,3 +30,13 @@ export interface ScriptSetupTransformOptions {
   }
   refTransform?: boolean
 }
+
+export interface PluginOptions extends ScriptSetupTransformOptions {
+  include?: FilterPattern
+  exclude?: FilterPattern
+}
+
+export type TransformResult = {
+  code: string
+  readonly map: any
+} | null

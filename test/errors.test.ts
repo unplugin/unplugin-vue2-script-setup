@@ -44,6 +44,10 @@ const {data} = await something()
 </script>
 `, 'TopLevel.vue'))
       .toThrowError('top-level await is not supported in Vue 2')
+  })
+
+  it('ref sugar', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
 
     expect(() =>
       t(`
@@ -61,5 +65,7 @@ const a = async () => {
 </script>
 `, 'App.vue'))
       .not.toThrow()
+
+    warn.mockRestore()
   })
 })

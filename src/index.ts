@@ -1,27 +1,31 @@
 import { createUnplugin } from 'unplugin'
-import { ScriptSetupTransformOptions } from './types'
-import { transform } from '.'
+import { createFilter } from '@rollup/pluginutils'
+import { PluginOptions } from './types'
+import { transform, shouldTransform } from './core'
 
-export * from './core/transform'
+export * from './core'
 export * from './types'
 
-const scriptSetupRE = /<script\s+setup/
+export default createUnplugin<PluginOptions>((options = {}) => {
+  const filter = createFilter(
+    options.include || options.refTransform ? [/\.vue$/] : [/\.vue$/, /\.[jt]sx?$/],
+    options.exclude || [/node_modules/, /\.git/, /\.nuxt/],
+  )
 
-export default createUnplugin<ScriptSetupTransformOptions>(options => ({
-  name: 'unplugin-vue2-script-setup',
-  enforce: 'pre',
-  transformInclude(id) {
-    const exts = ['.vue']
-    if (options?.refTransform) exts.push('.ts', '.js')
-    return exts.some(ext => id.endsWith(ext))
-  },
-  transform(code, id) {
-    try {
-      if (options?.refTransform || scriptSetupRE.test(code))
-        return transform(code, id, options)
-    }
-    catch (e) {
-      this.error(e)
-    }
-  },
-}))
+  return {
+    name: 'unplugin-vue2-script-setup',
+    enforce: 'pre',
+    transformInclude(id) {
+      return filter(id)
+    },
+    transform(code, id) {
+      try {
+        if (shouldTransform(code, id, options))
+          return transform(code, id, options)
+      }
+      catch (e) {
+        this.error(e)
+      }
+    },
+  }
+})
