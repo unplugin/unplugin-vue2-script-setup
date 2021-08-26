@@ -7,6 +7,8 @@ export default defineConfig({
   plugins: [
     Vue2(),
     Inspect(),
-    ScriptSetup(),
+    ScriptSetup({
+      refTransform: true,
+    }),
   ],
 })

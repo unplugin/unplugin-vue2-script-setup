@@ -15,6 +15,7 @@ export default defineComponent({
 
     return {
       msg,
+      msgRef: $$(msg),
     }
   },
 })

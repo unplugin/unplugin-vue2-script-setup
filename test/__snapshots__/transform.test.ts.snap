@@ -1,6 +1,151 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`transform fixture DynamicStyle.vue 1`] = `
+exports[`transform fixtures playground/App.vue 1`] = `
+"<template>
+  <div>
+    <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import HelloWorld from './HelloWorld.vue';
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  function onUpdate(e: any) {
+    console.log(e);
+  }
+
+  return {
+    onUpdate
+  };
+};
+
+__sfc_main.components = Object.assign({
+  HelloWorld
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixtures playground/Bar.vue 1`] = `
+"<template>
+  <div>Bar</div>
+</template>
+"
+`;
+
+exports[`transform fixtures playground/Foo.vue 1`] = `
+"<template>
+  <div>Foo</div>
+</template>
+"
+`;
+
+exports[`transform fixtures playground/HelloWorld.vue 1`] = `
+"<template>
+  <div>
+    <h3>{{ msg }}, {{ name }}</h3>
+    <button @click=\\"inc\\">
+      Inc
+    </button>
+    <div>{{ count }} x 2 = {{ doubled }}</div>
+    <button @click=\\"dec()\\" v-html=\\"decText\\" />
+    <component :is=\\"count > 2 ? Foo : Bar\\" />
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { ref as _ref, computed as _computed } from \\"@vue/composition-api\\";
+import { watch } from '@vue/composition-api';
+import Foo from './Foo.vue';
+import Bar from './Bar.vue';
+const __sfc_main = {
+  name: 'App'
+};
+__sfc_main.props = {
+  msg: {
+    key: \\"msg\\",
+    required: false,
+    type: [String],
+    default: 'Hello'
+  },
+  name: {
+    key: \\"name\\",
+    required: true,
+    type: [String, Number]
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const props = __props;
+  const emit = __ctx.emit;
+
+  let count = _ref(0); // eslint-disable-next-line prefer-const
+
+
+  let doubled = _computed(() => count.value * 2);
+
+  function inc() {
+    count.value += 1;
+  }
+
+  function dec() {
+    count.value -= 1;
+  }
+
+  const decText = '<b>Dec</b>';
+  watch(count.value, value => emit('update', value));
+  return {
+    Foo,
+    Bar,
+    count,
+    doubled,
+    inc,
+    dec,
+    decText
+  };
+};
+
+export default __sfc_main;
+</script>
+
+
+"
+`;
+
+exports[`transform fixtures playground/main.ts 1`] = `
+"import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
+import App from './App.vue'
+
+Vue.use(VueCompositionAPI)
+
+const app = new Vue({ render: h => h(App) })
+app.$mount('#app')
+"
+`;
+
+exports[`transform fixtures playground/vite.config.ts 1`] = `
+"import { defineConfig } from 'vite'
+import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
+import Inspect from 'vite-plugin-inspect'
+import ScriptSetup from '../src/vite'
+
+export default defineConfig({
+  plugins: [
+    Vue2(),
+    Inspect(),
+    ScriptSetup({
+      refTransform: true,
+    }),
+  ],
+})
+"
+`;
+
+exports[`transform fixtures test/fixtures/DynamicStyle.vue 1`] = `
 "<template>
   <div :style=\\"{ color, border: '1px' }\\" />
 </template>
@@ -20,9 +165,9 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture Empty.vue 1`] = `""`;
+exports[`transform fixtures test/fixtures/Empty.vue 1`] = `""`;
 
-exports[`transform fixture Macros.vue 1`] = `
+exports[`transform fixtures test/fixtures/Macros.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
 </template>
@@ -47,7 +192,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture MacrosPure.vue 1`] = `
+exports[`transform fixtures test/fixtures/MacrosPure.vue 1`] = `
 "<template>
   <div>{{ msg }}</div>
 </template>
@@ -62,7 +207,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture MacrosType.vue 1`] = `
+exports[`transform fixtures test/fixtures/MacrosType.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">
     {{ msg }}
@@ -104,7 +249,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture MacrosType2.vue 1`] = `
+exports[`transform fixtures test/fixtures/MacrosType2.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">
     {{ msg }}
@@ -165,7 +310,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture Object1.vue 1`] = `
+exports[`transform fixtures test/fixtures/Object1.vue 1`] = `
 "<template>
   <div>
     {{ data }} {{ title }}
@@ -189,7 +334,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture ObjectDestructure.vue 1`] = `
+exports[`transform fixtures test/fixtures/ObjectDestructure.vue 1`] = `
 "<template>
   <div></div>
 </template>
@@ -213,22 +358,26 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture RefSugar.ts 1`] = `
+exports[`transform fixtures test/fixtures/RefSugar.ts 1`] = `
 "import { ref as _ref, computed as _computed } from '@vue/composition-api'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
+import { ref } from '@vue/composition-api'
+
 let ref1 = (ref('hello'))
 ref1.value = 'world'
-const ref1Raw = (ref1)
+let ref1Raw = (ref1)
 
 let ref2 = _ref('hello')
 ref2.value = 'world'
-const ref2Raw = (ref2)
+let ref2Raw = (ref2)
 
 let computed1 = _computed(() => ref2.value += ' str')
-const computed1Raw = (computed1)
+let computed1Raw = (computed1)
 "
 `;
 
-exports[`transform fixture RefSugar.vue 1`] = `
+exports[`transform fixtures test/fixtures/RefSugar.vue 1`] = `
 "<template>
   <div>
     {{ msg }}
@@ -248,7 +397,8 @@ const __sfc_main = defineComponent({
   setup() {
     let msg = ref('hello world');
     return {
-      msg: msg.value
+      msg: msg.value,
+      msgRef: msg
     };
   }
 
@@ -267,7 +417,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture RefSugarScriptSetup.vue 1`] = `
+exports[`transform fixtures test/fixtures/RefSugarScriptSetup.vue 1`] = `
 "<template>
   <div>
     {{ msg }}
@@ -292,7 +442,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture ScriptOnly.vue 1`] = `
+exports[`transform fixtures test/fixtures/ScriptOnly.vue 1`] = `
 "<script lang=\\"ts\\">
 import { defineComponent } from '@vue/composition-api'
 
@@ -303,7 +453,7 @@ export default defineComponent({
 "
 `;
 
-exports[`transform fixture TemplateOnly.vue 1`] = `
+exports[`transform fixtures test/fixtures/TemplateOnly.vue 1`] = `
 "<template>
   <div>
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
@@ -339,7 +489,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixture VFor.vue 1`] = `
+exports[`transform fixtures test/fixtures/VFor.vue 1`] = `
 "<template>
   <div>
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
@@ -381,116 +531,5 @@ __sfc_main.setup = (__props, __ctx) => {
 
 export default __sfc_main;
 </script>
-"
-`;
-
-exports[`transform playground App.vue 1`] = `
-"<template>
-  <div>
-    <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
-  </div>
-</template>
-
-<script lang=\\"ts\\">
-import HelloWorld from './HelloWorld.vue';
-const __sfc_main = {};
-
-__sfc_main.setup = (__props, __ctx) => {
-  function onUpdate(e: any) {
-    console.log(e);
-  }
-
-  return {
-    onUpdate
-  };
-};
-
-__sfc_main.components = Object.assign({
-  HelloWorld
-}, __sfc_main.components);
-export default __sfc_main;
-</script>
-"
-`;
-
-exports[`transform playground Bar.vue 1`] = `
-"<template>
-  <div>Bar</div>
-</template>
-"
-`;
-
-exports[`transform playground Foo.vue 1`] = `
-"<template>
-  <div>Foo</div>
-</template>
-"
-`;
-
-exports[`transform playground HelloWorld.vue 1`] = `
-"<template>
-  <div>
-    <h3>{{ msg }}, {{ name }}</h3>
-    <button @click=\\"inc\\">
-      Inc
-    </button>
-    <div>{{ count }} x 2 = {{ doubled }}</div>
-    <button @click=\\"dec()\\" v-html=\\"decText\\" />
-    <component :is=\\"count > 2 ? Foo : Bar\\" />
-  </div>
-</template>
-
-<script lang=\\"ts\\">
-import { ref, computed, watch } from '@vue/composition-api';
-import Foo from './Foo.vue';
-import Bar from './Bar.vue';
-const __sfc_main = {
-  name: 'App'
-};
-__sfc_main.props = {
-  msg: {
-    key: \\"msg\\",
-    required: false,
-    type: [String],
-    default: 'Hello'
-  },
-  name: {
-    key: \\"name\\",
-    required: true,
-    type: [String, Number]
-  }
-};
-
-__sfc_main.setup = (__props, __ctx) => {
-  const props = __props;
-  const emit = __ctx.emit;
-  const count = ref(0);
-  const doubled = computed(() => count.value * 2);
-
-  function inc() {
-    count.value += 1;
-  }
-
-  function dec() {
-    count.value -= 1;
-  }
-
-  const decText = '<b>Dec</b>';
-  watch(count, value => emit('update', value));
-  return {
-    Foo,
-    Bar,
-    count,
-    doubled,
-    inc,
-    dec,
-    decText
-  };
-};
-
-export default __sfc_main;
-</script>
-
-
 "
 `;

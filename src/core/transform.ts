@@ -38,7 +38,7 @@ function transformVue(input: string, id: string, options: ResolvedOptions): Tran
 
   const sfc = parseSFC(input, id)
 
-  if (options?.refTransform)
+  if (options.refTransform)
     transformSfcRefSugar(sfc, options)
 
   const { code } = transformScriptSetup(sfc, options)

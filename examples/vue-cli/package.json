@@ -11,10 +11,10 @@
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.13",
-    "@vue/cli-plugin-typescript": "~4.5.13",
-    "@vue/cli-service": "~4.5.13",
-    "typescript": "~4.3.5",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-typescript": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
+    "typescript": "^4.3.5",
     "unplugin-vue2-script-setup": "workspace:*",
     "vue-template-compiler": "^2.6.14",
     "vue-tsc": "^0.3.0"

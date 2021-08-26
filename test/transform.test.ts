@@ -4,30 +4,18 @@ import fg from 'fast-glob'
 import { transform } from '../src'
 
 describe('transform', () => {
-  describe('playground', () => {
-    const root = resolve(__dirname, '../playground')
-    const files = fg.sync('*.vue', {
+  describe('fixtures', () => {
+    const root = resolve(__dirname, '..')
+    const files = fg.sync([
+      'test/fixtures/*.{vue,js,ts}',
+      'playground/*.{vue,js,ts}',
+    ], {
       cwd: root,
       onlyFiles: true,
     })
 
     for (const file of files) {
-      it(file, async() => {
-        const fixture = await fs.readFile(resolve(root, file), 'utf-8')
-        expect(transform(fixture, file)?.code || fixture).toMatchSnapshot()
-      })
-    }
-  })
-
-  describe('fixture', () => {
-    const root = resolve(__dirname, 'fixtures')
-    const files = fg.sync(['*.vue', '*.ts', '*.js'], {
-      cwd: root,
-      onlyFiles: true,
-    })
-
-    for (const file of files) {
-      it(file, async() => {
+      it(file.replace(/\\/g, '/'), async() => {
         const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
 
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
