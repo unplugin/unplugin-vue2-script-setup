@@ -239,7 +239,7 @@ exports[`transform fixture RefSugar.vue 1`] = `
 
 
 <script lang=\\"ts\\">
-import { ref as _ref } from '@vue/composition-api';
+import { ref as _ref } from \\"@vue/composition-api\\";
 
 /* eslint-disable prefer-const */
 import { defineComponent, ref } from '@vue/composition-api';
@@ -275,12 +275,11 @@ exports[`transform fixture RefSugarScriptSetup.vue 1`] = `
 </template>
 
 <script lang=\\"ts\\">
-import { ref as _ref } from '@vue/composition-api';
-/* eslint-disable prefer-const */
-
+import { ref as _ref } from \\"@vue/composition-api\\";
 const __sfc_main = {};
 
 __sfc_main.setup = (__props, __ctx) => {
+  /* eslint-disable prefer-const */
   let msg = _ref('hello world');
 
   return {

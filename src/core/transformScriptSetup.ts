@@ -41,23 +41,26 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
 
   let hasBody = false
 
-  let ast = t.program(
-    [...hoisted, ...script.ast.body]
-      .map((node: Node) => {
-        // replace `export default` with a temproray variable
-        // `const __sfc_main = { ... }`
-        if (node.type === 'ExportDefaultDeclaration') {
-          hasBody = true
-          return t.variableDeclaration('const', [
-            t.variableDeclarator(
-              __sfc,
-              node.declaration as any,
-            ),
-          ])
-        }
-        return node
-      }) as Statement[],
-  )
+  const bodyNodes = script.ast.body.map((node: Node) => {
+    // replace `export default` with a temproray variable
+    // `const __sfc_main = { ... }`
+    if (node.type === 'ExportDefaultDeclaration') {
+      hasBody = true
+      return t.variableDeclaration('const', [
+        t.variableDeclarator(
+          __sfc,
+          node.declaration as any,
+        ),
+      ])
+    }
+    return node
+  })
+
+  let ast = t.program([
+    ...sfc.extraDeclarations,
+    ...hoisted,
+    ...bodyNodes,
+  ] as Statement[])
 
   // inject `const __sfc_main = {}` if `<script>` has default export
   if (!hasBody) {

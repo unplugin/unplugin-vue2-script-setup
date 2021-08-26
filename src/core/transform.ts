@@ -3,9 +3,9 @@ import { shouldTransform as shouldTransformRefSugar, transform as transformRef }
 import { ScriptSetupTransformOptions, TransformResult } from '../types'
 import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
-import { transformRefSugar } from './transformReSugar'
+import { transformSfcRefSugar } from './transformSfcRefSugar'
 
-const importHelpersFrom = '@vue/composition-api'
+export const importHelpersFrom = '@vue/composition-api'
 const scriptSetupRE = /<script\s+setup/
 
 export function shouldTransform(code: string, id: string, options?: ScriptSetupTransformOptions): boolean {
@@ -33,16 +33,13 @@ export function transformNonVue(input: string, id: string, options: ScriptSetupT
 }
 
 export function transformVue(input: string, id: string, options: ScriptSetupTransformOptions | undefined): TransformResult {
-  let s = new MagicString(input)
+  const s = new MagicString(input)
 
-  let sfc = parseSFC(input, id)
-  if (options?.refTransform && (sfc.script.found || sfc.scriptSetup.found)) {
-    const result = transformRefSugar(sfc, s, importHelpersFrom)
-    if (result) {
-      s = result
-      sfc = parseSFC(s.toString(), id)
-    }
-  }
+  const sfc = parseSFC(input, id)
+
+  if (options?.refTransform)
+    transformSfcRefSugar(sfc)
+
   const { code } = transformScriptSetup(sfc, options)
 
   const attributes = {

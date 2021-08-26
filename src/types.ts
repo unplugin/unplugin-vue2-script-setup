@@ -1,4 +1,5 @@
-import type { Program } from '@babel/types'
+import type { ParserOptions } from '@babel/parser'
+import type { Program, Node } from '@babel/types'
 import type { FilterPattern } from '@rollup/pluginutils'
 
 export interface ScriptTagMeta {
@@ -20,6 +21,8 @@ export interface ParsedSFC {
   }
   scriptSetup: ScriptTagMeta
   script: ScriptTagMeta
+  parserOptions: ParserOptions
+  extraDeclarations: Node[]
 }
 
 export interface ScriptSetupTransformOptions {
