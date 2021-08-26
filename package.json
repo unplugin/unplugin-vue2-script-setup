@@ -1,6 +1,6 @@
 {
   "name": "unplugin-vue2-script-setup",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Bring <script setup> to Vue 2",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -67,6 +67,7 @@
     "@antfu/eslint-config": "^0.7.0",
     "@antfu/ni": "^0.7.0",
     "@antfu/utils": "^0.2.4",
+    "@rollup/pluginutils": "^4.1.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",
     "@vue/composition-api": "^1.1.3",
