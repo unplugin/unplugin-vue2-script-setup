@@ -6,7 +6,7 @@ import { transformScriptSetup } from './transformScriptSetup'
 import { transformSfcRefSugar } from './transformSfcRefSugar'
 
 export const importHelpersFrom = '@vue/composition-api'
-const scriptSetupRE = /<script\s+setup/
+const scriptSetupRE = /<script\s(.*\s)?setup(\s.*)?>/
 
 export function shouldTransform(code: string, id: string, options?: ScriptSetupTransformOptions): boolean {
   if (options?.refTransform)
