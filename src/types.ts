@@ -27,4 +27,5 @@ export interface ScriptSetupTransformOptions {
     scriptSetup?: (ast: Program) => Program
     post?: (ast: Program, sfc: ParsedSFC) => Program
   }
+  refTransform?: boolean
 }

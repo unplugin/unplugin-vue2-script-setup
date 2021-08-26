@@ -11,7 +11,7 @@ const a = 1
 <script lang="ts">
 export default {}
 </script>
-`))
+`, 'Lang.vue'))
       .toThrowError('<script setup> language must be the same as <script>')
   })
 
@@ -22,7 +22,7 @@ export default {}
 defineProps()
 const a = defineProps()
 </script>
-`))
+`, 'DefineProps.vue'))
       .toThrowError('duplicate defineProps() call')
   })
 
@@ -33,7 +33,7 @@ const a = defineProps()
 defineProps()
 await something()
 </script>
-`))
+`, 'TopLevel.vue'))
       .toThrowError('top-level await is not supported in Vue 2')
 
     expect(() =>
@@ -42,8 +42,14 @@ await something()
 defineProps()
 const {data} = await something()
 </script>
-`))
+`, 'TopLevel.vue'))
       .toThrowError('top-level await is not supported in Vue 2')
+
+    expect(() =>
+      t(`
+     const a = $ref(1)
+     `, 'Ref.ts', { refTransform: true }))
+      .toThrowError('$ref() bindings can only be declared with let')
 
     expect(() =>
       t(`
@@ -53,7 +59,7 @@ const a = async () => {
   await something()
 }
 </script>
-`))
+`, 'App.vue'))
       .not.toThrow()
   })
 })

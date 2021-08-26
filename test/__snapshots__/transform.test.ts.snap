@@ -213,6 +213,86 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixture RefSugar.ts 1`] = `
+"import { ref as _ref, computed as _computed } from '@vue/composition-api'
+let ref1 = (ref('hello'))
+ref1.value = 'world'
+const ref1Raw = (ref1)
+
+let ref2 = _ref('hello')
+ref2.value = 'world'
+const ref2Raw = (ref2)
+
+let computed1 = _computed(() => ref2.value += ' str')
+const computed1Raw = (computed1)
+"
+`;
+
+exports[`transform fixture RefSugar.vue 1`] = `
+"<template>
+  <div>
+    {{ msg }}
+    {{ msg2 }}
+  </div>
+</template>
+
+
+
+<script lang=\\"ts\\">
+import { ref as _ref } from '@vue/composition-api';
+
+/* eslint-disable prefer-const */
+import { defineComponent, ref } from '@vue/composition-api';
+
+const __sfc_main = defineComponent({
+  setup() {
+    let msg = ref('hello world');
+    return {
+      msg: msg.value
+    };
+  }
+
+});
+
+__sfc_main.setup = (__props, __ctx) => {
+  let msg2 = _ref('hello world');
+
+  return {
+    msg2
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform fixture RefSugarScriptSetup.vue 1`] = `
+"<template>
+  <div>
+    {{ msg }}
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { ref as _ref } from '@vue/composition-api';
+/* eslint-disable prefer-const */
+
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  let msg = _ref('hello world');
+
+  return {
+    msg
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixture ScriptOnly.vue 1`] = `
 "<script lang=\\"ts\\">
 import { defineComponent } from '@vue/composition-api';
