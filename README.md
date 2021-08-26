@@ -32,7 +32,7 @@ import ScriptSetup from 'unplugin-vue2-script-setup/vite'
 export default defineConfig({
   plugins: [
     Vue2(),
-    ScriptSetup(),
+    ScriptSetup({ /* options */ }),
   ],
 })
 ```
@@ -104,7 +104,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 module.exports = {
   configureWebpack: {
     plugins: [
-      require('unplugin-vue2-script-setup/webpack')(),
+      require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
     ],
   },
 }
@@ -124,7 +124,7 @@ npm i -D @vue/cli-plugin-typescript vue-tsc
 module.exports = {
   configureWebpack: {
     plugins: [
-      require('unplugin-vue2-script-setup/webpack')(),
+      require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
     ],
   },
   chainWebpack(config) {
@@ -156,7 +156,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 module.exports = {
   /* ... */
   plugins: [
-    require('unplugin-vue2-script-setup/webpack')()
+    require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
   ]
 }
 ```
@@ -231,6 +231,38 @@ If the global types are missing for your IDE, update your `tsconfig.json` with:
 
 If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
 
+## Configurations
+
+<details>
+  <summary>
+    Ref Sugar (take 2)
+  </summary>
+
+In v0.5.x, we shipped the **experimental** [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369) implementation based on Vue 3's [`@vue/ref-transform`](https://github.com/vuejs/vue-next/tree/master/packages/ref-transform) package. **Use at your own risk!**
+
+To enabled it, pass the option:
+
+```ts
+ScriptSetup({
+  refTransform: true
+})
+```
+
+To get TypeScript support, update your `tsconfig.json` with:
+
+```jsonc
+{
+  "compilerOptions": {
+    "types": [
+      "unplugin-vue2-script-setup/types",
+      "unplugin-vue2-script-setup/ref-macros"
+    ]
+  }
+}
+```
+
+</details>
+
 ## Recommendations
 
 If you enjoy using `<script setup>`, you might also want to try [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) to improve the DX even further.
@@ -242,6 +274,7 @@ If you enjoy using `<script setup>`, you might also want to try [`unplugin-auto-
 - [x] Compile time macros `defineProps` `defineEmits` `withDefaults`
 - [x] Global types
 - [x] Merge with normal scripts
+- [x] [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369)
 - [x] Vite plugin
 - [x] Webpack plugin
 - [x] Nuxt module
