@@ -4,7 +4,6 @@ import { PluginOptions } from './types'
 import { transform } from './core'
 
 export * from './core'
-export * from './types'
 
 export default createUnplugin<PluginOptions>((options = {}) => {
   const filter = createFilter(

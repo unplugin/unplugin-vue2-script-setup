@@ -18,7 +18,7 @@ async function run() {
     code = code.replace('exports.default =', 'module.exports =')
     code += 'exports.default = module.exports;'
     await fs.writeFile(file, code)
-    await fs.writeFile(`${name}.d.ts`, `export { default } from './dist/${name}'\n`)
+    await fs.writeFile(`${name}.d.ts`, `import './shims'\nexport { default } from './dist/${name}'\n`)
   }
 }
 
