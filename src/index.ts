@@ -21,7 +21,7 @@ export default createUnplugin<PluginOptions>((options = {}) => {
       try {
         return transform(code, id, options)
       }
-      catch (e) {
+      catch (e: any) {
         this.error(e)
       }
     },
