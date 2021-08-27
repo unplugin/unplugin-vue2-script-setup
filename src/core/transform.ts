@@ -9,6 +9,9 @@ import { resolveOptions } from './options'
 const scriptSetupRE = /<script\s(.*\s)?setup(\s.*)?>/
 
 export function shouldTransform(code: string, id: string, options?: ScriptSetupTransformOptions): boolean {
+  // avoid transforming twice
+  if (code.includes('export default __sfc_main'))
+    return false
   return (options?.refTransform && shouldTransformRefSugar(code)) || scriptSetupRE.test(code)
 }
 
