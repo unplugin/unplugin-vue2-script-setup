@@ -16,10 +16,10 @@ export function transform(input: string, id: string, options?: ScriptSetupTransf
   if (!shouldTransform(input, id, options))
     return null
   const resolved = resolveOptions(options)
-  if (!id.endsWith('.vue'))
-    return transformNonVue(input, id, resolved)
-  else
+  if (id.endsWith('.vue') || id.includes('.vue?vue'))
     return transformVue(input, id, resolved)
+  else
+    return transformNonVue(input, id, resolved)
 }
 
 function transformNonVue(input: string, id: string, options: ResolvedOptions): TransformResult {

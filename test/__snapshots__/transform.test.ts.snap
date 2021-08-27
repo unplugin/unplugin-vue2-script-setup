@@ -13,6 +13,7 @@ const __sfc_main = {};
 
 __sfc_main.setup = (__props, __ctx) => {
   function onUpdate(e: any) {
+    // eslint-disable-next-line no-console
     console.log(e);
   }
 
@@ -142,41 +143,6 @@ export default defineConfig({
     }),
   ],
 })
-"
-`;
-
-exports[`transform fixtures test/fixtures/A.vue 1`] = `
-"<template>
-  <div @click=\\"counter\\">{{ msg }}: {{ count }}</div>
-</template>
-
-<script lang=\\"ts\\">
-const __sfc_main = {
-  data() {
-    return {
-      msg: 'hello'
-    };
-  }
-
-};
-
-__sfc_main.setup = (__props, __ctx) => {
-  let count = 0;
-
-  function counter() {
-    count = count + 1;
-  }
-
-  return {
-    count,
-    counter
-  };
-};
-
-export default __sfc_main;
-</script>
-
-
 "
 `;
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const ScriptSetup = require('unplugin-vue2-script-setup/webpack')
+const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 
 /**
  * @type {import('@vue/cli-service').ProjectOptions}
