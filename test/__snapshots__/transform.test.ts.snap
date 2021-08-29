@@ -13,6 +13,7 @@ const __sfc_main = {};
 
 __sfc_main.setup = (__props, __ctx) => {
   function onUpdate(e: any) {
+    // eslint-disable-next-line no-console
     console.log(e);
   }
 

@@ -19,7 +19,11 @@ describe('transform', () => {
         const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
 
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
-        expect(transform(fixture, file, { refTransform: true })?.code || fixture).toMatchSnapshot()
+        const result = transform(fixture, file, { refTransform: true })?.code || fixture
+        expect(result).toMatchSnapshot()
+
+        const result2 = transform(result, file, { refTransform: true })?.code || result
+        expect(result).toEqual(result2)
 
         warn.mockRestore()
       })
