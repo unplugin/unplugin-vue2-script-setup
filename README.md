@@ -42,6 +42,24 @@ Example: [`playground/`](./playground/)
 <br></details>
 
 <details>
+<summary>Rollup</summary><br>
+
+```ts
+// rollup.config.js
+import vue from 'rollup-plugin-vue'
+import ScriptSetup from 'unplugin-vue2-script-setup/rollup'
+
+export default {
+  plugins: [
+    ScriptSetup({ /* options */ }),
+    vue()
+  ]
+}
+```
+
+<br></details>
+
+<details>
 <summary>Nuxt</summary><br>
 
 ```bash
