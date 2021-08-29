@@ -163,6 +163,23 @@ module.exports = {
 
 <br></details>
 
+<details>
+<summary>Rollup</summary><br>
+
+```ts
+// rollup.config.js
+import Vue from 'rollup-plugin-vue'
+import ScriptSetup from 'unplugin-vue2-script-setup/rollup'
+
+export default {
+  plugins: [
+    Vue(),
+    ScriptSetup({ /* options */ }),
+  ]
+}
+```
+
+<br></details>
 
 <details>
 <summary>Jest</summary><br>
