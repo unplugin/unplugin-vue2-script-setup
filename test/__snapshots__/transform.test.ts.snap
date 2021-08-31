@@ -210,7 +210,7 @@ export default __sfc_main;
 
 exports[`transform fixtures test/fixtures/MacrosType.vue 1`] = `
 "<template>
-  <div @click=\\"emit(props.msg)\\">
+  <div @click=\\"emit('update', props.msg)\\">
     {{ msg }}
   </div>
 </template>

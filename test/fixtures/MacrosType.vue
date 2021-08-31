@@ -1,5 +1,5 @@
 <template>
-  <div @click="emit(props.msg)">
+  <div @click="emit('update', props.msg)">
     {{ msg }}
   </div>
 </template>
@@ -10,5 +10,5 @@ const props = withDefaults(
   { msg: 'Hello' },
 )
 
-const emit = defineEmits()
+const emit = defineEmits(['update'])
 </script>
