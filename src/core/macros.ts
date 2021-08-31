@@ -22,7 +22,7 @@ const WITH_DEFAULTS = 'withDefaults'
 
 export interface PropTypeData {
   key: string
-  type: string[]
+  type: string[] | string
   required: boolean
 }
 
@@ -211,6 +211,9 @@ export function applyMacros(nodes: Statement[]) {
 
     return t.objectExpression(
       Object.entries(props).map(([key, value]) => {
+        if (value.type === 'null')
+          return t.objectProperty(t.identifier(key), t.nullLiteral())
+
         const prop = hasStaticDefaults
           ? (propsRuntimeDefaults as ObjectExpression).properties.find((node: any) => node.key.name === key) as ObjectProperty
           : undefined
@@ -218,10 +221,9 @@ export function applyMacros(nodes: Statement[]) {
         if (prop)
           value.required = false
 
-        const entries = Object.entries(value).map(([key, value]) =>
-          key === 'type'
-            ? t.objectProperty(t.identifier(key), t.arrayExpression(value.map((i: any) => t.identifier(i))) as any)
-            : t.objectProperty(t.identifier(key), parseExpression(JSON.stringify(value)) as any),
+        const entries = Object.entries(value).map(([key, value]) => key === 'type'
+          ? t.objectProperty(t.identifier(key), typeof value === 'string' ? t.identifier(value) : t.arrayExpression(value.map((i: any) => t.identifier(i))) as any)
+          : t.objectProperty(t.identifier(key), parseExpression(JSON.stringify(value)) as any),
         )
 
         if (prop)
@@ -311,7 +313,7 @@ function extractRuntimeProps(
       (m.type === 'TSPropertySignature' || m.type === 'TSMethodSignature')
       && m.key.type === 'Identifier'
     ) {
-      let type
+      let type: string[] | undefined
       if (m.type === 'TSMethodSignature') {
         type = ['Function']
       }
@@ -324,7 +326,7 @@ function extractRuntimeProps(
       props[m.key.name] = {
         key: m.key.name,
         required: !m.optional,
-        type: type || ['null'],
+        type: type?.length === 1 ? type[0] : type || 'null',
       }
     }
   }
