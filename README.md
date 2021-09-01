@@ -244,6 +244,21 @@ If the global types are missing for your IDE, update your `tsconfig.json` with:
 }
 ```
 
+###### Support Vue 2 template
+
+Volar preferentially supports Vue 3. Vue 3 and Vue 2 template has some different. You need to set the `experimentalCompatMode` option to support Vue 2 template.
+
+```jsonc
+{
+  "compilerOptions": {
+    ...
+  },
+  "vueCompilerOptions": {
+    "experimentalCompatMode": 2
+  },
+}
+```
+
 ###### ESLint
 
 If you are using ESLint, you might get `@typescript-eslint/no-unused-vars` warning with `<script setup>`. You can disable it and add `noUnusedLocals: true` in your `tsconfig.json`, Volar will infer the real missing locals correctly for you. 
