@@ -55,6 +55,7 @@ export default {
     '@nuxtjs/composition-api/module',
     'unplugin-vue2-script-setup/nuxt',
   ],
+  scriptSetup: { /* options */ },
 }
 ```
 

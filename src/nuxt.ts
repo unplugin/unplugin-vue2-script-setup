@@ -1,7 +1,10 @@
+import defu from 'defu'
 import { PluginOptions } from './types'
 import unplugin from '.'
 
-export default function(this: any, options?: PluginOptions) {
+export default function(this: any, inlineOptions: PluginOptions = {}) {
+  const options = defu(inlineOptions, this.nuxt.options.scriptSetup)
+
   // install webpack plugin
   this.extendBuild((config: any) => {
     config.plugins = config.plugins || []
