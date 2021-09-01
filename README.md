@@ -246,7 +246,7 @@ If the global types are missing for your IDE, update your `tsconfig.json` with:
 
 ###### Support Vue 2 template
 
-Volar preferentially supports Vue 3. Vue 3 and Vue 2 template has some different. You need to set the experimentalCompatMode option to support Vue 2 template.
+Volar preferentially supports Vue 3. Vue 3 and Vue 2 template has some different. You need to set the `experimentalCompatMode` option to support Vue 2 template.
 
 ```jsonc
 {
