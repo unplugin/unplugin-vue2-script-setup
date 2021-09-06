@@ -168,6 +168,28 @@ export default __sfc_main;
 
 exports[`transform fixtures test/fixtures/Empty.vue 1`] = `""`;
 
+exports[`transform fixtures test/fixtures/Enum.vue 1`] = `
+"<template>
+  <div>{{ MyEnum }}</div>
+</template>
+
+<script lang=\\"ts\\">
+enum MyEnum {
+  test = 'true',
+}
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  return {
+    MyEnum
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/Macros.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">{{ msg }}</div>

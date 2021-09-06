@@ -1,7 +1,12 @@
 import { PrivateName, Expression, Statement, SpreadElement, Node } from '@babel/types'
 
 export function getIdentifierDeclarations(nodes: Statement[], identifiers = new Set<string>()) {
-  for (const node of nodes) {
+  for (let node of nodes) {
+    if (node.type === 'ExportNamedDeclaration') {
+      node = node.declaration!
+      if (!node)
+        continue
+    }
     if (node.type === 'ImportDeclaration') {
       for (const specifier of node.specifiers)
         identifiers.add(specifier.local.name)
@@ -35,6 +40,10 @@ export function getIdentifierDeclarations(nodes: Statement[], identifiers = new 
         handleVariableId(declarator.id)
     }
     else if (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration') {
+      if (node.id)
+        identifiers.add(node.id.name)
+    }
+    else if (node.type === 'TSEnumDeclaration') {
       if (node.id)
         identifiers.add(node.id.name)
     }
