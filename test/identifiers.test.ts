@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { parse } from '@babel/parser'
 import { getIdentifierDeclarations, getIdentifierUsages } from '../src/core/identifiers'
 
@@ -51,6 +52,8 @@ describe('identifiers', () => {
       ['() => { foo() + bar; a }', ['foo', 'bar', 'a']],
       ['(function () { foo() + bar })', ['foo', 'bar']],
       ['function foobar() { return foo() + bar }', ['foo', 'bar']],
+      ['`${foo}bar`', ['foo']],
+      ['`${foo(zag)}` + bar', ['foo', 'zag', 'bar']],
     ]
 
     for (const [input, output] of cases) {

@@ -1,4 +1,4 @@
-import { PrivateName, Expression, Statement, SpreadElement, Node } from '@babel/types'
+import { PrivateName, Expression, Statement, SpreadElement, Node, TSType } from '@babel/types'
 
 export function getIdentifierDeclarations(nodes: Statement[], identifiers = new Set<string>()) {
   for (let node of nodes) {
@@ -54,7 +54,7 @@ export function getIdentifierDeclarations(nodes: Statement[], identifiers = new 
   return identifiers
 }
 
-export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateName | Statement | null, identifiers = new Set<string>()) {
+export function getIdentifierUsages(node?: Expression | TSType | SpreadElement | PrivateName | Statement | null, identifiers = new Set<string>()) {
   if (!node)
     return identifiers
 
@@ -113,6 +113,9 @@ export function getIdentifierUsages(node?: Expression | SpreadElement | PrivateN
   }
   else if (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
     getIdentifierUsages(node.body, identifiers)
+  }
+  else if (node.type === 'TemplateLiteral') {
+    node.expressions.forEach(expr => getIdentifierUsages(expr, identifiers))
   }
   // else {
   //   console.log(node)
