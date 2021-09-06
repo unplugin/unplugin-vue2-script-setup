@@ -73,7 +73,7 @@ importers:
     specifiers:
       '@nuxt/types': ^2.15.8
       '@nuxt/typescript-build': ^2.1.0
-      '@nuxtjs/composition-api': ^0.27.0
+      '@nuxtjs/composition-api': ^0.28.0
       '@vue/runtime-dom': ^3.2.6
       core-js: ^3.16.4
       nuxt: ^2.15.8
@@ -85,7 +85,7 @@ importers:
     devDependencies:
       '@nuxt/types': 2.15.8
       '@nuxt/typescript-build': 2.1.0_@nuxt+types@2.15.8
-      '@nuxtjs/composition-api': 0.27.0_nuxt@2.15.8
+      '@nuxtjs/composition-api': 0.28.0_nuxt@2.15.8+vite@2.5.3
       '@vue/runtime-dom': 3.2.6
       unplugin-vue2-script-setup: link:../..
       vue-tsc: 0.3.0_typescript@4.4.2
@@ -2256,21 +2256,27 @@ packages:
       - webpack-command
     dev: false
 
-  /@nuxtjs/composition-api/0.27.0_nuxt@2.15.8:
-    resolution: {integrity: sha512-YtQ1KX+ls13zbukII8/vhKskoI1FrngDxegGVW31576qlaiEQUQGpOATF0cGrZ1W7Wgmz3rsAz1CNdSd5FFXOA==}
+  /@nuxtjs/composition-api/0.28.0_nuxt@2.15.8+vite@2.5.3:
+    resolution: {integrity: sha512-YSchyQsOrpADtFXFxFjsQuYSQSuAjnidzPpF+bxeVLj1/yhwzy2CQGIBabKJbkMPoDFwive7dKf6LdkbPQL4RQ==}
     peerDependencies:
       '@nuxt/vue-app': ^2.15
       nuxt: ^2.15
       vue: ^2
     dependencies:
-      '@vue/composition-api': 1.1.2
+      '@vue/composition-api': 1.1.4
       defu: 5.0.0
       estree-walker: 2.0.2
       fs-extra: 9.1.0
       magic-string: 0.25.7
       nuxt: 2.15.8_typescript@4.4.2
       ufo: 0.7.9
+      unplugin-vue2-script-setup: 0.5.7_vite@2.5.3
       upath: 2.0.1
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - vite
+      - webpack
     dev: true
 
   /@nuxtjs/youch/4.2.3:
@@ -3264,7 +3270,6 @@ packages:
       '@vue/shared': 3.2.6
       estree-walker: 2.0.2
       source-map: 0.6.1
-    dev: false
 
   /@vue/compiler-dom/3.2.4:
     resolution: {integrity: sha512-uj1nwO4794fw2YsYas5QT+FU/YGrXbS0Qk+1c7Kp1kV7idhZIghWLTjyvYibpGoseFbYLPd+sW2/noJG5H04EQ==}
@@ -3316,14 +3321,6 @@ packages:
     optionalDependencies:
       prettier: 1.19.1
 
-  /@vue/composition-api/1.1.2:
-    resolution: {integrity: sha512-mqJ1eyYLZmYWsQzos11eZsRc+JNB/FSPWuuyT7qY6jAXUucmdyvv5eD8MeeX2fjY8idwVHqe3+TV1y9rRQu4gw==}
-    peerDependencies:
-      vue: '>= 2.5 < 3'
-    dependencies:
-      tslib: 2.3.1
-    dev: true
-
   /@vue/composition-api/1.1.4:
     resolution: {integrity: sha512-f618a79X0VepQUoZofaAYzaherBuzfIIYah4gQPcwmXgN3oeuGdhO7DY2s3Rjcw7r9yTEh5sQIowbNWy6INGjg==}
     peerDependencies:
@@ -3372,7 +3369,6 @@ packages:
       '@vue/shared': 3.2.6
       estree-walker: 2.0.2
       magic-string: 0.25.7
-    dev: false
 
   /@vue/runtime-core/3.2.6:
     resolution: {integrity: sha512-3mqtgpj/YSGFxtvTufSERRApo92B16JNNxz9p+5eG6PPuqTmuRJz214MqhKBEgLEAIQ6R6YCbd83ZDtjQnyw2g==}
@@ -13538,6 +13534,27 @@ packages:
     resolution: {integrity: sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=}
     engines: {node: '>= 0.8'}
 
+  /unplugin-vue2-script-setup/0.5.7_vite@2.5.3:
+    resolution: {integrity: sha512-Dy08dFieMMQ1xS1ixOOBWc5SjiMatuVW/tmQMVUZu086L/mGWZuZNfDQ5L0kdMOEQnATOyINnqw/f0tKI/n65A==}
+    dependencies:
+      '@babel/core': 7.15.0
+      '@babel/generator': 7.15.0
+      '@babel/parser': 7.15.3
+      '@babel/traverse': 7.15.0
+      '@babel/types': 7.15.0
+      '@vue/ref-transform': 3.2.6
+      '@vue/shared': 3.2.6
+      defu: 5.0.0
+      htmlparser2: 6.1.0
+      magic-string: 0.25.7
+      unplugin: 0.2.7_vite@2.5.3
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - vite
+      - webpack
+    dev: true
+
   /unplugin/0.2.7_vite@2.5.3:
     resolution: {integrity: sha512-KcMTl+aF+UhNOUvUdxwxHiOhvIoFe++foE2GgblFmXsnjdRYYggd2Tg7wopljCnOyiv5IspQRKfAvpyc4qtzuw==}
     peerDependencies:
@@ -13555,7 +13572,6 @@ packages:
       upath: 2.0.1
       vite: 2.5.3
       webpack-virtual-modules: 0.4.3
-    dev: false
 
   /unquote/1.1.1:
     resolution: {integrity: sha1-j97XMk7G6IoP+LkF58CYzcCG1UQ=}
@@ -14278,7 +14294,6 @@ packages:
 
   /webpack-virtual-modules/0.4.3:
     resolution: {integrity: sha512-5NUqC2JquIL2pBAAo/VfBP6KuGkHIZQXW/lNKupLPfhViwh8wNsu0BObtl09yuKZszeEUfbXz8xhrHvSG16Nqw==}
-    dev: false
 
   /webpack/4.46.0:
     resolution: {integrity: sha512-6jJuJjg8znb/xRItk7bkT0+Q7AHCYjjFnvKIWQPkNIOyRqoCGvkOs0ipeQzrqz4l5FtN5ZI/ukEHroeX/o1/5Q==}
