@@ -44,6 +44,8 @@ Example: [`playground/`](./playground/)
 <details>
 <summary>Nuxt</summary><br>
 
+> From v0.28.0 of `@nuxtjs/composition-api`, this plugin is included and enabled out-of-box.
+
 ```bash
 npm i @nuxtjs/composition-api
 ```
@@ -53,7 +55,6 @@ npm i @nuxtjs/composition-api
 export default {
   buildModules: [
     '@nuxtjs/composition-api/module',
-    'unplugin-vue2-script-setup/nuxt',
   ],
   scriptSetup: { /* options */ },
 }
