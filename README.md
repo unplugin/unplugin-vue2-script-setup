@@ -224,7 +224,7 @@ const Vue2SFC = transform(`
 
 We recommend using [VS Code](https://code.visualstudio.com/) with [Volar](https://github.com/johnsoncodehk/volar) to get the best experience (You might want to disable Vetur if you have it).
 
-When using Volar, you will need to install `@vue/runtime-dom` as devDependencies to make it work on Vue 2.
+When using Volar, you need to install `@vue/runtime-dom` as devDependencies to make it work on Vue 2.
 
 ```bash
 npm i -D @vue/runtime-dom
@@ -309,6 +309,7 @@ If you enjoy using `<script setup>`, you might also want to try [`unplugin-auto-
 - [x] Global types
 - [x] Merge with normal scripts
 - [x] [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369)
+- [x] `<template lang="pug">` support
 - [x] Vite plugin
 - [x] Webpack plugin
 - [x] Nuxt module
