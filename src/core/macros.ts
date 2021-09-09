@@ -40,6 +40,7 @@ export function applyMacros(nodes: Statement[]) {
   | TSInterfaceBody
   | undefined
   let emitsTypeDeclRaw: Node | undefined
+  let exposeDecl: CallExpression['arguments'][number] | undefined
 
   // props/emits declared via types
   const typeDeclaredProps: Record<string, PropTypeData> = {}
@@ -190,9 +191,18 @@ export function applyMacros(nodes: Statement[]) {
   }
 
   function processDefineExpose(node: Node): boolean {
-    if (isCallOf(node, DEFINE_EXPOSE))
-      error(`Vue 2 does not support ${DEFINE_EXPOSE}()`, node)
-    return false
+    if (!isCallOf(node, DEFINE_EXPOSE))
+      return false
+
+    if (exposeDecl)
+      error(`duplicate ${DEFINE_EXPOSE}() call`, node)
+
+    if (node.arguments.length !== 1)
+      error(`${DEFINE_EXPOSE}() requires one argument`, node)
+
+    exposeDecl = node.arguments[0]
+
+    return true
   }
 
   function genRuntimeProps(props: Record<string, PropTypeData>) {
@@ -285,6 +295,7 @@ export function applyMacros(nodes: Statement[]) {
   return {
     nodes,
     props: getProps(),
+    expose: exposeDecl,
   }
 }
 

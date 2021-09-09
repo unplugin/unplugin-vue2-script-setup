@@ -10,7 +10,7 @@ import { getIdentifierDeclarations } from './identifiers'
 export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransformOptions) {
   const { scriptSetup, script, template } = sfc
 
-  const { nodes: body, props } = applyMacros(scriptSetup.ast.body)
+  const { nodes: body, props, expose } = applyMacros(scriptSetup.ast.body)
 
   const [hoisted, setupBody] = partition(
     body,
@@ -25,9 +25,14 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   getIdentifierDeclarations(setupBody, declarations)
 
   // filter out identifiers that are used in `<template>`
-  const returns = Array.from(declarations)
+  const returns: t.ObjectExpression['properties'] = Array.from(declarations)
     .filter(Boolean)
     .filter(i => template.identifiers.has(i))
+    .map((i) => {
+      const id = t.identifier(i)
+      return t.objectProperty(id, id, false, true)
+    })
+
   const components = Array.from(declarations)
     .filter(Boolean)
     .filter(i => template.components.has(i)
@@ -92,14 +97,13 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   // `__sfc_main.setup = () => {}`
   if (body.length) {
     hasBody = true
-    const returnStatement = t.returnStatement(
-      t.objectExpression(
-        returns.map((i) => {
-          const id = t.identifier(i)
-          return t.objectProperty(id, id, false, true)
-        }),
-      ),
-    )
+    const returnExpr = expose
+      ? t.callExpression(
+        t.memberExpression(t.identifier('Object'), t.identifier('assign')),
+        [t.objectExpression(returns), expose],
+      )
+      : t.objectExpression(returns)
+    const returnStatement = t.returnStatement(returnExpr)
 
     ast.body.push(
       t.expressionStatement(

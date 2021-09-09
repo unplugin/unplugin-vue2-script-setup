@@ -215,6 +215,29 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/MacrosDefineExpose.vue 1`] = `
+"<template>
+  <div>{{a}}</div>
+</template>
+
+<script lang=\\"js\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const a = ref(1);
+  const b = 1;
+  return Object.assign({
+    a
+  }, {
+    b
+  });
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/MacrosPure.vue 1`] = `
 "<template>
   <div>{{ msg }}</div>
