@@ -400,6 +400,34 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/Pug1.vue 1`] = `
+"<template lang=\\"pug\\">
+.root
+  span {{ data }} {{ title }}
+  .p-1(@click=\\"foo\\")
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const data = {
+    title: 'Template Only'
+  };
+
+  function foo() {}
+
+  return {
+    data,
+    foo
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/RefSugar.ts 1`] = `
 "import { ref as _ref, computed as _computed } from '@vue/composition-api'
 /* eslint-disable @typescript-eslint/no-unused-vars */

@@ -1,4 +1,4 @@
-import { Parser as HTMLParser } from 'htmlparser2'
+import { Parser as HTMLParser, ParserOptions as HTMLParserOptions } from 'htmlparser2'
 import { parse, ParserOptions } from '@babel/parser'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
@@ -33,31 +33,63 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
     found: false,
     ast: undefined!,
   }
+  const htmlParserOptions: HTMLParserOptions = {
+    xmlMode: true,
+    lowerCaseTags: false,
+    lowerCaseAttributeNames: false,
+    recognizeSelfClosing: true,
+  }
+
+  let pugStart: number | undefined
+
+  function handleTemplateContent(name: string, attributes: Record<string, string>) {
+    if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
+      components.add(capitalize(camelize(name)))
+
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (!value)
+        return
+      if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
+        if (key === 'v-for')
+          // we strip out delectations for v-for before `in` or `of`
+          expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
+        else
+          expressions.add(`(${value})`)
+      }
+      if (key === 'ref')
+        identifiers.add(value)
+    })
+  }
+
+  function handlePugTemplate(pugCode: string, id?: string) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const html = require('pug').compile(pugCode, { filename: id })()
+      const parser = new HTMLParser({
+        onopentag(name, attributes) {
+          name && handleTemplateContent(name, attributes)
+        },
+      }, htmlParserOptions)
+
+      parser.write(html)
+      parser.end()
+    }
+    catch {}
+  }
 
   const parser = new HTMLParser({
     onopentag(name, attributes) {
       if (!name)
         return
 
-      if (name === 'template')
+      if (name === 'template') {
+        if (templateLevel === 0 && attributes.lang === 'pug')
+          pugStart = parser.endIndex! + 1
         templateLevel += 1
+      }
 
       if (templateLevel > 0) {
-        if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
-          components.add(capitalize(camelize(name)))
-        Object.entries(attributes).forEach(([key, value]) => {
-          if (!value)
-            return
-          if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
-            if (key === 'v-for')
-              // we strip out delectations for v-for before `in` or `of`
-              expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
-            else
-              expressions.add(`(${value})`)
-          }
-          if (key === 'ref')
-            identifiers.add(value)
-        })
+        handleTemplateContent(name, attributes)
       }
       else {
         if (name === 'script') {
@@ -86,8 +118,11 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
       }
     },
     onclosetag(name) {
-      if (name === 'template')
+      if (name === 'template') {
         templateLevel -= 1
+        if (templateLevel === 0 && pugStart != null)
+          handlePugTemplate(code.slice(pugStart, parser.startIndex), id)
+      }
 
       if (inScriptSetup && name === 'script') {
         scriptSetup.end = parser.endIndex! + 1
@@ -102,12 +137,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
         inScript = false
       }
     },
-  }, {
-    xmlMode: true,
-    lowerCaseTags: false,
-    lowerCaseAttributeNames: false,
-    recognizeSelfClosing: true,
-  })
+  }, htmlParserOptions)
 
   parser.write(code)
   parser.end()

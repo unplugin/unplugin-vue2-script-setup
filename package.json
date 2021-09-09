@@ -2,13 +2,38 @@
   "name": "unplugin-vue2-script-setup",
   "version": "0.5.8",
   "description": "Bring <script setup> to Vue 2",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "index.d.ts",
+  "keywords": [],
+  "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
+  "bugs": {
+    "url": "https://github.com/antfu/unplugin-vue2-script-setup/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfu/unplugin-vue2-script-setup.git"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "license": "MIT",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "exports": {
     ".": {
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./*": "./*",
+    "./jest": {
+      "require": "./jest.js"
+    },
+    "./nuxt": {
+      "require": "./dist/nuxt.js",
+      "import": "./dist/nuxt.mjs"
+    },
+    "./rollup": {
+      "require": "./dist/rollup.js",
+      "import": "./dist/rollup.mjs"
+    },
+    "./types": {
+      "require": "./dist/types.js",
+      "import": "./dist/types.mjs"
     },
     "./vite": {
       "require": "./dist/vite.js",
@@ -17,51 +42,39 @@
     "./webpack": {
       "require": "./dist/webpack.js",
       "import": "./dist/webpack.mjs"
-    },
-    "./rollup": {
-      "require": "./dist/rollup.js",
-      "import": "./dist/rollup.mjs"
-    },
-    "./nuxt": {
-      "require": "./dist/nuxt.js",
-      "import": "./dist/nuxt.mjs"
-    },
-    "./jest": {
-      "require": "./jest.js"
-    },
-    "./types": {
-      "require": "./dist/types.js",
-      "import": "./dist/types.mjs"
-    },
-    "./*": "./*"
+    }
   },
-  "funding": "https://github.com/sponsors/antfu",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/antfu/unplugin-vue2-script-setup/issues"
-  },
-  "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/antfu/unplugin-vue2-script-setup.git"
-  },
-  "keywords": [],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "index.d.ts",
   "files": [
     "dist",
     "jest.js",
     "*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "nr build",
     "build": "rimraf dist && tsup 'src/*.ts' --format cjs,esm --dts && esno scripts/postbuild.ts",
     "dev": "tsup 'src/*.ts' --watch src",
-    "play": "npm -C playground run dev",
-    "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "nr lint -- --fix",
+    "play": "npm -C playground run dev",
+    "prepublishOnly": "nr build",
+    "release": "bumpp --commit --push --tag && pnpm publish",
     "test": "jest",
     "test:update": "jest -u"
+  },
+  "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/generator": "^7.15.0",
+    "@babel/parser": "^7.15.3",
+    "@babel/traverse": "^7.15.0",
+    "@babel/types": "^7.15.0",
+    "@vue/ref-transform": "^3.2.6",
+    "@vue/shared": "^3.2.6",
+    "defu": "^5.0.0",
+    "htmlparser2": "^6.1.0",
+    "magic-string": "^0.25.7",
+    "unplugin": "^0.2.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",
@@ -79,23 +92,14 @@
     "fast-glob": "^3.2.7",
     "jest": "^27.1.0",
     "log-editor": "^0.1.0",
+    "pug": "^3.0.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "tsup": "^4.14.0",
     "typescript": "^4.4.2",
     "vite": "^2.5.3"
   },
-  "dependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/generator": "^7.15.0",
-    "@babel/parser": "^7.15.3",
-    "@babel/traverse": "^7.15.0",
-    "@babel/types": "^7.15.0",
-    "@vue/ref-transform": "^3.2.6",
-    "@vue/shared": "^3.2.6",
-    "defu": "^5.0.0",
-    "htmlparser2": "^6.1.0",
-    "magic-string": "^0.25.7",
-    "unplugin": "^0.2.7"
+  "optionalDependencies": {
+    "pug": "^3.0.0"
   }
 }
