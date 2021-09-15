@@ -146,6 +146,28 @@ export default defineConfig({
 "
 `;
 
+exports[`transform fixtures test/fixtures/AsyncImport.vue 1`] = `
+"<script lang=\\"ts\\">
+import { defineAsyncComponent } from 'script-setup';
+const ScriptOnly = defineAsyncComponent(() => import('./ScriptOnly.vue'));
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  return {};
+};
+
+__sfc_main.components = Object.assign({
+  ScriptOnly
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <ScriptOnly />
+</template>
+"
+`;
+
 exports[`transform fixtures test/fixtures/DynamicStyle.vue 1`] = `
 "<template>
   <div :style=\\"{ color, border: '1px' }\\" />
