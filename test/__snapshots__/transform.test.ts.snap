@@ -30,6 +30,13 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures playground/Async.vue 1`] = `
+"<template>
+  <div>Async Component</div>
+</template>
+"
+`;
+
 exports[`transform fixtures playground/Bar.vue 1`] = `
 "<template>
   <div>Bar</div>
