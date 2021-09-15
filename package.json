@@ -21,7 +21,7 @@
     },
     "./*": "./*",
     "./jest": {
-      "require": "./jest.js"
+      "require": "./jest-transform.js"
     },
     "./nuxt": {
       "require": "./dist/nuxt.js",
@@ -49,7 +49,7 @@
   "types": "index.d.ts",
   "files": [
     "dist",
-    "jest.js",
+    "jest-transform.js",
     "*.d.ts"
   ],
   "scripts": {
