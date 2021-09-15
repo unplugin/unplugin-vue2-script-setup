@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'script-setup'
+import { defineAsyncComponent } from '@vue/composition-api'
 const ScriptOnly = defineAsyncComponent(() => import('./ScriptOnly.vue'))
 </script>
 

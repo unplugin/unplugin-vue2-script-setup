@@ -148,7 +148,7 @@ export default defineConfig({
 
 exports[`transform fixtures test/fixtures/AsyncImport.vue 1`] = `
 "<script lang=\\"ts\\">
-import { defineAsyncComponent } from 'script-setup';
+import { defineAsyncComponent } from '@vue/composition-api';
 const ScriptOnly = defineAsyncComponent(() => import('./ScriptOnly.vue'));
 const __sfc_main = {};
 
