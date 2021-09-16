@@ -21,7 +21,7 @@
     },
     "./*": "./*",
     "./jest": {
-      "require": "./jest-transform.js"
+      "require": "./jest.js"
     },
     "./nuxt": {
       "require": "./dist/nuxt.js",
