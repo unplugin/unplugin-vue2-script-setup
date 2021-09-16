@@ -7,6 +7,17 @@ import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
 
+function isAsyncImport(node: any) {
+  if (node.type === 'VariableDeclaration') {
+    const declaration = node.declarations[0]
+
+    return declaration.init.callee != null
+      && declaration.init.callee.name === 'defineAsyncComponent'
+  }
+
+  return false
+}
+
 export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransformOptions) {
   const { scriptSetup, script, template } = sfc
 
@@ -14,7 +25,9 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
 
   const [hoisted, setupBody] = partition(
     body,
-    n => n.type === 'ImportDeclaration'
+    n =>
+      isAsyncImport(n)
+     || n.type === 'ImportDeclaration'
      || n.type === 'ExportNamedDeclaration'
      || n.type.startsWith('TS'),
   )

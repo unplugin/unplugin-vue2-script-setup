@@ -4,11 +4,15 @@ exports[`transform fixtures playground/App.vue 1`] = `
 "<template>
   <div>
     <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
+
+    <async-component />
   </div>
 </template>
 
 <script lang=\\"ts\\">
+import { defineAsyncComponent } from '@vue/composition-api';
 import HelloWorld from './HelloWorld.vue';
+const AsyncComponent = defineAsyncComponent(() => import('./Async.vue'));
 const __sfc_main = {};
 
 __sfc_main.setup = (__props, __ctx) => {
@@ -23,10 +27,18 @@ __sfc_main.setup = (__props, __ctx) => {
 };
 
 __sfc_main.components = Object.assign({
-  HelloWorld
+  HelloWorld,
+  AsyncComponent
 }, __sfc_main.components);
 export default __sfc_main;
 </script>
+"
+`;
+
+exports[`transform fixtures playground/Async.vue 1`] = `
+"<template>
+  <div>Async Component</div>
+</template>
 "
 `;
 
@@ -143,6 +155,28 @@ export default defineConfig({
     }),
   ],
 })
+"
+`;
+
+exports[`transform fixtures test/fixtures/AsyncImport.vue 1`] = `
+"<script lang=\\"ts\\">
+import { defineAsyncComponent } from '@vue/composition-api';
+const ScriptOnly = defineAsyncComponent(() => import('./ScriptOnly.vue'));
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  return {};
+};
+
+__sfc_main.components = Object.assign({
+  ScriptOnly
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <ScriptOnly />
+</template>
 "
 `;
 

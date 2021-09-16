@@ -49,12 +49,12 @@
   "types": "index.d.ts",
   "files": [
     "dist",
-    "jest.js",
+    "jest-transform.js",
     "*.d.ts"
   ],
   "scripts": {
-    "build": "rimraf dist && tsup 'src/*.ts' --format cjs,esm --dts && esno scripts/postbuild.ts",
-    "dev": "tsup 'src/*.ts' --watch src",
+    "build": "rimraf dist && tsup \"src/*.ts\" --format cjs,esm --dts && esno scripts/postbuild.ts",
+    "dev": "tsup \"src/*.ts\" --watch src",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "nr lint -- --fix",
     "play": "npm -C playground run dev",
