@@ -73,7 +73,10 @@ function transformVue(input: string, id: string, options: ResolvedOptions): Tran
   return {
     code: s.toString(),
     map: options.sourceMap
-      ? s.generateMap()
+      ? s.generateMap({
+        source: id,
+        includeContent: true,
+      })
       : null,
   }
 }
