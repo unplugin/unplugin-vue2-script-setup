@@ -1,6 +1,6 @@
 // modified from https://github.com/vuejs/vue-next/blob/main/packages/compiler-sfc/src/compileScript.ts
 
-import {
+import type {
   Node,
   ObjectExpression,
   TSType,
@@ -11,8 +11,11 @@ import {
   CallExpression,
   TSInterfaceBody,
 } from '@babel/types'
-import { types as t } from '@babel/core'
-import { parseExpression } from '@babel/parser'
+import * as babelCore from '@babel/core'
+import * as babelParser from '@babel/parser'
+
+const { types: t } = babelCore
+const { parseExpression } = babelParser
 
 // Special compiler macros
 const DEFINE_PROPS = 'defineProps'

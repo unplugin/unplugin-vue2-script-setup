@@ -1,4 +1,4 @@
-import { PrivateName, Expression, Statement, SpreadElement, Node, TSType } from '@babel/types'
+import type { PrivateName, Expression, Statement, SpreadElement, Node, TSType } from '@babel/types'
 
 export function getIdentifierDeclarations(nodes: Statement[], identifiers = new Set<string>()) {
   for (let node of nodes) {

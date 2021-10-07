@@ -1,11 +1,13 @@
-import { types as t } from '@babel/core'
+import * as babelCore from '@babel/core'
 import { camelize, capitalize } from '@vue/shared'
-import { Node, Statement } from '@babel/types'
+import type { Node, ObjectExpression, Statement } from '@babel/types'
 import generate from '@babel/generator'
 import { partition } from '@antfu/utils'
 import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
+
+const { types: t } = babelCore
 
 function isAsyncImport(node: any) {
   if (node.type === 'VariableDeclaration') {
@@ -38,7 +40,7 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   getIdentifierDeclarations(setupBody, declarations)
 
   // filter out identifiers that are used in `<template>`
-  const returns: t.ObjectExpression['properties'] = Array.from(declarations)
+  const returns: ObjectExpression['properties'] = Array.from(declarations)
     .filter(Boolean)
     .filter(i => template.identifiers.has(i))
     .map((i) => {
