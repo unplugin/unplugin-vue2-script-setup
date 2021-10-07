@@ -1,8 +1,11 @@
 import { shouldTransform, transformAST } from '@vue/ref-transform'
 import MagicString from 'magic-string'
-import { parse } from '@babel/parser'
-import { types as t } from '@babel/core'
+import babelParser from '@babel/parser'
+import babelCore from '@babel/core'
 import type { ParsedSFC, ResolvedOptions } from '../types'
+
+const { types: t } = babelCore
+const { parse } = babelParser
 
 export function transformSfcRefSugar(sfc: ParsedSFC, options: ResolvedOptions) {
   const importedHelpers = new Set<string>()

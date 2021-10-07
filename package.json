@@ -53,7 +53,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "rimraf dist && tsup \"src/*.ts\" --format cjs,esm --dts && esno scripts/postbuild.ts",
+    "build": "tsup \"src/*.ts\" --format cjs,esm --clean --target esnext --dts --splitting && esno scripts/postbuild.ts",
     "dev": "tsup \"src/*.ts\" --watch src",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "nr lint -- --fix",
@@ -74,13 +74,13 @@
     "defu": "^5.0.0",
     "htmlparser2": "^7.1.2",
     "magic-string": "^0.25.7",
+    "@rollup/pluginutils": "^4.1.1",
     "unplugin": "^0.2.11"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.9.0",
     "@antfu/ni": "^0.9.3",
     "@antfu/utils": "^0.3.0",
-    "@rollup/pluginutils": "^4.1.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.9.1",
     "@vue/composition-api": "^1.1.5",
