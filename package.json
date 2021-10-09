@@ -16,36 +16,29 @@
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.js"
     },
     "./*": "./*",
     "./jest": {
       "require": "./jest.js"
     },
     "./nuxt": {
-      "require": "./dist/nuxt.js",
-      "import": "./dist/nuxt.mjs"
+      "require": "./dist/nuxt.js"
     },
     "./rollup": {
-      "require": "./dist/rollup.js",
-      "import": "./dist/rollup.mjs"
+      "require": "./dist/rollup.js"
     },
     "./types": {
-      "require": "./dist/types.js",
-      "import": "./dist/types.mjs"
+      "require": "./dist/types.js"
     },
     "./vite": {
-      "require": "./dist/vite.js",
-      "import": "./dist/vite.mjs"
+      "require": "./dist/vite.js"
     },
     "./webpack": {
-      "require": "./dist/webpack.js",
-      "import": "./dist/webpack.mjs"
+      "require": "./dist/webpack.js"
     }
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "index.d.ts",
   "files": [
     "dist",

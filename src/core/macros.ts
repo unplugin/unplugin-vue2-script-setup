@@ -11,11 +11,7 @@ import type {
   CallExpression,
   TSInterfaceBody,
 } from '@babel/types'
-import * as babelCore from '@babel/core'
-import * as babelParser from '@babel/parser'
-
-const { types: t } = babelCore
-const { parseExpression } = babelParser
+import { parseExpression, t } from './babel'
 
 // Special compiler macros
 const DEFINE_PROPS = 'defineProps'

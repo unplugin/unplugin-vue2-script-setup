@@ -1,4 +1,3 @@
-import * as babelCore from '@babel/core'
 import { camelize, capitalize } from '@vue/shared'
 import type { Node, ObjectExpression, Statement } from '@babel/types'
 import generate from '@babel/generator'
@@ -6,8 +5,7 @@ import { partition } from '@antfu/utils'
 import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
-
-const { types: t } = babelCore
+import { t } from './babel'
 
 function isAsyncImport(node: any) {
   if (node.type === 'VariableDeclaration') {
