@@ -509,6 +509,7 @@ exports[`transform fixtures test/fixtures/RefSugar.vue 1`] = `
   <div>
     {{ msg }}
     {{ msg2 }}
+    {{ a }}
   </div>
 </template>
 
@@ -534,8 +535,11 @@ const __sfc_main = defineComponent({
 __sfc_main.setup = (__props, __ctx) => {
   let msg2 = _ref('hello world');
 
+  let a: number;
+  a = 2;
   return {
-    msg2
+    msg2,
+    a
   };
 };
 

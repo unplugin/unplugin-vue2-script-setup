@@ -2,6 +2,7 @@
   <div>
     {{ msg }}
     {{ msg2 }}
+    {{ a }}
   </div>
 </template>
 
@@ -23,4 +24,8 @@ export default defineComponent({
 
 <script setup lang="ts">
 let msg2 = $ref('hello world')
+
+let a: number
+
+a = 2
 </script>

@@ -11,8 +11,7 @@ function isAsyncImport(node: any) {
   if (node.type === 'VariableDeclaration') {
     const declaration = node.declarations[0]
 
-    return declaration.init.callee != null
-      && declaration.init.callee.name === 'defineAsyncComponent'
+    return declaration?.init?.callee?.name === 'defineAsyncComponent'
   }
 
   return false
