@@ -1,6 +1,6 @@
 {
   "name": "unplugin-vue2-script-setup",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "Bring <script setup> to Vue 2",
   "keywords": [],
   "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
@@ -17,13 +17,13 @@
   "exports": {
     ".": "./dist/index.js",
     "./*": "./*",
-    "./jest":"./jest.js",
-    "./nuxt":  "./dist/nuxt.js",
-    "./rollup":  "./dist/rollup.js",
+    "./jest": "./jest.js",
+    "./nuxt": "./dist/nuxt.js",
+    "./rollup": "./dist/rollup.js",
     "./types": "./dist/types.js",
-    "./vite":"./dist/vite.js",
+    "./vite": "./dist/vite.js",
     "./webpack": "./dist/webpack.js"
-},
+  },
   "main": "dist/index.js",
   "types": "index.d.ts",
   "files": [
