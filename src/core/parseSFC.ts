@@ -1,8 +1,11 @@
 import { Parser as HTMLParser, ParserOptions as HTMLParserOptions } from 'htmlparser2'
-import { parse, ParserOptions } from '@babel/parser'
+import type { ParserOptions } from '@babel/parser'
+import * as babelParser from '@babel/parser'
 import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
 import { getIdentifierUsages } from './identifiers'
+
+const { parse } = babelParser
 
 export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
   const components = new Set<string>()
