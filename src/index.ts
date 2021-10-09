@@ -5,7 +5,7 @@ import { transform } from './core'
 
 export * from './core'
 
-export default createUnplugin<PluginOptions>((options = {}) => {
+export const unplugin = createUnplugin<PluginOptions>((options = {}) => {
   const filter = createFilter(
     options.include || (options.refTransform ? [/\.vue$/, /\.vue\?vue/, /\.[jt]sx?$/] : [/\.vue$/, /\.vue\?vue/]),
     options.exclude || [/node_modules/, /\.git/, /\.nuxt/],
@@ -27,3 +27,5 @@ export default createUnplugin<PluginOptions>((options = {}) => {
     },
   }
 })
+
+export default unplugin

@@ -15,29 +15,15 @@
   "license": "MIT",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "exports": {
-    ".": {
-      "require": "./dist/index.js"
-    },
+    ".": "./dist/index.js",
     "./*": "./*",
-    "./jest": {
-      "require": "./jest.js"
-    },
-    "./nuxt": {
-      "require": "./dist/nuxt.js"
-    },
-    "./rollup": {
-      "require": "./dist/rollup.js"
-    },
-    "./types": {
-      "require": "./dist/types.js"
-    },
-    "./vite": {
-      "require": "./dist/vite.js"
-    },
-    "./webpack": {
-      "require": "./dist/webpack.js"
-    }
-  },
+    "./jest":"./jest.js",
+    "./nuxt":  "./dist/nuxt.js",
+    "./rollup":  "./dist/rollup.js",
+    "./types": "./dist/types.js",
+    "./vite":"./dist/vite.js",
+    "./webpack": "./dist/webpack.js"
+},
   "main": "dist/index.js",
   "types": "index.d.ts",
   "files": [
