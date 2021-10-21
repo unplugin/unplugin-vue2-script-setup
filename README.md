@@ -64,6 +64,24 @@ export default {
 
 Example: [`examples/nuxt`](./examples/nuxt)
 
+###### Component Meta
+
+Note that `<script setup>` could co-exist with `<script>`, if you want to define component metadata like `layout` or `head` for Nuxt, you can do it this way:
+  
+```html
+<script setup lang="ts">
+// your script setup
+</script>
+
+<script lang="ts">
+// the normal script
+export default {
+  layout: 'user',
+  // ...other meta
+}
+</script>
+```
+  
 ###### TypeScript
 
 To use TypeScript with Nuxt, install the [`@nuxtjs/typescript-module`](https://typescript.nuxtjs.org/) but disable the type check:
