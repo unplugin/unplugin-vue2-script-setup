@@ -28,7 +28,7 @@
   "types": "index.d.ts",
   "files": [
     "dist",
-    "jest-transform.js",
+    "jest.js",
     "*.d.ts"
   ],
   "scripts": {
