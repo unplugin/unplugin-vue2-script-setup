@@ -575,12 +575,18 @@ export default __sfc_main;
 
 exports[`transform fixtures test/fixtures/ScriptOnly.vue 1`] = `
 "<script lang=\\"ts\\">
-import { defineComponent } from '@vue/composition-api'
+// <script setup> in comment should not be matched
+import { defineComponent } from '@vue/composition-api';
 
-export default defineComponent({
-  name: 'Hi',
-})
+const __sfc_main = defineComponent({
+  name: 'Hi'
+});
+
+export default __sfc_main;
 </script>
+
+
+<!-- <script setup> -->
 "
 `;
 

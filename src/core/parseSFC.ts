@@ -5,6 +5,9 @@ import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
 import { getIdentifierUsages } from './identifiers'
 import { parse } from './babel'
 
+const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
+const singlelineCommentsRE = /\/\/\s.*/g
+
 export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
   const components = new Set<string>()
   const expressions = new Set<string>()
@@ -13,6 +16,10 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
   let templateLevel = 0
   let inScriptSetup = false
   let inScript = false
+
+  const striped = code
+    .replace(multilineCommentsRE, r => ' '.repeat(r.length))
+    .replace(singlelineCommentsRE, r => ' '.repeat(r.length))
 
   const scriptSetup: ScriptTagMeta = {
     start: 0,
@@ -122,7 +129,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
       if (name === 'template') {
         templateLevel -= 1
         if (templateLevel === 0 && pugStart != null)
-          handlePugTemplate(code.slice(pugStart, parser.startIndex), id)
+          handlePugTemplate(striped.slice(pugStart, parser.startIndex), id)
       }
 
       if (inScriptSetup && name === 'script') {
@@ -140,7 +147,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
     },
   }, htmlParserOptions)
 
-  parser.write(code)
+  parser.write(striped)
   parser.end()
 
   expressions.forEach((exp) => {

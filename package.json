@@ -43,18 +43,18 @@
     "test:update": "jest -u"
   },
   "dependencies": {
+    "@antfu/utils": "^0.3.0",
     "@babel/core": "^7.15.5",
     "@babel/generator": "^7.15.4",
     "@babel/parser": "^7.15.6",
     "@babel/traverse": "^7.15.4",
     "@babel/types": "^7.15.6",
+    "@rollup/pluginutils": "^4.1.1",
     "@vue/ref-transform": "^3.2.11",
     "@vue/shared": "^3.2.11",
     "defu": "^5.0.0",
     "htmlparser2": "^7.1.2",
     "magic-string": "^0.25.7",
-    "@rollup/pluginutils": "^4.1.1",
-    "@antfu/utils": "^0.3.0",
     "unplugin": "^0.2.11"
   },
   "devDependencies": {
