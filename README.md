@@ -122,6 +122,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 // vue.config.js
 
 module.exports = {
+  parallel: false,  // disable thread-loader, which is not compactible with this plugin
   configureWebpack: {
     plugins: [
       require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
@@ -142,6 +143,7 @@ npm i -D @vue/cli-plugin-typescript vue-tsc
 
 ```ts
 module.exports = {
+  parallel: false,
   configureWebpack: {
     plugins: [
       require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
