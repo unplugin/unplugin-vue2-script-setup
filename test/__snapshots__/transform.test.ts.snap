@@ -386,6 +386,46 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/MacrosType3.vue 1`] = `
+"<template>
+  <div @click=\\"emit('update', msg)\\">
+    {{ msg }}
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+__sfc_main.props = {
+  msg: {
+    key: \\"msg\\",
+    required: false,
+    type: String,
+    default: 'Hello'
+  },
+  value: {
+    key: \\"value\\",
+    required: true,
+    type: [Number, String]
+  },
+  data: {
+    key: \\"data\\",
+    required: false,
+    type: Object
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const emit = __ctx.emit;
+  return {
+    emit
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/MacrosTypeAny.vue 1`] = `
 "<template>
   <div>
