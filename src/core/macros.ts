@@ -282,7 +282,7 @@ export function applyMacros(nodes: Statement[]) {
         }
       }
 
-      if (processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node))
+      if (processWithDefaults(node) || processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node))
         return null
 
       throwIfAwait(node)
