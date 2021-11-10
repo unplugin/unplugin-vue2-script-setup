@@ -220,9 +220,6 @@ export function applyMacros(nodes: Statement[]) {
 
     return t.objectExpression(
       Object.entries(props).map(([key, value]) => {
-        if (value.type === 'null')
-          return t.objectProperty(t.identifier(key), t.nullLiteral())
-
         const prop = hasStaticDefaults
           ? (propsRuntimeDefaults as ObjectExpression).properties.find((node: any) => node.key.name === key) as ObjectProperty
           : undefined
