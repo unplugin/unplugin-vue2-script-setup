@@ -369,7 +369,11 @@ __sfc_main.props = {
     required: false,
     type: Array
   },
-  any: null
+  any: {
+    key: \\"any\\",
+    required: true,
+    type: null
+  }
 };
 
 __sfc_main.setup = (__props, __ctx) => {
@@ -426,6 +430,28 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/MacrosType4.vue 1`] = `
+"<script lang=\\"ts\\">
+type Test = number[];
+const __sfc_main = {};
+__sfc_main.props = {
+  test: {
+    key: \\"test\\",
+    required: false,
+    type: null,
+    default: () => []
+  }
+};
+
+__sfc_main.setup = (__props, __ctx) => {
+  return {};
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/MacrosTypeAny.vue 1`] = `
 "<template>
   <div>
@@ -436,7 +462,11 @@ exports[`transform fixtures test/fixtures/MacrosTypeAny.vue 1`] = `
 <script lang=\\"ts\\">
 const __sfc_main = {};
 __sfc_main.props = {
-  value: null
+  value: {
+    key: \\"value\\",
+    required: true,
+    type: null
+  }
 };
 
 __sfc_main.setup = (__props, __ctx) => {
