@@ -67,13 +67,10 @@ export function getIdentifierUsages(node?: Expression | TSType | SpreadElement |
   else if (node.type === 'Identifier') {
     identifiers.add(node.name)
   }
-  else if (node.type === 'MemberExpression') {
+  else if (node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') {
     getIdentifierUsages(node.object, identifiers)
   }
-  else if (node.type === 'OptionalMemberExpression') {
-    getIdentifierUsages(node.object, identifiers)
-  }
-  else if (node.type === 'CallExpression') {
+  else if (node.type === 'CallExpression' || node.type === 'OptionalCallExpression') {
     getIdentifierUsages(node.callee as Expression, identifiers)
     node.arguments.forEach(arg => getIdentifierUsages(arg as Expression, identifiers))
   }

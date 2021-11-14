@@ -702,6 +702,35 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/TemplateOptionalChaining.vue 1`] = `
+"<template>
+  <div @click=\\"callback?.()\\">
+    {{ text?.length ?? textLengthDefault }}
+    {{ classes?.[0] }}
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const text = 'hello';
+  const textLengthDefault = 0;
+  const callback = (undefined as undefined | (() => void));
+  const classes = (undefined as undefined | string[]);
+  return {
+    text,
+    textLengthDefault,
+    callback,
+    classes
+  };
+};
+
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/VFor.vue 1`] = `
 "<template>
   <div>
