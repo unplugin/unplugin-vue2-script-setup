@@ -251,17 +251,23 @@ export default __sfc_main;
 
 exports[`transform fixtures test/fixtures/MacrosDefineExpose.vue 1`] = `
 "<template>
-  <div>{{a}}</div>
+  <div>{{ a }}</div>
+  <div>{{ text?.length ?? textLengthDefault }}</div>
 </template>
 
-<script lang=\\"js\\">
+<script lang=\\"ts\\">
+import { ref } from '@vue/composition-api';
 const __sfc_main = {};
 
 __sfc_main.setup = (__props, __ctx) => {
   const a = ref(1);
   const b = 1;
+  const text = 'hello';
+  const textLengthDefault = 0;
   return Object.assign({
-    a
+    a,
+    text,
+    textLengthDefault
   }, {
     b
   });
