@@ -70,6 +70,9 @@ export function getIdentifierUsages(node?: Expression | TSType | SpreadElement |
   else if (node.type === 'MemberExpression') {
     getIdentifierUsages(node.object, identifiers)
   }
+  else if (node.type === 'OptionalMemberExpression') {
+    getIdentifierUsages(node.object, identifiers)
+  }
   else if (node.type === 'CallExpression') {
     getIdentifierUsages(node.callee as Expression, identifiers)
     node.arguments.forEach(arg => getIdentifierUsages(arg as Expression, identifiers))
