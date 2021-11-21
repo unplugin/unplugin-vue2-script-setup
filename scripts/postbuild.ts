@@ -1,6 +1,5 @@
-import { resolve } from 'path'
+import { resolve, basename } from 'path'
 import { promises as fs } from 'fs'
-import { basename } from 'path/posix'
 import fg from 'fast-glob'
 
 async function run() {
