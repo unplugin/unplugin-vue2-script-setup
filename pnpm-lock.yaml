@@ -25,7 +25,7 @@ importers:
       eslint-plugin-jest: ^25.2.4
       esno: ^0.12.0
       fast-glob: ^3.2.7
-      htmlparser2: ^7.2.0
+      htmlparser2: 5.0.1
       jest: ^27.3.1
       log-editor: ^0.1.0
       magic-string: ^0.25.7
@@ -47,7 +47,7 @@ importers:
       '@vue/ref-transform': 3.2.21
       '@vue/shared': 3.2.21
       defu: 5.0.0
-      htmlparser2: 7.2.0
+      htmlparser2: 5.0.1
       magic-string: 0.25.7
       unplugin: 0.2.21_vite@2.6.14
     devDependencies:
@@ -5873,6 +5873,13 @@ packages:
       webidl-conversions: 5.0.0
     dev: true
 
+  /domhandler/3.3.0:
+    resolution: {integrity: sha512-J1C5rIANUbuYK+FuFL98650rihynUOEzRLxW+90bKZRWB6A1X1Tf82GxR1qAWLyfNPRvjqfip3Q5tdYlmAa9lA==}
+    engines: {node: '>= 4'}
+    dependencies:
+      domelementtype: 2.2.0
+    dev: false
+
   /domhandler/4.2.2:
     resolution: {integrity: sha512-PzE9aBMsdZO8TK4BnuJwH0QT41wgMbRzuZrHUcpYncEjmQazq8QEaBWgLG7ZyC/DAZKEgglpIA6j4Qn/HmxS3w==}
     engines: {node: '>= 4'}
@@ -6025,6 +6032,7 @@ packages:
   /entities/3.0.1:
     resolution: {integrity: sha512-WiyBqoomrwMdFG1e0kqvASYfnlb0lp8M5o5Fw2OFq1hNZxxcNk8Ik0Xm7LxzBhuidnZB/UtBqVCgUz3kBOP51Q==}
     engines: {node: '>=0.12'}
+    dev: true
 
   /errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
@@ -7781,6 +7789,15 @@ packages:
       webpack: 4.46.0
     dev: false
 
+  /htmlparser2/5.0.1:
+    resolution: {integrity: sha512-vKZZra6CSe9qsJzh0BjBGXo8dvzNsq/oGvsjfRdOrrryfeD9UOBEEQdeoqCRmKZchF5h2zOBMQ6YuQ0uRUmdbQ==}
+    dependencies:
+      domelementtype: 2.2.0
+      domhandler: 3.3.0
+      domutils: 2.8.0
+      entities: 2.2.0
+    dev: false
+
   /htmlparser2/6.1.0:
     resolution: {integrity: sha512-gyyPk6rgonLFEDGoeRgQNaEUvdJ4ktTmmUh/h2t7s+M8oPpIPxgNACWa+6ESR57kXstwqPiCut0V8NRpcwgU7A==}
     dependencies:
@@ -7796,6 +7813,7 @@ packages:
       domhandler: 4.2.2
       domutils: 2.8.0
       entities: 3.0.1
+    dev: true
 
   /http-deceiver/1.2.7:
     resolution: {integrity: sha1-+nFolEq5pRnTN8sL7HKE3D5yPYc=}

@@ -649,6 +649,26 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/ScriptLessThanOrEqualTo.vue 1`] = `
+"<script lang=\\"ts\\">
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const val: boolean = 1 <= 2;
+  return {
+    val
+  };
+};
+
+export default __sfc_main;
+</script>
+
+<template>
+  <div>{{ val }}</div>
+</template>
+"
+`;
+
 exports[`transform fixtures test/fixtures/ScriptOnly.vue 1`] = `
 "<script lang=\\"ts\\">
 // <script setup> in comment should not be matched
