@@ -180,6 +180,43 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform fixtures test/fixtures/ComponentsDirectives.vue 1`] = `
+"<template>
+  <div>
+    <FooView ref=\\"fooView\\" v-foo-bar=\\"a\\" v-demo:foo.a.b=\\"message\\"></FooView>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { ref } from '@vue/runtime-dom';
+import FooView from './FooView.vue';
+import { vFooBar, vDemo } from './directive';
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const fooView = ref<null | InstanceType<typeof FooView>>(null);
+  const a = ref(1);
+  const message = ref('hello');
+  return {
+    fooView,
+    a,
+    message
+  };
+};
+
+__sfc_main.components = Object.assign({
+  FooView
+}, __sfc_main.components);
+__sfc_main.directives = Object.assign({
+  fooBar: vFooBar,
+  demo: vDemo
+}, __sfc_main.directives);
+export default __sfc_main;
+</script>
+"
+`;
+
 exports[`transform fixtures test/fixtures/DynamicStyle.vue 1`] = `
 "<template>
   <div :style=\\"{ color, border: '1px' }\\" />
