@@ -1,5 +1,6 @@
 import { Parser as HTMLParser, ParserOptions as HTMLParserOptions } from 'htmlparser2'
 import type { ParserOptions } from '@babel/parser'
+import { NodeTypes, baseCompile } from '@vue/compiler-core'
 import { camelize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
 import { getIdentifierUsages } from './identifiers'
@@ -30,6 +31,32 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'el',
   // 'ref',
 ])
+
+const parseDirective = (attr: string) => {
+  try {
+    const elementNode = baseCompile(`<a ${attr}></a>`).ast.children[0]
+    if (elementNode?.type !== NodeTypes.ELEMENT) return undefined
+
+    const directiveNode = elementNode.props[0]
+    if (directiveNode?.type !== NodeTypes.DIRECTIVE) return undefined
+
+    const { arg, modifiers, name } = directiveNode
+    const argExpression
+      = arg?.type !== NodeTypes.SIMPLE_EXPRESSION
+        ? undefined
+        : arg.isStatic
+          ? JSON.stringify(arg.content)
+          : arg.content
+    return {
+      argExpression,
+      modifiers,
+      name,
+    }
+  }
+  catch (error) {
+    return undefined
+  }
+}
 
 export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
   /** foo-bar -> FooBar */
@@ -78,25 +105,30 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
 
   function handleTemplateContent(name: string, attributes: Record<string, string>) {
     if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
-      components.add(pascalize((name)))
+      components.add(pascalize(name))
 
     Object.entries(attributes).forEach(([key, value]) => {
-      if (!value)
+      // ref
+      if (key === 'ref') {
+        identifiers.add(value)
         return
-      if (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':')) {
+      }
+
+      if (value !== '' && (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':'))) {
         if (key === 'v-for')
           // we strip out delectations for v-for before `in` or `of`
           expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
         else
           expressions.add(`(${value})`)
       }
+
       if (key.startsWith('v-')) {
-        const directiveName = key.slice('v-'.length).split(':')[0].split('.')[0]
-        if (!BUILD_IN_DIRECTIVES.has(directiveName))
-          directives.add(camelize(directiveName))
+        const parsedDirective = parseDirective(key)
+        if (parsedDirective && !BUILD_IN_DIRECTIVES.has(parsedDirective.name))
+          directives.add(camelize(parsedDirective.name))
+        if (parsedDirective?.argExpression)
+          expressions.add(parsedDirective.argExpression)
       }
-      if (key === 'ref')
-        identifiers.add(value)
     })
   }
 
