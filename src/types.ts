@@ -17,7 +17,10 @@ export interface ScriptTagMeta {
 export interface ParsedSFC {
   id?: string
   template: {
+    /** foo-bar -> FooBar */
     components: Set<string>
+    /** v-foo-bar -> fooBar */
+    directives: Set<string>
     identifiers: Set<string>
   }
   scriptSetup: ScriptTagMeta

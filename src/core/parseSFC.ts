@@ -1,15 +1,41 @@
 import { Parser as HTMLParser, ParserOptions as HTMLParserOptions } from 'htmlparser2'
 import type { ParserOptions } from '@babel/parser'
-import { camelize, capitalize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
+import { camelize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
 import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
 import { getIdentifierUsages } from './identifiers'
 import { parse } from './babel'
+import { pascalize } from './utils'
 
 const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
 const singlelineCommentsRE = /\/\/\s.*/g
 
+const BUILD_IN_DIRECTIVES = new Set([
+  'if',
+  'else',
+  'else-if',
+  'for',
+  'once',
+  'model',
+  'on',
+  'bind',
+  'slot',
+  'slot-scope',
+  'key',
+  'ref',
+  'text',
+  'html',
+  'show',
+  'pre',
+  'cloak',
+  // 'el',
+  // 'ref',
+])
+
 export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
+  /** foo-bar -> FooBar */
   const components = new Set<string>()
+  /** v-foo-bar -> fooBar */
+  const directives = new Set<string>()
   const expressions = new Set<string>()
   const identifiers = new Set<string>()
 
@@ -52,7 +78,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
 
   function handleTemplateContent(name: string, attributes: Record<string, string>) {
     if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
-      components.add(capitalize(camelize(name)))
+      components.add(pascalize((name)))
 
     Object.entries(attributes).forEach(([key, value]) => {
       if (!value)
@@ -63,6 +89,11 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
           expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
         else
           expressions.add(`(${value})`)
+      }
+      if (key.startsWith('v-')) {
+        const directiveName = key.slice('v-'.length).split(':')[0].split('.')[0]
+        if (!BUILD_IN_DIRECTIVES.has(directiveName))
+          directives.add(camelize(directiveName))
       }
       if (key === 'ref')
         identifiers.add(value)
@@ -183,6 +214,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
     id,
     template: {
       components,
+      directives,
       identifiers,
     },
     scriptSetup,

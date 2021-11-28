@@ -1,4 +1,4 @@
-import { camelize, capitalize } from '@vue/shared'
+import { capitalize } from '@vue/shared'
 import type { Node, ObjectExpression, Statement } from '@babel/types'
 import generate from '@babel/generator'
 import { partition } from '@antfu/utils'
@@ -6,6 +6,7 @@ import { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
 import { t } from './babel'
+import { isNotNil, pascalize } from './utils'
 
 function isAsyncImport(node: any) {
   if (node.type === 'VariableDeclaration') {
@@ -35,22 +36,29 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   const declarations = new Set<string>()
   getIdentifierDeclarations(hoisted, declarations)
   getIdentifierDeclarations(setupBody, declarations)
+  const declarationArray = Array.from(declarations).filter(isNotNil)
 
   // filter out identifiers that are used in `<template>`
-  const returns: ObjectExpression['properties'] = Array.from(declarations)
-    .filter(Boolean)
+  const returns: ObjectExpression['properties'] = declarationArray
     .filter(i => template.identifiers.has(i))
     .map((i) => {
       const id = t.identifier(i)
       return t.objectProperty(id, id, false, true)
     })
 
-  const components = Array.from(declarations)
-    .filter(Boolean)
-    .filter(i => template.components.has(i)
-      || template.components.has(camelize(i))
-      || template.components.has(capitalize(camelize(i))),
-    )
+  const components = Array.from(template.components).map(component =>
+    declarationArray.find(declare => declare === component)
+    ?? declarationArray.find(declare => pascalize(declare) === component),
+  ).filter(isNotNil)
+
+  const directiveDeclaration = Array.from(template.directives).map((directive) => {
+    const identifier = declarationArray.find(declaration => declaration === `v${capitalize(directive)}`)
+    if (identifier === undefined)
+      return undefined
+
+    return { identifier, directive }
+  },
+  ).filter(isNotNil)
 
   // append `<script setup>` imports to `<script>`
 
@@ -153,6 +161,35 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
             [
               componentsObject,
               t.memberExpression(__sfc, t.identifier('components')),
+            ],
+          ),
+        ),
+      ) as any,
+    )
+  }
+
+  // inject directives
+  // `__sfc_main.directives = Object.assign({ ... }, __sfc_main.directives)`
+  if (directiveDeclaration.length) {
+    hasBody = true
+    const directivesObject = t.objectExpression(
+      directiveDeclaration.map(({ directive, identifier }) => (t.objectProperty(
+        t.identifier(directive),
+        t.identifier(identifier),
+        false,
+        false,
+      ))),
+    )
+
+    ast.body.push(
+      t.expressionStatement(
+        t.assignmentExpression('=',
+          t.memberExpression(__sfc, t.identifier('directives')),
+          t.callExpression(
+            t.memberExpression(t.identifier('Object'), t.identifier('assign')),
+            [
+              directivesObject,
+              t.memberExpression(__sfc, t.identifier('directives')),
             ],
           ),
         ),
