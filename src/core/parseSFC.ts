@@ -132,11 +132,22 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
       }
 
       if (value !== '' && (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':'))) {
-        if (key === 'v-for')
+        if (key === 'v-for') {
           // we strip out delectations for v-for before `in` or `of`
           expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
-        else
-          expressions.add(`(${value})`)
+        }
+        else if (key.startsWith('@') || key.startsWith('v-on')) {
+          if (value.trimStart()[0] === '{')
+            expressions.add(`(${value})`)
+          else
+            expressions.add(`$event => {${value};}`)
+        }
+        else {
+          if (value.trimStart()[0] === '{')
+            expressions.add(`(${value})`)
+          else
+            expressions.add(`${value};`)
+        }
       }
 
       if (

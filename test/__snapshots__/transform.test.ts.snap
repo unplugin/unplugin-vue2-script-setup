@@ -481,7 +481,7 @@ export default __sfc_main;
 
 exports[`transform fixtures test/fixtures/MacrosType3.vue 1`] = `
 "<template>
-  <div @click=\\"emit('update', msg)\\">
+  <div @click=\\"emit('update', msg);emit('update', msg + value);\\">
     {{ msg }}
   </div>
 </template>
@@ -509,8 +509,10 @@ __sfc_main.props = {
 
 __sfc_main.setup = (__props, __ctx) => {
   const emit = __ctx.emit;
+  const value = 'bar';
   return {
-    emit
+    emit,
+    value
   };
 };
 
