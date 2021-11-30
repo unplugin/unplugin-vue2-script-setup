@@ -63,7 +63,7 @@
     "@antfu/ni": "^0.10.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.7",
-    "@vue/composition-api": "^1.4.0",
+    "@vue/composition-api": "^1.4.1",
     "@vue/runtime-dom": "^3.2.23",
     "bumpp": "^7.1.1",
     "eslint": "^8.2.0",
