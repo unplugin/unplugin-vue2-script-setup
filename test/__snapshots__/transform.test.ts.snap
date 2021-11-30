@@ -184,6 +184,7 @@ exports[`transform fixtures test/fixtures/ComponentsDirectives.vue 1`] = `
 "<template>
   <div>
     <FooView
+      v-if=\\"now > 0\\"
       ref=\\"fooView\\"
       v-foo-bar=\\"message0\\"
       v-d0-demo:foo.a.b=\\"message1\\"
@@ -195,7 +196,8 @@ exports[`transform fixtures test/fixtures/ComponentsDirectives.vue 1`] = `
       v-d6-arg-dynamic-no-value:[direction3]
       v-d6-arg-dynamic-no-value:shouldNotUsed
     ></FooView>
-    <router-view></router-view>
+    <button v-else-if=\\"now === 0\\" :[propNamePrefix+propName]=\\"1\\" @[eventPrefix.value+eventName]=\\"console.log($event)\\"></button>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -216,6 +218,14 @@ __sfc_main.setup = (__props, __ctx) => {
   const direction2 = ref('top');
   const direction3 = ref('top');
   const shouldNotUsed = ref('');
+  const propNamePrefix = 'vue-';
+  const propName = 'color';
+  const eventPrefix = {
+    value: 'vue-'
+  };
+  const eventName = '';
+  const console = globalThis.console;
+  const now = Date.now();
   return {
     fooView,
     message0,
@@ -225,7 +235,13 @@ __sfc_main.setup = (__props, __ctx) => {
     message4,
     direction1,
     direction2,
-    direction3
+    direction3,
+    propNamePrefix,
+    propName,
+    eventPrefix,
+    eventName,
+    console,
+    now
   };
 };
 

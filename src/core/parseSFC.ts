@@ -14,6 +14,12 @@ const SIMPLE_EXPRESSION: NodeTypes.SIMPLE_EXPRESSION = 4
 const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
 const singlelineCommentsRE = /\/\/\s.*/g
 
+const BUILD_IN_DIRECTIVES_WIRH_ARGUMENT = new Set([
+  'on',
+  'bind',
+  'slot',
+])
+
 const BUILD_IN_DIRECTIVES = new Set([
   'if',
   'else',
@@ -35,6 +41,17 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'el',
   // 'ref',
 ])
+
+function maybeHasDirectiveArgument(nameWithPrefixV: string) {
+  const directiveName = nameWithPrefixV.replace(/^v-/, '')
+  if (BUILD_IN_DIRECTIVES_WIRH_ARGUMENT.has(directiveName))
+    return true
+
+  else if (BUILD_IN_DIRECTIVES.has(directiveName))
+    return false
+
+  return true
+}
 
 function parseDirective(comp: string, attr: string, body: string) {
   const elementNode = baseCompile(`<${comp} ${attr}="${body}" />`).ast.children[0]
@@ -122,7 +139,10 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
           expressions.add(`(${value})`)
       }
 
-      if (key.startsWith('v-')) {
+      if (
+        ['v-', '@[', ':['].some(prefix => key.startsWith(prefix))
+        && maybeHasDirectiveArgument(key)
+      ) {
         const parsedDirective = parseDirective(name, key, value)
         if (parsedDirective && !BUILD_IN_DIRECTIVES.has(parsedDirective.name))
           directives.add(camelize(parsedDirective.name))
