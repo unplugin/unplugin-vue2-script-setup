@@ -1,6 +1,7 @@
 <template>
   <div>
     <FooView
+      v-if="now > 0"
       ref="fooView"
       v-foo-bar="message0"
       v-d0-demo:foo.a.b="message1"
@@ -12,7 +13,8 @@
       v-d6-arg-dynamic-no-value:[direction3]
       v-d6-arg-dynamic-no-value:shouldNotUsed
     ></FooView>
-    <router-view></router-view>
+    <button v-else-if="now === 0" :[propNamePrefix+propName]="1" @[eventPrefix.value+eventName]="console.log($event)"></button>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -31,4 +33,12 @@ const direction1 = ref('top')
 const direction2 = ref('top')
 const direction3 = ref('top')
 const shouldNotUsed = ref('')
+
+const propNamePrefix = 'vue-'
+const propName = 'color'
+const eventPrefix = { value: 'vue-' }
+const eventName = ''
+
+const console = globalThis.console
+const now = Date.now()
 </script>
