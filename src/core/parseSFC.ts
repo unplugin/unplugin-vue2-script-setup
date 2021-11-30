@@ -7,6 +7,10 @@ import { getIdentifierUsages } from './identifiers'
 import { parse } from './babel'
 import { pascalize } from './utils'
 
+const ELEMENT: NodeTypes.ELEMENT = 1
+const DIRECTIVE: NodeTypes.DIRECTIVE = 7
+const SIMPLE_EXPRESSION: NodeTypes.SIMPLE_EXPRESSION = 4
+
 const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
 const singlelineCommentsRE = /\/\/\s.*/g
 
@@ -32,29 +36,25 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'ref',
 ])
 
-const parseDirective = (attr: string) => {
-  try {
-    const elementNode = baseCompile(`<a ${attr}></a>`).ast.children[0]
-    if (elementNode?.type !== NodeTypes.ELEMENT) return undefined
+function parseDirective(comp: string, attr: string, body: string) {
+  const elementNode = baseCompile(`<${comp} ${attr}="${body}" />`).ast.children[0]
+  if (elementNode?.type !== ELEMENT) return undefined
 
-    const directiveNode = elementNode.props[0]
-    if (directiveNode?.type !== NodeTypes.DIRECTIVE) return undefined
+  const directiveNode = elementNode.props[0]
+  if (directiveNode?.type !== DIRECTIVE) return undefined
 
-    const { arg, modifiers, name } = directiveNode
-    const argExpression
-      = arg?.type !== NodeTypes.SIMPLE_EXPRESSION
+  const { arg, modifiers, name } = directiveNode
+  const argExpression
+      = arg?.type !== SIMPLE_EXPRESSION
         ? undefined
         : arg.isStatic
           ? JSON.stringify(arg.content)
           : arg.content
-    return {
-      argExpression,
-      modifiers,
-      name,
-    }
-  }
-  catch (error) {
-    return undefined
+
+  return {
+    argExpression,
+    modifiers,
+    name,
   }
 }
 
@@ -123,7 +123,7 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
       }
 
       if (key.startsWith('v-')) {
-        const parsedDirective = parseDirective(key)
+        const parsedDirective = parseDirective(name, key, value)
         if (parsedDirective && !BUILD_IN_DIRECTIVES.has(parsedDirective.name))
           directives.add(camelize(parsedDirective.name))
         if (parsedDirective?.argExpression)
