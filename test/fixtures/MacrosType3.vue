@@ -1,5 +1,5 @@
 <template>
-  <div @click="emit('update', msg)">
+  <div @click="emit('update', msg);emit('update', msg + value);">
     {{ msg }}
   </div>
 </template>
@@ -11,4 +11,5 @@ withDefaults(
 )
 
 const emit = defineEmits(['update'])
+const value = 'bar'
 </script>
