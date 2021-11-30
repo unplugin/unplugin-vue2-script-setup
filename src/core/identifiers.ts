@@ -69,6 +69,8 @@ export function getIdentifierUsages(node?: Expression | TSType | SpreadElement |
   }
   else if (node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') {
     getIdentifierUsages(node.object, identifiers)
+    if (node.computed)
+      getIdentifierUsages(node.property, identifiers)
   }
   else if (node.type === 'CallExpression' || node.type === 'OptionalCallExpression') {
     getIdentifierUsages(node.callee as Expression, identifiers)
