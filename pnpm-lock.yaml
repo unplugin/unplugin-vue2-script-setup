@@ -16,7 +16,7 @@ importers:
       '@types/jest': ^27.0.2
       '@types/node': ^16.11.7
       '@vue/compiler-core': ^3.2.23
-      '@vue/composition-api': ^1.4.0
+      '@vue/composition-api': ^1.4.1
       '@vue/ref-transform': ^3.2.23
       '@vue/runtime-dom': ^3.2.23
       '@vue/shared': ^3.2.23
@@ -57,7 +57,7 @@ importers:
       '@antfu/ni': 0.10.1
       '@types/jest': 27.0.2
       '@types/node': 16.11.7
-      '@vue/composition-api': 1.4.0
+      '@vue/composition-api': 1.4.1
       '@vue/runtime-dom': 3.2.23
       bumpp: 7.1.1
       eslint: 8.2.0
@@ -3243,6 +3243,14 @@ packages:
       tslib: 2.3.1
       vue: 2.6.14
     dev: false
+
+  /@vue/composition-api/1.4.1:
+    resolution: {integrity: sha512-ZTat9ru/rwecveRnFzlO2mduOBpGfnBdXn+WtBcFLV9UsL/D+6nX47RWuLiVdNxNDX0qphGZRC+JDjwt+YTnRA==}
+    peerDependencies:
+      vue: '>= 2.5 < 3'
+    dependencies:
+      tslib: 2.3.1
+    dev: true
 
   /@vue/preload-webpack-plugin/1.1.2_502c618fc8a7d35df07e93275324a2d0:
     resolution: {integrity: sha512-LIZMuJk38pk9U9Ur4YzHjlIyMuxPlACdBIHH9/nGYVTsaGKOSnSuELiE8vS9wa+dJpIYspYUOqk+L1Q4pgHQHQ==}
