@@ -1,24 +1,68 @@
-import { Parser as HTMLParser, ParserOptions as HTMLParserOptions } from 'htmlparser2'
+/* eslint-disable one-var */
+/* eslint-disable @typescript-eslint/no-namespace */
+import {
+  Parser as HTMLParser,
+  ParserOptions as HTMLParserOptions,
+} from 'htmlparser2'
 import type { ParserOptions } from '@babel/parser'
-import { NodeTypes, baseCompile } from '@vue/compiler-core'
-import { camelize, isHTMLTag, isSVGTag, isVoidTag } from '@vue/shared'
-import { ParsedSFC, ScriptSetupTransformOptions, ScriptTagMeta } from '../types'
+import {
+  AttributeNode,
+  DirectiveNode,
+  TemplateChildNode,
+  ExpressionNode,
+  baseParse,
+} from '@vue/compiler-core'
+import { camelize } from '@vue/shared'
+import {
+  ParsedSFC,
+  ScriptSetupTransformOptions,
+  ScriptTagMeta,
+} from '../types'
 import { getIdentifierUsages } from './identifiers'
 import { parse } from './babel'
-import { pascalize } from './utils'
+import { exhaustiveCheckReturnUndefined, isNotNil, pascalize } from './utils'
 
-const ELEMENT: NodeTypes.ELEMENT = 1
-const DIRECTIVE: NodeTypes.DIRECTIVE = 7
-const SIMPLE_EXPRESSION: NodeTypes.SIMPLE_EXPRESSION = 4
+namespace NodeTypes {
+  export const
+    ROOT = 0,
+    ELEMENT = 1,
+    TEXT = 2,
+    COMMENT = 3,
+    SIMPLE_EXPRESSION = 4,
+    INTERPOLATION = 5,
+    ATTRIBUTE = 6,
+    DIRECTIVE = 7,
+    COMPOUND_EXPRESSION = 8,
+    IF = 9,
+    IF_BRANCH = 10,
+    FOR = 11,
+    TEXT_CALL = 12,
+    VNODE_CALL = 13,
+    JS_CALL_EXPRESSION = 14,
+    JS_OBJECT_EXPRESSION = 15,
+    JS_PROPERTY = 16,
+    JS_ARRAY_EXPRESSION = 17,
+    JS_FUNCTION_EXPRESSION = 18,
+    JS_CONDITIONAL_EXPRESSION = 19,
+    JS_CACHE_EXPRESSION = 20,
+    JS_BLOCK_STATEMENT = 21,
+    JS_TEMPLATE_LITERAL = 22,
+    JS_IF_STATEMENT = 23,
+    JS_ASSIGNMENT_EXPRESSION = 24,
+    JS_SEQUENCE_EXPRESSION = 25,
+    JS_RETURN_STATEMENT = 26
+}
+
+namespace ElementTypes {
+  export const
+    ELEMENT = 0,
+    COMPONENT = 1,
+    SLOT = 2,
+    TEMPLATE = 3
+}
 
 const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
 const singlelineCommentsRE = /\/\/\s.*/g
-
-const BUILD_IN_DIRECTIVES_WIRH_ARGUMENT = new Set([
-  'on',
-  'bind',
-  'slot',
-])
 
 const BUILD_IN_DIRECTIVES = new Set([
   'if',
@@ -42,47 +86,193 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'ref',
 ])
 
-function maybeHasDirectiveArgument(nameWithPrefixV: string) {
-  const directiveName = nameWithPrefixV.replace(/^v-/, '')
-  if (BUILD_IN_DIRECTIVES_WIRH_ARGUMENT.has(directiveName))
-    return true
+function getComponents(node: TemplateChildNode): string[] {
+  const current
+    = node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.COMPONENT
+      ? [node.tag]
+      : node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.ELEMENT
+        ? [node.tag]
+        : []
 
-  else if (BUILD_IN_DIRECTIVES.has(directiveName))
-    return false
+  const children
+    = node.type === NodeTypes.IF
+      ? node.branches
+      : node.type === NodeTypes.ELEMENT
+        || node.type === NodeTypes.IF_BRANCH
+        || node.type === NodeTypes.FOR
+        ? node.children
+        : node.type === NodeTypes.TEXT
+        || node.type === NodeTypes.COMMENT
+        || node.type === NodeTypes.COMPOUND_EXPRESSION
+        || node.type === NodeTypes.TEXT_CALL
+        || node.type === NodeTypes.INTERPOLATION
+          ? []
+          : exhaustiveCheckReturnUndefined(node) ?? []
 
-  return true
+  return [...current, ...children.flatMap(getComponents)]
 }
 
-function parseDirective(comp: string, attr: string, body: string) {
-  const elementNode = baseCompile(`<${comp} ${attr}="${body}" />`).ast.children[0]
-  if (elementNode?.type !== ELEMENT) return undefined
-
-  const directiveNode = elementNode.props[0]
-  if (directiveNode?.type !== DIRECTIVE) return undefined
-
-  const { arg, modifiers, name } = directiveNode
-  const argExpression
-      = arg?.type !== SIMPLE_EXPRESSION
-        ? undefined
-        : arg.isStatic
-          ? JSON.stringify(arg.content)
-          : arg.content
-
-  return {
-    argExpression,
-    modifiers,
-    name,
+function getDirectiveNames(node: TemplateChildNode): string[] {
+  if (node.type === NodeTypes.ELEMENT) {
+    const directives = node.props.flatMap(x =>
+      x.type === NodeTypes.DIRECTIVE ? [x.name] : [],
+    )
+    return [...directives, ...node.children.flatMap(getDirectiveNames)]
+  }
+  else if (node.type === NodeTypes.IF) {
+    return node.branches.flatMap(getDirectiveNames)
+  }
+  else if (node.type === NodeTypes.IF_BRANCH || node.type === NodeTypes.FOR) {
+    return node.children.flatMap(getDirectiveNames)
+  }
+  else if (
+    node.type === NodeTypes.INTERPOLATION
+    || node.type === NodeTypes.COMPOUND_EXPRESSION
+    || node.type === NodeTypes.TEXT
+    || node.type === NodeTypes.COMMENT
+    || node.type === NodeTypes.TEXT_CALL
+  ) {
+    return []
+  }
+  else {
+    exhaustiveCheckReturnUndefined(node)
+    return []
   }
 }
 
-export function parseSFC(code: string, id?: string, options?: ScriptSetupTransformOptions): ParsedSFC {
-  /** foo-bar -> FooBar */
-  const components = new Set<string>()
-  /** v-foo-bar -> fooBar */
-  const directives = new Set<string>()
-  const expressions = new Set<string>()
+function getFreeVariablesForText(input: string): string[] {
   const identifiers = new Set<string>()
+  const inputWithPrefix = input.trimStart()[0] === '{' ? `(${input})` : input
 
+  const nodes = parse(inputWithPrefix).program.body
+  nodes.forEach(node => getIdentifierUsages(node, identifiers))
+  return [...identifiers.values()]
+}
+
+function getFreeVariablesForPropsNode(
+  node: AttributeNode | DirectiveNode,
+): string[] {
+  if (node.type === NodeTypes.DIRECTIVE) {
+    const arg = node.arg === undefined ? [] : getFreeVariablesForNode(node.arg)
+    const exp = node.exp === undefined ? [] : getFreeVariablesForNode(node.exp)
+    return [...arg, ...exp]
+  }
+  return []
+}
+
+function getFreeVariablesForNode(
+  node: TemplateChildNode | ExpressionNode,
+): string[] {
+  if (node.type === NodeTypes.SIMPLE_EXPRESSION) {
+    return node.isStatic ? [] : getFreeVariablesForText(node.content)
+  }
+  else if (node.type === NodeTypes.COMPOUND_EXPRESSION) {
+    return node.children.flatMap(x =>
+      typeof x !== 'object' ? [] : getFreeVariablesForNode(x),
+    )
+  }
+  else if (node.type === NodeTypes.INTERPOLATION) {
+    return getFreeVariablesForNode(node.content)
+  }
+  else if (node.type === NodeTypes.ELEMENT) {
+    const children = node.children.flatMap(getFreeVariablesForNode)
+
+    const directiveProps = node.props
+      .flatMap(x =>
+        x.type === NodeTypes.DIRECTIVE ? [x] : [],
+      )
+    const attributeProps = node.props
+      .flatMap(x =>
+        x.type === NodeTypes.ATTRIBUTE ? [x] : [],
+      )
+
+    const refNode = attributeProps.find(node => node.name === 'ref' && node.value !== undefined)
+    const refIdentifier = refNode?.value?.content
+
+    const vSlotNode = directiveProps.find(node => node.name === 'slot')
+    const vSlotArgIdentifiers = vSlotNode?.arg === undefined ? [] : getFreeVariablesForNode(vSlotNode.arg)
+    // TODO: Variable shadowing
+    const vSlotExpVariableShadowingIdentifiers: string[] = []
+
+    const vForNode = directiveProps.find(node => node.name === 'for')
+    const vForIdentifiers = vForNode?.exp?.type === NodeTypes.SIMPLE_EXPRESSION ? getFreeVariablesForText(vForNode.exp.content.replace(/^.*\s(?:in|of)\s/, '')) : []
+    // TODO: Variable shadowing
+    const vForExpVariableShadowingIdentifiers: string[] = []
+
+    const props = directiveProps
+      .filter(({ name }) => name !== 'slot' && name !== 'for')
+      .flatMap(getFreeVariablesForPropsNode)
+
+    const shadowingIdentifiers = new Set([...vSlotExpVariableShadowingIdentifiers, ...vForExpVariableShadowingIdentifiers])
+    return [
+      ...vSlotArgIdentifiers,
+      refIdentifier,
+      ...vForIdentifiers,
+      ...([...children, ...props]).filter(x => !shadowingIdentifiers.has(x)),
+    ].filter(isNotNil)
+  }
+  else if (node.type === NodeTypes.FOR) {
+    // If we use `baseCompiler`, we need add variable shadowing here
+    // But we use `baseParse` now. So this branch will never be reached.
+    // `NodeTypes.IF` and `NodeTypes.IF_BRANCH` will never be reached, also.
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { keyAlias, valueAlias } = node
+    return [node.source, ...node.children].flatMap(getFreeVariablesForNode)
+  }
+  else if (node.type === NodeTypes.IF) {
+    return (node.branches ?? []).flatMap(getFreeVariablesForNode)
+  }
+  else if (node.type === NodeTypes.IF_BRANCH) {
+    return [node.condition, ...node.children]
+      .filter(isNotNil)
+      .flatMap(getFreeVariablesForNode)
+  }
+  else if (node.type === NodeTypes.TEXT || node.type === NodeTypes.COMMENT || node.type === NodeTypes.TEXT_CALL) {
+    return []
+  }
+  else {
+    exhaustiveCheckReturnUndefined(node)
+    return []
+  }
+}
+
+export function findReferencesForSFC(code: string) {
+  const rootNode = baseParse(code, {
+  })
+  const templateChildNodes = rootNode.children.flatMap(node =>
+    node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.ELEMENT
+      ? [node]
+      : [],
+  )
+
+  const templateNode = templateChildNodes.find(
+    ({ tag }) => tag === 'template',
+  )
+
+  const components = templateNode?.children.flatMap(getComponents) ?? []
+  const directives = templateNode?.children.flatMap(getDirectiveNames) ?? []
+  const identifiers
+    = templateNode?.children.flatMap(getFreeVariablesForNode) ?? []
+
+  return {
+    components,
+    directives,
+    identifiers,
+  }
+}
+
+const htmlParserOptions: HTMLParserOptions = {
+  xmlMode: true,
+  lowerCaseTags: false,
+  lowerCaseAttributeNames: false,
+  recognizeSelfClosing: true,
+}
+export function parseSFC(
+  code: string,
+  id?: string,
+  options?: ScriptSetupTransformOptions,
+): ParsedSFC {
   let templateLevel = 0
   let inScriptSetup = false
   let inScript = false
@@ -111,89 +301,24 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
     found: false,
     ast: undefined!,
   }
-  const htmlParserOptions: HTMLParserOptions = {
-    xmlMode: true,
-    lowerCaseTags: false,
-    lowerCaseAttributeNames: false,
-    recognizeSelfClosing: true,
-  }
 
-  let pugStart: number | undefined
+  let templateStart: number | undefined
+  let templateEnd: number | undefined
+  let templateLang: 'html' | 'pug' = 'html'
+  const parser = new HTMLParser(
+    {
+      onopentag(name, attributes) {
+        if (!name) return
 
-  function handleTemplateContent(name: string, attributes: Record<string, string>) {
-    if (!isHTMLTag(name) && !isSVGTag(name) && !isVoidTag(name))
-      components.add(pascalize(name))
-
-    Object.entries(attributes).forEach(([key, value]) => {
-      // ref
-      if (key === 'ref') {
-        identifiers.add(value)
-        return
-      }
-
-      if (value !== '' && (key.startsWith('v-') || key.startsWith('@') || key.startsWith(':'))) {
-        if (key === 'v-for') {
-          // we strip out delectations for v-for before `in` or `of`
-          expressions.add(`(${value.replace(/^.*\s(?:in|of)\s/, '')})`)
+        if (name === 'template') {
+          if (templateLevel === 0) {
+            templateStart = parser.endIndex! + 1
+            if (attributes.lang === 'pug')
+              templateLang = 'pug'
+          }
+          templateLevel += 1
         }
-        else if (key.startsWith('@') || key.startsWith('v-on')) {
-          if (value.trimStart()[0] === '{')
-            expressions.add(`(${value})`)
-          else
-            expressions.add(`$event => {${value};}`)
-        }
-        else {
-          if (value.trimStart()[0] === '{')
-            expressions.add(`(${value})`)
-          else
-            expressions.add(`${value};`)
-        }
-      }
 
-      if (
-        ['v-', '@[', ':['].some(prefix => key.startsWith(prefix))
-        && maybeHasDirectiveArgument(key)
-      ) {
-        const parsedDirective = parseDirective(name, key, value)
-        if (parsedDirective && !BUILD_IN_DIRECTIVES.has(parsedDirective.name))
-          directives.add(camelize(parsedDirective.name))
-        if (parsedDirective?.argExpression)
-          expressions.add(parsedDirective.argExpression)
-      }
-    })
-  }
-
-  function handlePugTemplate(pugCode: string, id?: string) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const html = require('pug').compile(pugCode, { filename: id })()
-      const parser = new HTMLParser({
-        onopentag(name, attributes) {
-          name && handleTemplateContent(name, attributes)
-        },
-      }, htmlParserOptions)
-
-      parser.write(html)
-      parser.end()
-    }
-    catch {}
-  }
-
-  const parser = new HTMLParser({
-    onopentag(name, attributes) {
-      if (!name)
-        return
-
-      if (name === 'template') {
-        if (templateLevel === 0 && attributes.lang === 'pug')
-          pugStart = parser.endIndex! + 1
-        templateLevel += 1
-      }
-
-      if (templateLevel > 0) {
-        handleTemplateContent(name, attributes)
-      }
-      else {
         if (name === 'script') {
           if ('setup' in attributes) {
             scriptSetup.start = parser.startIndex
@@ -210,47 +335,46 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
             inScript = true
           }
         }
-      }
-    },
-    ontext(text) {
-      if (templateLevel > 0) {
-        Array.from(text.matchAll(/\{\{(.*?)\}\}/g)).forEach(([, expression]) => {
-          expressions.add(`(${expression})`)
-        })
-      }
-    },
-    onclosetag(name) {
-      if (name === 'template') {
-        templateLevel -= 1
-        if (templateLevel === 0 && pugStart != null)
-          handlePugTemplate(striped.slice(pugStart, parser.startIndex), id)
-      }
+      },
+      onclosetag(name) {
+        if (name === 'template') {
+          templateLevel -= 1
+          if (templateLevel === 0 && templateStart != null)
+            templateEnd = parser.startIndex
+        }
 
-      if (inScriptSetup && name === 'script') {
-        scriptSetup.end = parser.endIndex! + 1
-        scriptSetup.contentEnd = parser.startIndex
-        scriptSetup.content = code.slice(scriptSetup.contentStart, scriptSetup.contentEnd)
-        inScriptSetup = false
-      }
-      if (inScript && name === 'script') {
-        script.end = parser.endIndex! + 1
-        script.contentEnd = parser.startIndex
-        script.content = code.slice(script.contentStart, script.contentEnd)
-        inScript = false
-      }
+        if (inScriptSetup && name === 'script') {
+          scriptSetup.end = parser.endIndex! + 1
+          scriptSetup.contentEnd = parser.startIndex
+          scriptSetup.content = code.slice(
+            scriptSetup.contentStart,
+            scriptSetup.contentEnd,
+          )
+          inScriptSetup = false
+        }
+        if (inScript && name === 'script') {
+          script.end = parser.endIndex! + 1
+          script.contentEnd = parser.startIndex
+          script.content = code.slice(script.contentStart, script.contentEnd)
+          inScript = false
+        }
+      },
     },
-  }, htmlParserOptions)
+    htmlParserOptions,
+  )
 
   parser.write(striped)
   parser.end()
 
-  expressions.forEach((exp) => {
-    const nodes = parse(exp).program.body
-    nodes.forEach(node => getIdentifierUsages(node, identifiers))
-  })
-
-  if (script.found && scriptSetup.found && scriptSetup.attrs.lang !== script.attrs.lang)
-    throw new SyntaxError('<script setup> language must be the same as <script>')
+  if (
+    script.found
+    && scriptSetup.found
+    && scriptSetup.attrs.lang !== script.attrs.lang
+  ) {
+    throw new SyntaxError(
+      '<script setup> language must be the same as <script>',
+    )
+  }
 
   const parserOptions: ParserOptions = {
     sourceType: 'module',
@@ -258,27 +382,40 @@ export function parseSFC(code: string, id?: string, options?: ScriptSetupTransfo
   }
 
   const lang = scriptSetup.attrs.lang || script.attrs.lang || 'js'
-  if (lang === 'ts')
-    parserOptions.plugins!.push('typescript')
-  else if (lang === 'jsx')
-    parserOptions.plugins!.push('jsx')
-  else if (lang === 'tsx')
-    parserOptions.plugins!.push('typescript', 'jsx')
+  if (lang === 'ts') parserOptions.plugins!.push('typescript')
+  else if (lang === 'jsx') parserOptions.plugins!.push('jsx')
+  else if (lang === 'tsx') parserOptions.plugins!.push('typescript', 'jsx')
   else if (lang !== 'js')
     throw new SyntaxError(`Unsupported script language: ${lang}`)
 
   scriptSetup.ast = parse(scriptSetup.content, parserOptions).program
   script.ast = parse(script.content || '', parserOptions).program
 
-  scriptSetup.ast = options?.astTransforms?.scriptSetup?.(scriptSetup.ast) || scriptSetup.ast
+  scriptSetup.ast
+    = options?.astTransforms?.scriptSetup?.(scriptSetup.ast) || scriptSetup.ast
   script.ast = options?.astTransforms?.script?.(script.ast) || script.ast
+
+  const codeOfTemplate = (() => {
+    if (templateStart == null || templateEnd == null)
+      return undefined
+
+    const templateCode = code.slice(templateStart, templateEnd)
+    const html
+      = templateLang === 'html'
+        ? templateCode
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        : require('pug').compile(templateCode, { filename: id })()
+    return `<template>\n${html}\n</template>`
+  })()
+
+  const a = codeOfTemplate ? findReferencesForSFC(codeOfTemplate) : undefined
 
   return {
     id,
     template: {
-      components,
-      directives,
-      identifiers,
+      components: new Set(a?.components.map(pascalize)),
+      directives: new Set(a?.directives.filter(x => !BUILD_IN_DIRECTIVES.has(x)).map(camelize)),
+      identifiers: new Set(a?.identifiers),
     },
     scriptSetup,
     script,
