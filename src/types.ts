@@ -1,7 +1,6 @@
 import type { ParserOptions } from '@babel/parser'
 import type { Program, Node } from '@babel/types'
 import type { FilterPattern } from '@rollup/pluginutils'
-import type { SourceMap } from 'rollup'
 
 export interface ScriptTagMeta {
   start: number
@@ -46,6 +45,17 @@ export interface PluginOptions extends ScriptSetupTransformOptions {
 }
 
 export type ResolvedOptions = Required<ScriptSetupTransformOptions>
+
+export interface SourceMap {
+  file: string
+  mappings: string
+  names: string[]
+  sources: string[]
+  sourcesContent: string[]
+  version: number
+  toString(): string
+  toUrl(): string
+}
 
 export type TransformResult = {
   code: string
