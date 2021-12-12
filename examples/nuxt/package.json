@@ -14,9 +14,9 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
-    "@nuxtjs/composition-api": "^0.30.0",
-    "@vue/runtime-dom": "^3.2.21",
+    "@nuxtjs/composition-api": "^0.31.0",
+    "@vue/runtime-dom": "^3.2.25",
     "unplugin-vue2-script-setup": "workspace:*",
-    "vue-tsc": "^0.29.4"
+    "vue-tsc": "^0.29.8"
   }
 }

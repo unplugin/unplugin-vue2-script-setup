@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`transform fixtures playground/App.vue 1`] = `
+exports[`transform > fixtures > playground/App.vue 1`] = `
 "<template>
   <div>
     <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
@@ -35,28 +35,28 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures playground/Async.vue 1`] = `
+exports[`transform > fixtures > playground/Async.vue 1`] = `
 "<template>
   <div>Async Component</div>
 </template>
 "
 `;
 
-exports[`transform fixtures playground/Bar.vue 1`] = `
+exports[`transform > fixtures > playground/Bar.vue 1`] = `
 "<template>
   <div>Bar</div>
 </template>
 "
 `;
 
-exports[`transform fixtures playground/Foo.vue 1`] = `
+exports[`transform > fixtures > playground/Foo.vue 1`] = `
 "<template>
   <div>Foo</div>
 </template>
 "
 `;
 
-exports[`transform fixtures playground/HelloWorld.vue 1`] = `
+exports[`transform > fixtures > playground/HelloWorld.vue 1`] = `
 "<template>
   <div>
     <h3>{{ msg }}, {{ name }}</h3>
@@ -128,7 +128,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures playground/main.ts 1`] = `
+exports[`transform > fixtures > playground/main.ts 1`] = `
 "import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import App from './App.vue'
@@ -140,7 +140,7 @@ app.$mount('#app')
 "
 `;
 
-exports[`transform fixtures playground/vite.config.ts 1`] = `
+exports[`transform > fixtures > playground/vite.config.ts 1`] = `
 "import { defineConfig } from 'vite'
 import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
 import Inspect from 'vite-plugin-inspect'
@@ -158,7 +158,7 @@ export default defineConfig({
 "
 `;
 
-exports[`transform fixtures test/fixtures/AsyncImport.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/AsyncImport.vue 1`] = `
 "<script lang=\\"ts\\">
 import { defineAsyncComponent } from '@vue/composition-api';
 const ScriptOnly = defineAsyncComponent(() => import('./ScriptOnly.vue'));
@@ -180,7 +180,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/ComponentsDirectives.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/ComponentsDirectives.vue 1`] = `
 "<template>
   <div>
     <FooView
@@ -276,7 +276,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/DynamicStyle.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/DynamicStyle.vue 1`] = `
 "<template>
   <div :style=\\"{ color, border: '1px' }\\" />
 </template>
@@ -296,9 +296,9 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/Empty.vue 1`] = `""`;
+exports[`transform > fixtures > test/fixtures/Empty.vue 1`] = `""`;
 
-exports[`transform fixtures test/fixtures/Enum.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/Enum.vue 1`] = `
 "<template>
   <div>{{ MyEnum }}</div>
 </template>
@@ -320,7 +320,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/Macros.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/Macros.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">{{ msg }}</div>
 </template>
@@ -345,7 +345,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosDefineExpose.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosDefineExpose.vue 1`] = `
 "<template>
   <div>{{ a }}</div>
   <div>{{ text?.length ?? textLengthDefault }}</div>
@@ -374,7 +374,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosPure.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosPure.vue 1`] = `
 "<template>
   <div>{{ msg }}</div>
 </template>
@@ -389,7 +389,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosType.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosType.vue 1`] = `
 "<template>
   <div @click=\\"emit('update', props.msg)\\">
     {{ msg }}
@@ -431,7 +431,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosType2.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosType2.vue 1`] = `
 "<template>
   <div @click=\\"emit(props.msg)\\">
     {{ msg }}
@@ -492,7 +492,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosType3.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosType3.vue 1`] = `
 "<template>
   <div @click=\\"emit('update', msg);emit('update', msg + value);\\">
     {{ msg }}
@@ -534,7 +534,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosType4.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosType4.vue 1`] = `
 "<script lang=\\"ts\\">
 type Test = number[];
 const __sfc_main = {};
@@ -556,7 +556,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/MacrosTypeAny.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/MacrosTypeAny.vue 1`] = `
 "<template>
   <div>
     {{ value }}
@@ -583,7 +583,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/Object1.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/Object1.vue 1`] = `
 "<template>
   <div>
     {{ data }} {{ title }}
@@ -607,7 +607,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/ObjectDestructure.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/ObjectDestructure.vue 1`] = `
 "<template>
   <div></div>
 </template>
@@ -631,7 +631,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/Pug1.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/Pug1.vue 1`] = `
 "<template lang=\\"pug\\">
 .root
   span {{ data }} {{ title }}
@@ -659,7 +659,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/RefSugar.ts 1`] = `
+exports[`transform > fixtures > test/fixtures/RefSugar.ts 1`] = `
 "import { ref as _ref, computed as _computed } from '@vue/composition-api'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-const */
@@ -678,7 +678,7 @@ let computed1Raw = (computed1)
 "
 `;
 
-exports[`transform fixtures test/fixtures/RefSugar.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/RefSugar.vue 1`] = `
 "<template>
   <div>
     {{ msg }}
@@ -722,7 +722,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/RefSugarScriptSetup.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/RefSugarScriptSetup.vue 1`] = `
 "<template>
   <div>
     {{ msg }}
@@ -747,7 +747,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/ScriptLessThanOrEqualTo.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/ScriptLessThanOrEqualTo.vue 1`] = `
 "<script lang=\\"ts\\">
 const __sfc_main = {};
 
@@ -767,7 +767,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/ScriptOnly.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/ScriptOnly.vue 1`] = `
 "<script lang=\\"ts\\">
 // <script setup> in comment should not be matched
 import { defineComponent } from '@vue/composition-api';
@@ -784,7 +784,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/TemplateOnly.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/TemplateOnly.vue 1`] = `
 "<template>
   <div>
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">
@@ -820,7 +820,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/TemplateOptionalChaining.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/TemplateOptionalChaining.vue 1`] = `
 "<template>
   <div @click=\\"callback?.()\\">
     {{ text?.length ?? textLengthDefault?.[index] }}
@@ -861,7 +861,7 @@ export default __sfc_main;
 "
 `;
 
-exports[`transform fixtures test/fixtures/VFor.vue 1`] = `
+exports[`transform > fixtures > test/fixtures/VFor.vue 1`] = `
 "<template>
   <div>
     <div v-for=\\"(item, index) in items\\" :key=\\"item\\">

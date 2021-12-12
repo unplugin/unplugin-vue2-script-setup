@@ -1,3 +1,4 @@
+import { sinon } from 'vitest'
 import { transform as t } from '../src'
 
 describe('errors', () => {
@@ -47,7 +48,7 @@ const {data} = await something()
   })
 
   it('ref sugar', () => {
-    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    const warn = sinon.stub(console, 'warn')
 
     expect(() =>
       t(`
@@ -66,6 +67,6 @@ const a = async () => {
 `, 'App.vue'))
       .not.toThrow()
 
-    warn.mockRestore()
+    sinon.restore()
   })
 })

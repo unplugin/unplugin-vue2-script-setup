@@ -39,8 +39,8 @@
     "play": "npm -C playground run dev",
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --push --tag && pnpm publish",
-    "test": "jest",
-    "test:update": "jest -u"
+    "test": "vitest",
+    "test:update": "vitest -u"
   },
   "dependencies": {
     "@antfu/utils": "^0.3.0",
@@ -50,34 +50,30 @@
     "@babel/traverse": "^7.16.3",
     "@babel/types": "^7.16.0",
     "@rollup/pluginutils": "^4.1.1",
-    "@vue/compiler-core": "^3.2.23",
-    "@vue/ref-transform": "^3.2.23",
-    "@vue/shared": "^3.2.23",
+    "@vue/compiler-core": "^3.2.25",
+    "@vue/ref-transform": "^3.2.24",
+    "@vue/shared": "^3.2.24",
     "defu": "^5.0.0",
     "htmlparser2": "5.0.1",
     "magic-string": "^0.25.7",
     "unplugin": "^0.2.21"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.11.1",
-    "@antfu/ni": "^0.11.0",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.11",
+    "@antfu/eslint-config": "^0.13.1",
+    "@antfu/ni": "^0.12.0",
+    "@types/node": "^16.11.12",
     "@vue/composition-api": "^1.4.1",
-    "@vue/runtime-dom": "^3.2.23",
+    "@vue/runtime-dom": "^3.2.25",
     "bumpp": "^7.1.1",
-    "eslint": "^8.4.0",
-    "eslint-plugin-jest": "^25.3.0",
+    "eslint": "^8.4.1",
     "esno": "^0.12.1",
     "fast-glob": "^3.2.7",
-    "jest": "^27.4.3",
-    "log-editor": "^0.1.0",
     "pug": "^3.0.2",
     "rimraf": "^3.0.2",
-    "ts-jest": "^27.0.7",
-    "tsup": "^5.10.1",
-    "typescript": "^4.5.2",
-    "vite": "^2.6.14"
+    "tsup": "^5.11.1",
+    "typescript": "^4.5.3",
+    "vite": "^2.7.1",
+    "vitest": "^0.0.70"
   },
   "peerDependencies": {
     "pug": "^3.0.2"

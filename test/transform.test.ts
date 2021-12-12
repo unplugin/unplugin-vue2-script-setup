@@ -16,16 +16,12 @@ describe('transform', () => {
 
     for (const file of files) {
       it(file.replace(/\\/g, '/'), async() => {
-        const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
-
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
         const result = transform(fixture, file, { refTransform: true })?.code || fixture
         expect(result).toMatchSnapshot()
 
         const result2 = transform(result, file, { refTransform: true })?.code || result
         expect(result).toEqual(result2)
-
-        warn.mockRestore()
       })
     }
   })
