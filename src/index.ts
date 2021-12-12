@@ -1,6 +1,6 @@
 import { createUnplugin } from 'unplugin'
 import { createFilter } from '@rollup/pluginutils'
-import { PluginOptions } from './types'
+import type { PluginOptions } from './types'
 import { transform } from './core'
 
 export * from './core'

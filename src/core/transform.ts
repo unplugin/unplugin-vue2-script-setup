@@ -1,6 +1,6 @@
 import MagicString from 'magic-string'
 import { shouldTransform as shouldTransformRefSugar, transform as transformRef } from '@vue/ref-transform'
-import { ResolvedOptions, ScriptSetupTransformOptions, TransformResult } from '../types'
+import type { ResolvedOptions, ScriptSetupTransformOptions, TransformResult } from '../types'
 import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
 import { transformSfcRefSugar } from './transformSfcRefSugar'

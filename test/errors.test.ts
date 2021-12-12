@@ -48,7 +48,7 @@ const {data} = await something()
   })
 
   it('ref sugar', () => {
-    const warn = sinon.stub(console, 'warn')
+    sinon.stub(console, 'warn')
 
     expect(() =>
       t(`

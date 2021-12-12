@@ -1,19 +1,17 @@
 /* eslint-disable one-var */
 /* eslint-disable @typescript-eslint/no-namespace */
-import {
-  Parser as HTMLParser,
-  ParserOptions as HTMLParserOptions,
-} from 'htmlparser2'
+import type { ParserOptions as HTMLParserOptions } from 'htmlparser2'
+import { Parser as HTMLParser } from 'htmlparser2'
 import type { ParserOptions } from '@babel/parser'
-import {
+import type {
   AttributeNode,
   DirectiveNode,
   TemplateChildNode,
   ExpressionNode,
-  baseParse,
 } from '@vue/compiler-core'
+import { baseParse } from '@vue/compiler-core'
 import { camelize } from '@vue/shared'
-import {
+import type {
   ParsedSFC,
   ScriptSetupTransformOptions,
   ScriptTagMeta,

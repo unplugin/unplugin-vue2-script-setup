@@ -1,5 +1,5 @@
 import defu from 'defu'
-import { PluginOptions } from './types'
+import type { PluginOptions } from './types'
 import unplugin from '.'
 
 export default function(this: any, inlineOptions: PluginOptions = {}) {

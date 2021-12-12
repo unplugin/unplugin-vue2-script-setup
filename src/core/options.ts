@@ -1,4 +1,4 @@
-import { ScriptSetupTransformOptions, ResolvedOptions } from '../types'
+import type { ScriptSetupTransformOptions, ResolvedOptions } from '../types'
 
 export function resolveOptions(options: ScriptSetupTransformOptions = {}): ResolvedOptions {
   return Object.assign(
