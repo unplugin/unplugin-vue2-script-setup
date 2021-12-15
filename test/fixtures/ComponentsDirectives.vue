@@ -26,6 +26,7 @@
     </FooView>
     <button v-else-if="now === 0" :[propNamePrefix+propName]="1" @[eventPrefix.value+eventName]="console.log($event)"></button>
     <router-view v-else></router-view>
+    <img src="https://vuejs.org/images/logo.svg">
   </div>
 </template>
 

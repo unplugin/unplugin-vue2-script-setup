@@ -10,6 +10,7 @@ import type {
   ExpressionNode,
 } from '@vue/compiler-core'
 import { baseParse } from '@vue/compiler-core'
+import { parserOptions } from '@vue/compiler-dom'
 import { camelize } from '@vue/shared'
 import type {
   ParsedSFC,
@@ -236,8 +237,7 @@ function getFreeVariablesForNode(
 }
 
 export function findReferencesForSFC(code: string) {
-  const rootNode = baseParse(code, {
-  })
+  const rootNode = baseParse(code, parserOptions)
   const templateChildNodes = rootNode.children.flatMap(node =>
     node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.ELEMENT
       ? [node]
