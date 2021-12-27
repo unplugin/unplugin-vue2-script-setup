@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { parse } from '@babel/parser'
+import { describe, expect, it } from 'vitest'
 import { getIdentifierDeclarations, getIdentifierUsages } from '../src/core/identifiers'
 
 describe('identifiers', () => {

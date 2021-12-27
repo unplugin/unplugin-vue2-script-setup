@@ -1,4 +1,4 @@
-import { sinon } from 'vitest'
+import { describe, expect, it, sinon } from 'vitest'
 import { transform as t } from '../src'
 
 describe('errors', () => {

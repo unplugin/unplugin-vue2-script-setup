@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { promises as fs } from 'fs'
 import fg from 'fast-glob'
+import { describe, expect, it } from 'vitest'
 import { transform } from '../src'
 
 describe('transform', () => {
