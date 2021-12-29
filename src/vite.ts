@@ -1,3 +1,3 @@
 import unplugin from '.'
 
-export default unplugin.vite
+export = unplugin.vite

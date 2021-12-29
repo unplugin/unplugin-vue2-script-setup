@@ -2,7 +2,7 @@ import defu from 'defu'
 import type { PluginOptions } from './types'
 import unplugin from '.'
 
-export default function(this: any, inlineOptions: PluginOptions = {}) {
+function scriptSetupModule(this: any, inlineOptions: PluginOptions = {}) {
   const options = defu(inlineOptions, this.nuxt.options.scriptSetup)
 
   // install webpack plugin
@@ -17,3 +17,5 @@ export default function(this: any, inlineOptions: PluginOptions = {}) {
     vite.config.plugins.push(unplugin.vite(options))
   })
 }
+
+export = scriptSetupModule

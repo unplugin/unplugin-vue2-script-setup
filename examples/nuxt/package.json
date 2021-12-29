@@ -8,15 +8,15 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "core-js": "^3.19.1",
+    "core-js": "^3.20.1",
     "nuxt": "^2.15.8"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/composition-api": "^0.31.0",
-    "@vue/runtime-dom": "^3.2.25",
+    "@vue/runtime-dom": "^3.2.26",
     "unplugin-vue2-script-setup": "workspace:*",
-    "vue-tsc": "^0.29.8"
+    "vue-tsc": "^0.30.1"
   }
 }

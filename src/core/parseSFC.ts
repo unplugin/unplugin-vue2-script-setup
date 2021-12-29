@@ -6,8 +6,8 @@ import type { ParserOptions } from '@babel/parser'
 import type {
   AttributeNode,
   DirectiveNode,
-  TemplateChildNode,
   ExpressionNode,
+  TemplateChildNode,
 } from '@vue/compiler-core'
 import { baseParse } from '@vue/compiler-core'
 import { parserOptions } from '@vue/compiler-dom'

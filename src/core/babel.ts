@@ -1,4 +1,4 @@
 import { types as t } from '@babel/core'
-import { parseExpression, parse } from '@babel/parser'
+import { parse, parseExpression } from '@babel/parser'
 
 export { t, parseExpression, parse }

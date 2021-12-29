@@ -1,5 +1,5 @@
 import type { ParserOptions } from '@babel/parser'
-import type { Program, Node } from '@babel/types'
+import type { Node, Program } from '@babel/types'
 import type { FilterPattern } from '@rollup/pluginutils'
 
 export interface ScriptTagMeta {

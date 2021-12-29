@@ -1,4 +1,4 @@
-import { sinon } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { transform as t } from '../src'
 
 describe('errors', () => {
@@ -48,7 +48,7 @@ const {data} = await something()
   })
 
   it('ref sugar', () => {
-    sinon.stub(console, 'warn')
+    const consoleWarnMock = vi.spyOn(console, 'warn')
 
     expect(() =>
       t(`
@@ -67,6 +67,6 @@ const a = async () => {
 `, 'App.vue'))
       .not.toThrow()
 
-    sinon.restore()
+    consoleWarnMock.mockRestore()
   })
 })
