@@ -1,15 +1,15 @@
 // modified from https://github.com/vuejs/vue-next/blob/main/packages/compiler-sfc/src/compileScript.ts
 
 import type {
+  CallExpression,
   Node,
   ObjectExpression,
-  TSType,
-  TSTypeLiteral,
-  TSFunctionType,
   ObjectProperty,
   Statement,
-  CallExpression,
+  TSFunctionType,
   TSInterfaceBody,
+  TSType,
+  TSTypeLiteral,
 } from '@babel/types'
 import { parseExpression, t } from './babel'
 
