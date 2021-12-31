@@ -1,3 +1,6 @@
 import unplugin from '.'
 
-export = unplugin.rollup
+export default unplugin.rollup
+module.exports = unplugin.rollup
+module.exports.default = unplugin.rollup
+Object.defineProperty(module.exports, '__esModule', { value: true })

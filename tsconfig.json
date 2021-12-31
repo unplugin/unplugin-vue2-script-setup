@@ -4,13 +4,11 @@
     "module": "CommonJS",
     "lib": ["esnext", "dom"],
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "strictNullChecks": true,
     "isolatedModules": true,
     "resolveJsonModule": true
-  },
-  "vueCompilerOptions": {
-    "experimentalCompatMode": 2
   }
 }

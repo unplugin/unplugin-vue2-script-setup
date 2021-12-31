@@ -1,15 +1,7 @@
 // Vitest Snapshot v1
 
-exports[`transform > fixtures > playground/App.vue 1`] = `
-"<template>
-  <div>
-    <hello-world name=\\"Vue 2\\" @update=\\"onUpdate\\" />
-
-    <async-component />
-  </div>
-</template>
-
-<script lang=\\"ts\\">
+exports[`transform > fixtures > playground/src/App.vue 1`] = `
+"<script lang=\\"ts\\">
 import { defineAsyncComponent } from '@vue/composition-api';
 import HelloWorld from './HelloWorld.vue';
 const AsyncComponent = defineAsyncComponent(() => import('./Async.vue'));
@@ -32,43 +24,39 @@ __sfc_main.components = Object.assign({
 }, __sfc_main.components);
 export default __sfc_main;
 </script>
+<template>
+  <div>
+    <HelloWorld name=\\"Vue 2\\" @update=\\"onUpdate\\" />
+
+    <AsyncComponent />
+  </div>
+</template>
 "
 `;
 
-exports[`transform > fixtures > playground/Async.vue 1`] = `
+exports[`transform > fixtures > playground/src/Async.vue 1`] = `
 "<template>
   <div>Async Component</div>
 </template>
 "
 `;
 
-exports[`transform > fixtures > playground/Bar.vue 1`] = `
+exports[`transform > fixtures > playground/src/Bar.vue 1`] = `
 "<template>
   <div>Bar</div>
 </template>
 "
 `;
 
-exports[`transform > fixtures > playground/Foo.vue 1`] = `
+exports[`transform > fixtures > playground/src/Foo.vue 1`] = `
 "<template>
   <div>Foo</div>
 </template>
 "
 `;
 
-exports[`transform > fixtures > playground/HelloWorld.vue 1`] = `
-"<template>
-  <div>
-    <h3>{{ msg }}, {{ name }}</h3>
-    <button @click=\\"inc\\">
-      Inc
-    </button>
-    <div>{{ count }} x 2 = {{ doubled }}</div>
-    <button @click=\\"dec()\\" v-html=\\"decText\\" />
-    <component :is=\\"count > 2 ? Foo : Bar\\" />
-  </div>
-</template>
-
+exports[`transform > fixtures > playground/src/HelloWorld.vue 1`] = `
+"
 <script lang=\\"ts\\">
 import { ref as _ref, computed as _computed } from \\"@vue/composition-api\\";
 import { watch } from '@vue/composition-api';
@@ -92,7 +80,6 @@ __sfc_main.props = {
 };
 
 __sfc_main.setup = (__props, __ctx) => {
-  const props = __props;
   const emit = __ctx.emit;
 
   let count = _ref(0); // eslint-disable-next-line prefer-const
@@ -123,38 +110,36 @@ __sfc_main.setup = (__props, __ctx) => {
 
 export default __sfc_main;
 </script>
-
-
+<template>
+  <div>
+    <h3>{{ msg }}, {{ name }}</h3>
+    <button @click=\\"inc\\">
+      Inc
+    </button>
+    <div>{{ count }} x 2 = {{ doubled }}</div>
+    <button @click=\\"dec()\\" v-html=\\"decText\\" />
+    <component :is=\\"count > 2 ? Foo : Bar\\" />
+  </div>
+</template>
 "
 `;
 
-exports[`transform > fixtures > playground/main.ts 1`] = `
+exports[`transform > fixtures > playground/src/main.ts 1`] = `
 "import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
+import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
 import App from './App.vue'
 
 Vue.use(VueCompositionAPI)
 
-const app = new Vue({ render: h => h(App) })
-app.$mount('#app')
+const app = createApp({ render: () => h(App) })
+
+app.mount('#app')
 "
 `;
 
-exports[`transform > fixtures > playground/vite.config.ts 1`] = `
-"import { defineConfig } from 'vite'
-import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
-import Inspect from 'vite-plugin-inspect'
-import ScriptSetup from '../src/vite'
-
-export default defineConfig({
-  plugins: [
-    Vue2(),
-    Inspect(),
-    ScriptSetup({
-      refTransform: true,
-    }),
-  ],
-})
+exports[`transform > fixtures > playground/src/shims-vue.d.ts 1`] = `
+"/// <reference types=\\"unplugin-vue2-script-setup/shims.js\\" />
+/// <reference types=\\"unplugin-vue2-script-setup/ref-macros.js\\" />
 "
 `;
 

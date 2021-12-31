@@ -18,4 +18,7 @@ function scriptSetupModule(this: any, inlineOptions: PluginOptions = {}) {
   })
 }
 
-export = scriptSetupModule
+export default scriptSetupModule
+module.exports = scriptSetupModule
+module.exports.default = scriptSetupModule
+Object.defineProperty(module.exports, '__esModule', { value: true })

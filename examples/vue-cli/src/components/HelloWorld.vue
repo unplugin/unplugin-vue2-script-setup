@@ -1,3 +1,8 @@
+<script setup lang="ts">
+defineProps<{
+  msg: string
+}>()
+</script>
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
@@ -28,13 +33,6 @@
     </ul>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  msg: String,
-})
-</script>
-
 <style scoped>
 h3 {
   margin: 40px 0 0;

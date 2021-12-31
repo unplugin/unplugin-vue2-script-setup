@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <hello-world name="Vue 2" @update="onUpdate" />
-
-    <async-component />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { defineAsyncComponent } from '@vue/composition-api'
 
@@ -18,3 +10,10 @@ function onUpdate(e: any) {
   console.log(e)
 }
 </script>
+<template>
+  <div>
+    <HelloWorld name="Vue 2" @update="onUpdate" />
+
+    <AsyncComponent />
+  </div>
+</template>
