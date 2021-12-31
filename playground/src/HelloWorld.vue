@@ -1,4 +1,3 @@
-
 <script lang="ts">
 /* eslint-disable import/first */
 export default {
@@ -6,22 +5,24 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, ref, watch } from '@vue/composition-api'
+import { watch } from '@vue/composition-api'
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
 
 withDefaults(defineProps<{ msg: string; name: string | number }>(), { msg: 'Hello' })
 const emit = defineEmits<{
   (event: 'update', value: number): void
 }>()
 
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
+let count = $ref(0)
+// eslint-disable-next-line prefer-const
+let doubled = $computed(() => count * 2)
 
 function inc() {
-  count.value += 1
+  count += 1
 }
-
 function dec() {
-  count.value += 1
+  count -= 1
 }
 
 const decText = '<b>Dec</b>'
@@ -36,5 +37,6 @@ watch(count, value => emit('update', value))
     </button>
     <div>{{ count }} x 2 = {{ doubled }}</div>
     <button @click="dec()" v-html="decText" />
+    <component :is="count > 2 ? Foo : Bar" />
   </div>
 </template>

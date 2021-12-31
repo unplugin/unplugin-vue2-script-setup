@@ -9,7 +9,7 @@ describe('transform', () => {
     const root = resolve(__dirname, '..')
     const files = fg.sync([
       'test/fixtures/*.{vue,js,ts}',
-      'playground/*.{vue,js,ts}',
+      'playground/src/*.{vue,js,ts}',
     ], {
       cwd: root,
       onlyFiles: true,
