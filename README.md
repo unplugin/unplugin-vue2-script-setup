@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/unplugin-vue2-script-setup?color=a1b858&label=)](https://www.npmjs.com/package/unplugin-vue2-script-setup)
 
-Bring [`<script setup>`](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to Vue 2. Works for Vite, Nuxt, Vue CLI, Webpack and more, powered by [unplugin](https://github.com/unjs/unplugin).
+Bring [`<script setup>`](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to Vue 2. Works for Vite, Nuxt, Vue CLI, Webpack, esbuild and more, powered by [unplugin](https://github.com/unjs/unplugin).
 
 ## Install
 
@@ -199,6 +199,24 @@ export default {
     ScriptSetup({ /* options */ }),
   ]
 }
+```
+
+<br></details>
+
+<details>
+<summary>esbuild</summary><br>
+
+```ts
+// esbuild.config.js
+import { build } from 'esbuild'
+build({
+  /* ... */
+  plugins: [
+    require('unplugin-vue2-script-setup/esbuild')({
+      /* options */
+    }),
+  ],
+})
 ```
 
 <br></details>
