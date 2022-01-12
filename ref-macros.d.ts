@@ -1,10 +1,10 @@
 import type {
-  Ref,
-  UnwrapRef,
   ComputedRef,
+  Ref,
+  ShallowUnwrapRef,
+  UnwrapRef,
   WritableComputedOptions,
   WritableComputedRef,
-  ShallowUnwrapRef,
 } from '@vue/composition-api'
 
 declare const RefMarker: unique symbol

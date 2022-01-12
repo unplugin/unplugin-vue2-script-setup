@@ -15,15 +15,41 @@
   "license": "MIT",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./index.d.ts"
+    },
     "./*": "./*",
+    "./esbuild": {
+      "require": "./dist/esbuild.js",
+      "import": "./dist/esbuild.mjs",
+      "types": "./esbuild.d.ts"
+    },
     "./jest": "./jest.js",
-    "./nuxt": "./dist/nuxt.js",
-    "./rollup": "./dist/rollup.js",
-    "./types": "./dist/types.js",
-    "./vite": "./dist/vite.js",
-    "./webpack": "./dist/webpack.js",
-    "./esbuild": "./dist/esbuild.js"
+    "./nuxt": {
+      "require": "./dist/nuxt.js",
+      "import": "./dist/nuxt.mjs",
+      "types": "./nuxt.d.ts"
+    },
+    "./rollup": {
+      "require": "./dist/rollup.js",
+      "import": "./dist/rollup.mjs",
+      "types": "./rollup.d.ts"
+    },
+    "./types": {
+      "types": "./types.d.ts"
+    },
+    "./vite": {
+      "require": "./dist/vite.js",
+      "import": "./dist/vite.mjs",
+      "types": "./vite.d.ts"
+    },
+    "./webpack": {
+      "require": "./dist/webpack.js",
+      "import": "./dist/webpack.mjs",
+      "types": "./webpack.d.ts"
+    }
   },
   "main": "dist/index.js",
   "types": "index.d.ts",
@@ -33,8 +59,8 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "shx rm -rf dist && tsc --project tsconfig.lib.json",
-    "dev": "tsc --project tsconfig.lib.json --watch",
+    "build": "rimraf dist && rollup -c",
+    "dev": "rollup -c --watch",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "nr lint -- --fix",
     "play": "npm -C playground run dev",
@@ -64,6 +90,10 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.14.2",
     "@antfu/ni": "^0.12.0",
+    "@rollup/plugin-alias": "^3.1.9",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
     "@types/estree": "^0.0.50",
     "@types/node": "^17.0.5",
     "@types/ws": "^8.2.2",
@@ -72,6 +102,10 @@
     "eslint": "^8.5.0",
     "fast-glob": "^3.2.7",
     "pug": "^3.0.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.63.0",
+    "rollup-plugin-dts": "^4.1.0",
+    "rollup-plugin-typescript2": "^0.31.1",
     "shx": "^0.3.3",
     "typescript": "^4.5.4",
     "vite": "^2.7.9",
