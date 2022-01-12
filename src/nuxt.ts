@@ -1,9 +1,10 @@
-import defu from 'defu'
+import * as defu from 'defu'
 import type { PluginOptions } from './types'
 import unplugin from '.'
 
 function scriptSetupModule(this: any, inlineOptions: PluginOptions = {}) {
-  const options = defu(inlineOptions, this.nuxt.options.scriptSetup)
+  // FIXME: defu cjs types should changed
+  const options = (defu.default || defu)(inlineOptions, this.nuxt.options.scriptSetup)
 
   // install webpack plugin
   this.extendBuild((config: any) => {
@@ -19,6 +20,3 @@ function scriptSetupModule(this: any, inlineOptions: PluginOptions = {}) {
 }
 
 export default scriptSetupModule
-module.exports = scriptSetupModule
-module.exports.default = scriptSetupModule
-Object.defineProperty(module.exports, '__esModule', { value: true })
