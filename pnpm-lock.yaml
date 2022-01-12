@@ -131,7 +131,6 @@ importers:
       vite-plugin-vue2: ^1.9.2
       vue: ^2.6.14
       vue-template-compiler: ^2.6.14
-      vue-tsc: ^0.30.2
     dependencies:
       '@vue/composition-api': 1.4.3_vue@2.6.14
       vue: 2.6.14
@@ -140,7 +139,6 @@ importers:
       vite-plugin-inspect: 0.3.13_vite@2.7.10
       vite-plugin-vue2: 1.9.2_0942e2da5dc468c8f4e6d1df85edc06f
       vue-template-compiler: 2.6.14
-      vue-tsc: 0.30.2_typescript@4.5.4
 
 packages:
 
