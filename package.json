@@ -63,6 +63,7 @@
     "dev": "rollup -c --watch",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "nr lint -- --fix",
+    "build:examples": "pnpm -r --filter=!unplugin-vue2-script-setup run build",
     "play": "npm -C playground run dev",
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --push --tag && pnpm publish",
@@ -116,6 +117,11 @@
   "peerDependenciesMeta": {
     "pug": {
       "optional": true
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "unplugin-vue2-script-setup": "workspace:*"
     }
   }
 }
