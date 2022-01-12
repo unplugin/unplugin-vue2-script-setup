@@ -5,7 +5,7 @@ export function resolveOptions(options: ScriptSetupTransformOptions = {}): Resol
     {},
     {
       sourceMap: true,
-      refTransform: false,
+      reactivityTransform: false,
       importHelpersFrom: '@vue/composition-api',
       astTransforms: {},
     },

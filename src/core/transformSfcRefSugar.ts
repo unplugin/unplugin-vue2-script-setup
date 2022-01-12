@@ -1,4 +1,4 @@
-import { shouldTransform, transformAST } from '@vue/ref-transform'
+import { shouldTransform, transformAST } from '@vue/reactivity-transform'
 import MagicString from 'magic-string'
 import type { ParsedSFC, ResolvedOptions } from '../types'
 import { parse, t } from './babel'

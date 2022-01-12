@@ -80,7 +80,7 @@
     "@rollup/pluginutils": "^4.1.2",
     "@vue/compiler-core": "^3.2.26",
     "@vue/compiler-dom": "^3.2.26",
-    "@vue/ref-transform": "^3.2.24",
+    "@vue/reactivity-transform": "^3.2.26",
     "@vue/shared": "^3.2.26",
     "defu": "^5.0.0",
     "htmlparser2": "5.0.1",
@@ -110,7 +110,7 @@
     "rollup-plugin-typescript2": "^0.31.1",
     "typescript": "^4.5.4",
     "vite": "^2.7.10",
-    "vitest": "^0.0.141"
+    "vitest": "0.0.120"
   },
   "peerDependencies": {
     "pug": "^3.0.2"

@@ -7,7 +7,7 @@ export * from './core'
 
 export const unplugin = createUnplugin<PluginOptions>((options = {}) => {
   const filter = createFilter(
-    options.include || (options.refTransform ? [/\.vue$/, /\.vue\?vue/, /\.[jt]sx?$/] : [/\.vue$/, /\.vue\?vue/]),
+    options.include || (options.reactivityTransform ? [/\.vue$/, /\.vue\?vue/, /\.[jt]sx?$/] : [/\.vue$/, /\.vue\?vue/]),
     options.exclude || [/node_modules/, /\.git/, /\.nuxt/],
   )
 

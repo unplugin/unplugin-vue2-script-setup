@@ -10,7 +10,7 @@ export default defineConfig({
     Vue2(),
     Inspect(),
     ScriptSetup({
-      refTransform: true,
+      reactivityTransform: true,
     }),
   ],
 })

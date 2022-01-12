@@ -27,7 +27,7 @@ importers:
       '@vue/compiler-core': ^3.2.26
       '@vue/compiler-dom': ^3.2.26
       '@vue/composition-api': ^1.4.3
-      '@vue/ref-transform': ^3.2.24
+      '@vue/reactivity-transform': ^3.2.26
       '@vue/shared': ^3.2.26
       bumpp: ^7.1.1
       defu: ^5.0.0
@@ -44,7 +44,7 @@ importers:
       typescript: ^4.5.4
       unplugin: ^0.3.0
       vite: ^2.7.10
-      vitest: ^0.0.141
+      vitest: 0.0.120
     dependencies:
       '@antfu/utils': 0.4.0
       '@babel/core': 7.16.7
@@ -55,7 +55,7 @@ importers:
       '@rollup/pluginutils': 4.1.2
       '@vue/compiler-core': 3.2.26
       '@vue/compiler-dom': 3.2.26
-      '@vue/ref-transform': 3.2.24
+      '@vue/reactivity-transform': 3.2.26
       '@vue/shared': 3.2.26
       defu: 5.0.0
       htmlparser2: 5.0.1
@@ -84,14 +84,14 @@ importers:
       rollup-plugin-typescript2: 0.31.1_fd013fb8ef38c9725bd16a91645f9308
       typescript: 4.5.4
       vite: 2.7.10
-      vitest: 0.0.141
+      vitest: 0.0.120_vite@2.7.10
 
   examples/nuxt-bridge:
     specifiers:
       '@nuxt/bridge': latest
       nuxt-edge: latest
-      vue: ^2
-      vue2: npm:vue@^2
+      vue: ^2.6.14
+      vue2: npm:vue@^2.6.14
     devDependencies:
       '@nuxt/bridge': 0.10.1_0818dea53ce8ce35e46a9f0498c26c7b
       nuxt-edge: 2.16.0-27358576.777a4b7f_typescript@4.5.4
@@ -4371,15 +4371,6 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
-  /@vue/compiler-core/3.2.24:
-    resolution: {integrity: sha512-A0SxB2HAggKzP57LDin5gfgWOTwFyGCtQ5MTMNBADnfQYALWnYuC8kMI0DhRSplGTWRvn9Z2DAnG8f35BnojuA==}
-    dependencies:
-      '@babel/parser': 7.16.8
-      '@vue/shared': 3.2.24
-      estree-walker: 2.0.2
-      source-map: 0.6.1
-    dev: false
-
   /@vue/compiler-core/3.2.26:
     resolution: {integrity: sha512-N5XNBobZbaASdzY9Lga2D9Lul5vdCIOXvUMd6ThcN8zgqQhPKfCV+wfAJNNJKQkSHudnYRO2gEB+lp0iN3g2Tw==}
     dependencies:
@@ -4436,25 +4427,21 @@ packages:
       webpack: 4.46.0
     dev: true
 
+  /@vue/reactivity-transform/3.2.26:
+    resolution: {integrity: sha512-XKMyuCmzNA7nvFlYhdKwD78rcnmPb7q46uoR00zkX6yZrUmcCQ5OikiwUEVbvNhL5hBJuvbSO95jB5zkUon+eQ==}
+    dependencies:
+      '@babel/parser': 7.16.8
+      '@vue/compiler-core': 3.2.26
+      '@vue/shared': 3.2.26
+      estree-walker: 2.0.2
+      magic-string: 0.25.7
+    dev: false
+
   /@vue/reactivity/3.2.26:
     resolution: {integrity: sha512-h38bxCZLW6oFJVDlCcAiUKFnXI8xP8d+eO0pcDxx+7dQfSPje2AO6M9S9QO6MrxQB7fGP0DH0dYQ8ksf6hrXKQ==}
     dependencies:
       '@vue/shared': 3.2.26
     dev: true
-
-  /@vue/ref-transform/3.2.24:
-    resolution: {integrity: sha512-j6oNbsGLvea2rF8GQB9w6q7UFL1So7J+t6ducaMeWPSyjYZ+slWpwPVK6mmyghg5oGqC41R+HC5BV036Y0KhXQ==}
-    dependencies:
-      '@babel/parser': 7.16.8
-      '@vue/compiler-core': 3.2.24
-      '@vue/shared': 3.2.24
-      estree-walker: 2.0.2
-      magic-string: 0.25.7
-    dev: false
-
-  /@vue/shared/3.2.24:
-    resolution: {integrity: sha512-BUgRiZCkCrqDps5aQ9av05xcge3rn092ztKIh17tHkeEFgP4zfXMQWBA2zfdoCdCEdBL26xtOv+FZYiOp9RUDA==}
-    dev: false
 
   /@vue/shared/3.2.26:
     resolution: {integrity: sha512-vPV6Cq+NIWbH5pZu+V+2QHE9y1qfuTq49uNWw4f7FDEeZaDU2H2cx5jcUZOAKW7qTrUS4k6qZPbMy1x4N96nbA==}
@@ -15332,8 +15319,8 @@ packages:
     resolution: {integrity: sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=}
     dev: true
 
-  /tinypool/0.1.1:
-    resolution: {integrity: sha512-sW2fQZ2BRb/GX5v55NkHiTrbMLx0eX0xNpP+VGhOe2f7Oo04+LeClDyM19zCE/WCy7jJ8kzIJ0Ojrxj3UhN9Sg==}
+  /tinypool/0.0.6:
+    resolution: {integrity: sha512-E9vY6eq/Q7fUlSt69cY3y7qXNbVOFaxP+lAEDMKMObLrmO0MmEdUPyjOMgepoMDw/ps/sazl7WIQglnUrunnLg==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -16043,18 +16030,16 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.0.141:
-    resolution: {integrity: sha512-CQwNWGbifAs5OrG1MXyiveeFT3KYpU/UZiZzNUR5ZHMUWKam9OeoDX0U3sFuyaERp/0b2vhoL0oaMccY2PJPSQ==}
+  /vitest/0.0.120_vite@2.7.10:
+    resolution: {integrity: sha512-puJ8I/FpRpCwif4z9hcZ55PY6oszZNw+1rMdY+YkbtcnCFnKt8sqREnLUDcsvcA8wbM5G//Oa5kohR6CTaXCUA==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
-      '@vitest/ui': '*'
       c8: '*'
       happy-dom: '*'
       jsdom: '*'
+      vite: ^2.7.1
     peerDependenciesMeta:
-      '@vitest/ui':
-        optional: true
       c8:
         optional: true
       happy-dom:
@@ -16066,13 +16051,9 @@ packages:
       '@types/chai-subset': 1.3.3
       chai: 4.3.4
       local-pkg: 0.4.1
-      tinypool: 0.1.1
+      tinypool: 0.0.6
       tinyspy: 0.2.8
       vite: 2.7.10
-    transitivePeerDependencies:
-      - less
-      - sass
-      - stylus
     dev: true
 
   /vm-browserify/1.1.2:

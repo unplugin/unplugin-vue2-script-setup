@@ -18,10 +18,10 @@ describe('transform', () => {
     for (const file of files) {
       it(file.replace(/\\/g, '/'), async() => {
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
-        const result = transform(fixture, file, { refTransform: true })?.code || fixture
+        const result = transform(fixture, file, { reactivityTransform: true })?.code || fixture
         expect(result).toMatchSnapshot()
 
-        const result2 = transform(result, file, { refTransform: true })?.code || result
+        const result2 = transform(result, file, { reactivityTransform: true })?.code || result
         expect(result).toEqual(result2)
       })
     }

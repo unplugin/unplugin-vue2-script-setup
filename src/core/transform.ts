@@ -1,5 +1,5 @@
 import MagicString from 'magic-string'
-import { shouldTransform as shouldTransformRefSugar, transform as transformRef } from '@vue/ref-transform'
+import { shouldTransform as shouldTransformRefSugar, transform as transformRef } from '@vue/reactivity-transform'
 import type { ResolvedOptions, ScriptSetupTransformOptions, TransformResult } from '../types'
 import { parseSFC } from './parseSFC'
 import { transformScriptSetup } from './transformScriptSetup'
@@ -12,7 +12,7 @@ export function shouldTransform(code: string, id: string, options?: ScriptSetupT
   // avoid transforming twice
   if (code.includes('export default __sfc_main'))
     return false
-  return (options?.refTransform && shouldTransformRefSugar(code)) || scriptSetupRE.test(code)
+  return (options?.reactivityTransform && shouldTransformRefSugar(code)) || scriptSetupRE.test(code)
 }
 
 export function transform(input: string, id: string, options?: ScriptSetupTransformOptions): TransformResult {
@@ -26,7 +26,7 @@ export function transform(input: string, id: string, options?: ScriptSetupTransf
 }
 
 function transformNonVue(input: string, id: string, options: ResolvedOptions): TransformResult {
-  if (options.refTransform && shouldTransformRefSugar(input)) {
+  if (options.reactivityTransform && shouldTransformRefSugar(input)) {
     return transformRef(input, {
       filename: id,
       sourceMap: options.sourceMap,
@@ -41,7 +41,7 @@ function transformVue(input: string, id: string, options: ResolvedOptions): Tran
 
   const sfc = parseSFC(input, id)
 
-  if (options.refTransform)
+  if (options.reactivityTransform)
     transformSfcRefSugar(sfc, options)
 
   const { code } = transformScriptSetup(sfc, options)

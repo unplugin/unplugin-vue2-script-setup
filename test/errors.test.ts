@@ -52,12 +52,6 @@ const {data} = await something()
 
     expect(() =>
       t(`
-     const a = $ref(1)
-     `, 'Ref.ts', { refTransform: true }))
-      .toThrowError('$ref() bindings can only be declared with let')
-
-    expect(() =>
-      t(`
 <script setup>
 defineProps()
 const a = async () => {
