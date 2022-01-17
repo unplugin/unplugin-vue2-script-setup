@@ -100,6 +100,7 @@
     "@types/node": "^17.0.8",
     "@types/ws": "^8.2.2",
     "@vue/composition-api": "^1.4.3",
+    "@vue/runtime-dom": "^3.2.26",
     "bumpp": "^7.1.1",
     "eslint": "^8.6.0",
     "fast-glob": "^3.2.10",
@@ -113,7 +114,9 @@
     "vitest": "0.0.120"
   },
   "peerDependencies": {
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "@vue/composition-api": "^1.4.3",
+    "@vue/runtime-dom": "^3.2.26"
   },
   "peerDependenciesMeta": {
     "pug": {
