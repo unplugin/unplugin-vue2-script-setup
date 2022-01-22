@@ -343,7 +343,7 @@ If you enjoy using `<script setup>`, you might also want to try [`unplugin-auto-
 
 - [x] PoC
 - [x] Components registration
-- [x] Compile time macros `defineProps` `defineEmits` `withDefaults`
+- [x] Compile time macros `defineProps` `defineEmits` `withDefaults` `defineExpose`
 - [x] Global types
 - [x] Merge with normal scripts
 - [x] [Ref Sugar (take 2)](https://github.com/vuejs/rfcs/discussions/369)
