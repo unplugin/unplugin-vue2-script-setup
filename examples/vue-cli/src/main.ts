@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import VueCompostionAPI, { createApp, h } from '@vue/composition-api'
+import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
 import App from './App.vue'
 
 Vue.config.productionTip = false
-Vue.use(VueCompostionAPI)
+Vue.use(VueCompositionAPI)
 
 const app = createApp({
   render: () => h(App),
