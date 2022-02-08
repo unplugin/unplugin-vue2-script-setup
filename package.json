@@ -1,6 +1,6 @@
 {
   "name": "unplugin-vue2-script-setup",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Bring <script setup> to Vue 2",
   "keywords": [],
   "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
