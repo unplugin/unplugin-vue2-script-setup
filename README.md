@@ -120,12 +120,13 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 
 ```ts
 // vue.config.js
+const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 
 module.exports = {
   parallel: false,  // disable thread-loader, which is not compactible with this plugin
   configureWebpack: {
     plugins: [
-      require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
+      ScriptSetup({ /* options */ }),
     ],
   },
 }
@@ -142,11 +143,12 @@ npm i -D @vue/cli-plugin-typescript vue-tsc
 ```
 
 ```ts
+const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 module.exports = {
   parallel: false,
   configureWebpack: {
     plugins: [
-      require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
+      ScriptSetup({ /* options */ }),
     ],
   },
   chainWebpack(config) {
@@ -175,10 +177,11 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 
 ```ts
 // webpack.config.js
+const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 module.exports = {
   /* ... */
   plugins: [
-    require('unplugin-vue2-script-setup/webpack')({ /* options */ }),
+    ScriptSetup({ /* options */ }),
   ]
 }
 ```
@@ -209,10 +212,11 @@ export default {
 ```ts
 // esbuild.config.js
 import { build } from 'esbuild'
+import ScriptSetup from 'unplugin-vue2-script-setup/esbuild'
 build({
   /* ... */
   plugins: [
-    require('unplugin-vue2-script-setup/esbuild')({
+    ScriptSetup({
       /* options */
     }),
   ],
