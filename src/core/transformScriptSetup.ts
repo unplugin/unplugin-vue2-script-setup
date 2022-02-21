@@ -1,23 +1,31 @@
 import { capitalize } from '@vue/shared'
 import type { Node, ObjectExpression, Statement } from '@babel/types'
-import { partition } from '@antfu/utils'
+import { notNullish, partition, uniq } from '@antfu/utils'
 import type { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
 import { generate, t } from './babel'
-import { isNotNil, pascalize } from './utils'
+import { pascalize } from './utils'
 
-function isAsyncImport(node: any) {
-  if (node.type === 'VariableDeclaration') {
+function isAsyncImport(node: Statement) {
+  if (t.isVariableDeclaration(node)) {
     const declaration = node.declarations[0]
 
-    return declaration?.init?.callee?.name === 'defineAsyncComponent'
+    return (
+      declaration !== undefined
+      && t.isCallExpression(declaration.init)
+      && t.isIdentifier(declaration.init.callee)
+      && declaration.init.callee.name === 'defineAsyncComponent'
+    )
   }
 
   return false
 }
 
-export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransformOptions) {
+export function transformScriptSetup(
+  sfc: ParsedSFC,
+  options?: ScriptSetupTransformOptions,
+) {
   const { scriptSetup, script, template } = sfc
 
   const { nodes: body, props, expose } = applyMacros(scriptSetup.ast.body)
@@ -26,16 +34,17 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
     body,
     n =>
       isAsyncImport(n)
-     || n.type === 'ImportDeclaration'
-     || n.type === 'ExportNamedDeclaration'
-     || n.type.startsWith('TS'),
+      || t.isImportDeclaration(n)
+      || t.isExportNamedDeclaration(n)
+      || n.type.startsWith('TS'),
   )
 
   // get all identifiers in `<script setup>`
-  const declarations = new Set<string>()
-  getIdentifierDeclarations(hoisted, declarations)
-  getIdentifierDeclarations(setupBody, declarations)
-  const declarationArray = Array.from(declarations).filter(isNotNil)
+  const declarations = [
+    ...getIdentifierDeclarations(hoisted),
+    ...getIdentifierDeclarations(setupBody),
+  ]
+  const declarationArray = uniq(declarations).filter(notNullish)
 
   // filter out identifiers that are used in `<template>`
   const returns: ObjectExpression['properties'] = declarationArray
@@ -45,19 +54,24 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
       return t.objectProperty(id, id, false, true)
     })
 
-  const components = Array.from(template.components).map(component =>
-    declarationArray.find(declare => declare === component)
-    ?? declarationArray.find(declare => pascalize(declare) === component),
-  ).filter(isNotNil)
+  const components = Array.from(template.components)
+    .map(
+      component =>
+        declarationArray.find(declare => declare === component)
+        ?? declarationArray.find(declare => pascalize(declare) === component),
+    )
+    .filter(notNullish)
 
-  const directiveDeclaration = Array.from(template.directives).map((directive) => {
-    const identifier = declarationArray.find(declaration => declaration === `v${capitalize(directive)}`)
-    if (identifier === undefined)
-      return undefined
+  const directiveDeclaration = Array.from(template.directives)
+    .map((directive) => {
+      const identifier = declarationArray.find(
+        declaration => declaration === `v${capitalize(directive)}`,
+      )
+      if (identifier === undefined) return undefined
 
-    return { identifier, directive }
-  },
-  ).filter(isNotNil)
+      return { identifier, directive }
+    })
+    .filter(notNullish)
 
   // append `<script setup>` imports to `<script>`
 
@@ -71,10 +85,7 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
     if (node.type === 'ExportDefaultDeclaration') {
       hasBody = true
       return t.variableDeclaration('const', [
-        t.variableDeclarator(
-          __sfc,
-          node.declaration as any,
-        ),
+        t.variableDeclarator(__sfc, node.declaration as any),
       ])
     }
     return node
@@ -90,10 +101,7 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   if (!hasBody) {
     ast.body.push(
       t.variableDeclaration('const', [
-        t.variableDeclarator(
-          __sfc,
-          t.objectExpression([]),
-        ),
+        t.variableDeclarator(__sfc, t.objectExpression([])),
       ]),
     )
   }
@@ -104,7 +112,8 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
     hasBody = true
     ast.body.push(
       t.expressionStatement(
-        t.assignmentExpression('=',
+        t.assignmentExpression(
+          '=',
           t.memberExpression(__sfc, t.identifier('props')),
           props as any,
         ),
@@ -126,15 +135,13 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
 
     ast.body.push(
       t.expressionStatement(
-        t.assignmentExpression('=',
+        t.assignmentExpression(
+          '=',
           t.memberExpression(__sfc, t.identifier('setup')),
-          t.arrowFunctionExpression([
-            t.identifier('__props'),
-            t.identifier('__ctx'),
-          ], t.blockStatement([
-            ...setupBody,
-            returnStatement as any,
-          ])),
+          t.arrowFunctionExpression(
+            [t.identifier('__props'), t.identifier('__ctx')],
+            t.blockStatement([...setupBody, returnStatement as any]),
+          ),
         ),
       ) as any,
     )
@@ -153,7 +160,8 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
 
     ast.body.push(
       t.expressionStatement(
-        t.assignmentExpression('=',
+        t.assignmentExpression(
+          '=',
           t.memberExpression(__sfc, t.identifier('components')),
           t.callExpression(
             t.memberExpression(t.identifier('Object'), t.identifier('assign')),
@@ -172,17 +180,20 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
   if (directiveDeclaration.length) {
     hasBody = true
     const directivesObject = t.objectExpression(
-      directiveDeclaration.map(({ directive, identifier }) => (t.objectProperty(
-        t.identifier(directive),
-        t.identifier(identifier),
-        false,
-        false,
-      ))),
+      directiveDeclaration.map(({ directive, identifier }) =>
+        t.objectProperty(
+          t.identifier(directive),
+          t.identifier(identifier),
+          false,
+          false,
+        ),
+      ),
     )
 
     ast.body.push(
       t.expressionStatement(
-        t.assignmentExpression('=',
+        t.assignmentExpression(
+          '=',
           t.memberExpression(__sfc, t.identifier('directives')),
           t.callExpression(
             t.memberExpression(t.identifier('Object'), t.identifier('assign')),
@@ -205,9 +216,7 @@ export function transformScriptSetup(sfc: ParsedSFC, options?: ScriptSetupTransf
 
   // re-export
   // `export default __sfc_main`
-  ast.body.push(
-    t.exportDefaultDeclaration(__sfc) as any,
-  )
+  ast.body.push(t.exportDefaultDeclaration(__sfc) as any)
 
   ast = options?.astTransforms?.post?.(ast, sfc) || ast
 
