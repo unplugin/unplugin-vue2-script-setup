@@ -1,59 +1,41 @@
-import type { Expression, Node, PrivateName, SpreadElement, Statement, TSType } from '@babel/types'
+import type {
+  Expression,
+  File,
+  PrivateName,
+  SpreadElement,
+  Statement,
+  TSType,
+} from '@babel/types'
+import type { ParseResult } from '@babel/parser'
+import { t, traverse } from './babel'
 
-export function getIdentifierDeclarations(nodes: Statement[], identifiers = new Set<string>()) {
-  for (let node of nodes) {
-    if (node.type === 'ExportNamedDeclaration') {
-      node = node.declaration!
-      if (!node)
-        continue
-    }
-    if (node.type === 'ImportDeclaration') {
-      for (const specifier of node.specifiers)
-        identifiers.add(specifier.local.name)
-    }
-    else if (node.type === 'VariableDeclaration') {
-      function handleVariableId(node: Node) {
-        if (node.type === 'Identifier') {
-          identifiers.add(node.name)
-        }
-        else if (node.type === 'ObjectPattern') {
-          for (const property of node.properties) {
-            if (property.type === 'ObjectProperty')
-              handleVariableId(property.value)
-            else if (property.type === 'RestElement' && property.argument.type === 'Identifier')
-              identifiers.add(property.argument.name)
-          }
-        }
-        else if (node.type === 'ArrayPattern') {
-          for (const element of node.elements) {
-            if (element?.type === 'Identifier')
-              identifiers.add(element.name)
-            else if (element?.type === 'RestElement' && element.argument.type === 'Identifier')
-              identifiers.add(element.argument.name)
-            else if (element?.type === 'ObjectPattern' || element?.type === 'ArrayPattern')
-              handleVariableId(element)
-          }
-        }
+export function getIdentifierDeclarations(nodes: Statement[]) {
+  let result!: Set<string>
+  let programScopeUid: number
+  traverse(t.file(t.program(nodes)), {
+    Program(path) {
+      result = new Set(Object.keys(path.scope.bindings))
+      programScopeUid = (path.scope as any).uid
+    },
+    // FIXME: babel bug, temporary add TSEnumDeclaration and TSModuleDeclaration logic
+    TSEnumDeclaration(path) {
+      if ((path.scope as any).uid === programScopeUid)
+        result.add(path.node.id.name)
+    },
+    TSModuleDeclaration(path) {
+      if ((path.scope as any).uid === programScopeUid) {
+        const id = path.node.id
+        if (id.type === 'Identifier')
+          result.add(id.name)
       }
-
-      for (const declarator of node.declarations)
-        handleVariableId(declarator.id)
-    }
-    else if (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration') {
-      if (node.id)
-        identifiers.add(node.id.name)
-    }
-    else if (node.type === 'TSEnumDeclaration') {
-      if (node.id)
-        identifiers.add(node.id.name)
-    }
-    // else {
-    //   console.log(node)
-    // }
-  }
-  return identifiers
+    },
+  })
+  return Array.from(result)
 }
 
+/**
+ * @deprecated use `getFileGlobals` instead
+ */
 export function getIdentifierUsages(node?: Expression | TSType | SpreadElement | PrivateName | Statement | null, identifiers = new Set<string>()) {
   if (!node)
     return identifiers
@@ -123,4 +105,28 @@ export function getIdentifierUsages(node?: Expression | TSType | SpreadElement |
   //   console.log(node)
   // }
   return identifiers
+}
+
+export function getFileGlobals(result: ParseResult<File>) {
+  let globals!: Set<string>
+  let programScopeUid: number
+  traverse(result, {
+    Program(path) {
+      globals = new Set(Object.keys((path.scope as any).globals))
+      programScopeUid = (path.scope as any).uid
+    },
+    // FIXME: babel bug, temporary add TSEnumDeclaration and TSModuleDeclaration logic
+    TSEnumDeclaration(path) {
+      if ((path.scope as any).uid === programScopeUid)
+        globals.delete(path.node.id.name)
+    },
+    TSModuleDeclaration(path) {
+      if ((path.scope as any).uid === programScopeUid) {
+        const id = path.node.id
+        if (id.type === 'Identifier')
+          globals.delete(id.name)
+      }
+    },
+  })
+  return Array.from(globals)
 }

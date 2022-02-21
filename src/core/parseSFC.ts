@@ -19,7 +19,7 @@ import type {
   ScriptSetupTransformOptions,
   ScriptTagMeta,
 } from '../types'
-import { getIdentifierUsages } from './identifiers'
+import { getFileGlobals } from './identifiers'
 import { parse } from './babel'
 import { exhaustiveCheckReturnUndefined, pascalize } from './utils'
 
@@ -137,12 +137,8 @@ function getDirectiveNames(node: TemplateChildNode): string[] {
 }
 
 function getFreeVariablesForText(input: string): string[] {
-  const identifiers = new Set<string>()
   const inputWithPrefix = input.trimStart()[0] === '{' ? `(${input})` : input
-
-  const nodes = parse(inputWithPrefix).program.body
-  nodes.forEach(node => getIdentifierUsages(node, identifiers))
-  return [...identifiers.values()]
+  return getFileGlobals(parse(inputWithPrefix))
 }
 
 function getFreeVariablesForPropsNode(

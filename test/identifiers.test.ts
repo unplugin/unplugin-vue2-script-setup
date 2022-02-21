@@ -27,7 +27,7 @@ describe('identifiers', () => {
           sourceType: 'module',
         })
 
-        expect(getIdentifierDeclarations(ast.program.body)).toEqual(new Set(output))
+        expect(new Set(getIdentifierDeclarations(ast.program.body))).toEqual(new Set(output))
       })
     }
   })
