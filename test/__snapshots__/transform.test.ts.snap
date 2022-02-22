@@ -262,6 +262,49 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform > fixtures > test/fixtures/ComponentsDirectivesLocal.vue 1`] = `
+"
+<script lang=\\"ts\\">
+import type { ObjectDirective } from '@vue/composition-api'; // enables v-focus in templates
+
+const vFocus: ObjectDirective<HTMLInputElement, null> = {
+  inserted: (el, binding, vnode, oldVnode) => {
+    el.focus();
+  }
+};
+const __sfc_main = {};
+__sfc_main.directives = Object.assign({
+  focus: vFocus
+}, __sfc_main.directives);
+export default __sfc_main;
+</script>
+<template>
+  <input v-focus=\\"null\\">
+</template>
+"
+`;
+
+exports[`transform > fixtures > test/fixtures/ComponentsLocal.vue 1`] = `
+"
+<script lang=\\"tsx\\">
+const HelloComponent = ({
+  name
+}: {
+  name: string;
+}) => <span>Hello, {name}</span>;
+
+const __sfc_main = {};
+__sfc_main.components = Object.assign({
+  HelloComponent
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+<template>
+  <HelloComponent name=\\"Evan You\\" />
+</template>
+"
+`;
+
 exports[`transform > fixtures > test/fixtures/DynamicStyle.vue 1`] = `
 "<template>
   <div :style=\\"{ color, border: '1px' }\\" />

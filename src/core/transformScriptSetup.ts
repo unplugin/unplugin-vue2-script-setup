@@ -39,12 +39,12 @@ export function transformScriptSetup(
       || n.type.startsWith('TS'),
   )
 
-  // get all identifiers in `<script setup>`
-  const declarations = [
+  // get all identifiers in `<script setup>` and `<script>`
+  const declarationArray = uniq([
     ...getIdentifierDeclarations(hoisted),
     ...getIdentifierDeclarations(setupBody),
-  ]
-  const declarationArray = uniq(declarations).filter(notNullish)
+    ...getIdentifierDeclarations(script.ast.body),
+  ]).filter(notNullish)
 
   // filter out identifiers that are used in `<template>`
   const returns: ObjectExpression['properties'] = declarationArray
