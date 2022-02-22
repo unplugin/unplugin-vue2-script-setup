@@ -1,5 +1,6 @@
 /* eslint-disable one-var */
 /* eslint-disable @typescript-eslint/no-namespace */
+import { createRequire } from 'module'
 import { notNullish, partition } from '@antfu/utils'
 import type { Program } from '@babel/types'
 import type { ParserPlugin } from '@babel/parser'
@@ -81,6 +82,14 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'el',
   // 'ref',
 ])
+
+function getRequire() {
+  return (
+    (typeof require === 'function')
+      ? require
+      : createRequire(import.meta.url)
+  )
+}
 
 function getComponents(node: TemplateChildNode): string[] {
   const current
@@ -367,8 +376,7 @@ export function parseSFC(
             && p.value.content === 'pug',
       )
         ? baseParse(
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          require('pug').compile(
+          getRequire()('pug').compile(
             templateNode.children.map(x => x.loc.source).join(''),
             {
               filename: id,
