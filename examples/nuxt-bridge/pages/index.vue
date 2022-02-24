@@ -1,3 +1,11 @@
+<script setup lang="ts">
+useMeta({ meta: [{ name: 'description', content: 'This is a page to demo Nuxt Bridge.' }] })
+const version = ref('2')
+const state = useState('test-state')
+state.value = '123'
+const updateState = () => { state.value = '456' }
+</script>
+
 <template>
   <div>
     <div>Hello Vue {{ version }}!</div>
@@ -8,11 +16,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-useMeta({ meta: [{ name: 'description', content: 'This is a page to demo Nuxt Bridge.' }] })
-const version = ref('2')
-const state = useState('test-state')
-state.value = '123'
-const updateState = () => { state.value = '456' }
-</script>

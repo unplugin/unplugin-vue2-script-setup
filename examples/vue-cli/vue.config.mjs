@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 
-const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
+import { defineConfig } from '@vue/cli-service'
+import ScriptSetup from 'unplugin-vue2-script-setup/webpack'
 
-/**
- * @type {import('@vue/cli-service').ProjectOptions}
- */
-module.exports = {
+export default defineConfig({
   configureWebpack: {
     plugins: [
       ScriptSetup({
@@ -24,4 +21,4 @@ module.exports = {
     config.module.rule('ts').uses.delete('cache-loader')
     config.module.rule('tsx').uses.delete('cache-loader')
   },
-}
+})

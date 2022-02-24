@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const route = useRoute()
+</script>
+
 <template>
   <div>
     <Nuxt />
@@ -5,7 +9,3 @@
     Route: {{ route.path }}
   </div>
 </template>
-
-<script script>
-const route = useRoute()
-</script>
