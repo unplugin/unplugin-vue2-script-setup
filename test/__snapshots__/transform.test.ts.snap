@@ -954,3 +954,42 @@ export default __sfc_main;
 </script>
 "
 `;
+
+exports[`transform > fixtures > test/fixtures/VariableBinding.vue 1`] = `
+"<script lang=\\"ts\\">
+/* eslint-disable no-console */
+import { reactive } from '@vue/composition-api';
+const __sfc_main = {};
+
+__sfc_main.setup = (__props, __ctx) => {
+  const state = reactive({
+    value: ''
+  });
+
+  function showEvent(event: MouseEvent) {
+    console.log(event);
+  }
+
+  const emit = __ctx.emit;
+  return {
+    state,
+    showEvent,
+    emit
+  };
+};
+
+export default __sfc_main;
+</script>
+<template>
+  <div
+    @click=\\"
+      state.value = \`x: \${$event.x}\`
+      showEvent($event)
+      emit('foo')
+    \\"
+  >
+    2333
+  </div>
+</template>
+"
+`;
