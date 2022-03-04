@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-import { defineConfig } from '@vue/cli-service'
-import ScriptSetup from 'unplugin-vue2-script-setup/webpack'
+const { defineConfig } = require('@vue/cli-service')
+const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 
-export default defineConfig({
+module.exports = defineConfig({
   configureWebpack: {
     plugins: [
       ScriptSetup({
