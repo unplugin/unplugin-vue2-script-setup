@@ -13,8 +13,7 @@ const entries = [
   'src/vite.ts',
   'src/rollup.ts',
   'src/esbuild.ts',
-  'src/nuxt.ts',
-  'src/lib.ts',
+  'src/nuxt.ts'
 ]
 
 const dtsEntries = [

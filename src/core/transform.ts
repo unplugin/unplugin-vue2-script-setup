@@ -15,7 +15,7 @@ export function shouldTransform(code: string, id: string, options?: ScriptSetupT
   return (options?.reactivityTransform && shouldTransformRefSugar(code)) || scriptSetupRE.test(code)
 }
 
-export function transform(input: string, id: string, options?: ScriptSetupTransformOptions): TransformResult {
+export async function transform(input: string, id: string, options?: ScriptSetupTransformOptions): Promise<TransformResult> {
   if (!shouldTransform(input, id, options))
     return null
   const resolved = resolveOptions(options)
@@ -36,10 +36,10 @@ function transformNonVue(input: string, id: string, options: ResolvedOptions): T
   return null
 }
 
-function transformVue(input: string, id: string, options: ResolvedOptions): TransformResult {
+async function transformVue(input: string, id: string, options: ResolvedOptions): Promise<TransformResult> {
   const s = new MagicString(input)
 
-  const sfc = parseSFC(input, id)
+  const sfc = await parseSFC(input, id)
 
   if (options.reactivityTransform)
     transformSfcRefSugar(sfc, options)

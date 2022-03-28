@@ -17,9 +17,9 @@ export const unplugin = createUnplugin<PluginOptions>((options = {}) => {
     transformInclude(id) {
       return filter(id)
     },
-    transform(code, id) {
+    async transform(code, id) {
       try {
-        return transform(code, id, options)
+        return await transform(code, id, options)
       }
       catch (e: any) {
         this.error(e)
