@@ -49,6 +49,11 @@
       "require": "./dist/webpack.js",
       "import": "./dist/webpack.mjs",
       "types": "./webpack.d.ts"
+    },
+    "./lib": {
+      "require": "./dist/lib.js",
+      "import": "./dist/lib.mjs",
+      "types": "./lib.d.ts"
     }
   },
   "main": "dist/index.js",

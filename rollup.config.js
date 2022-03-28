@@ -14,6 +14,7 @@ const entries = [
   'src/rollup.ts',
   'src/esbuild.ts',
   'src/nuxt.ts',
+  'src/lib.ts',
 ]
 
 const dtsEntries = [
