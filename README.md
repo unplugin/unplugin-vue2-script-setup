@@ -249,7 +249,7 @@ module.exports = {
 ```ts
 import { transform } from 'unplugin-vue2-script-setup'
 
-const Vue2SFC = transform(`
+const Vue2SFC = await transform(`
 <template>
   <!-- ... -->
 </template>

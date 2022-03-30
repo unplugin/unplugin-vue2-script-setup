@@ -23,6 +23,7 @@ importers:
       '@types/babel__core': ^7.1.18
       '@types/estree': ^0.0.51
       '@types/node': ^17.0.21
+      '@types/pug': ^2.0.6
       '@types/ws': ^8.5.0
       '@vue/compiler-core': ^3.2.31
       '@vue/compiler-dom': ^3.2.31
@@ -69,6 +70,7 @@ importers:
       '@types/babel__core': 7.1.18
       '@types/estree': 0.0.51
       '@types/node': 17.0.21
+      '@types/pug': 2.0.6
       '@types/ws': 8.5.0
       '@vue/composition-api': 1.4.6
       '@vue/runtime-dom': 3.2.31
@@ -2484,6 +2486,10 @@ packages:
 
   /@types/parse5/6.0.3:
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
+    dev: true
+
+  /@types/pug/2.0.6:
+    resolution: {integrity: sha512-SnHmG9wN1UVmagJOnyo/qkk0Z7gejYxOYYmaAwr5u2yFYfsupN3sg10kyzN8Hep/2zbHxCnsumxOoRIRMBwKCg==}
     dev: true
 
   /@types/q/1.5.5:
@@ -7132,7 +7138,7 @@ packages:
     optional: true
 
   /fsevents/2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    resolution: {integrity: sha1-ilJveLj99GI7cJ4Ll1xSwkwC/Ro=}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true

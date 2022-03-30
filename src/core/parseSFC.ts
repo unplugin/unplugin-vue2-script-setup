@@ -82,14 +82,6 @@ const BUILD_IN_DIRECTIVES = new Set([
   // 'ref',
 ])
 
-async function getRequire() {
-  if (typeof require === 'function')
-    return require
-
-  const { default: { createRequire } } = await import('module')
-  return createRequire(import.meta.url)
-}
-
 function getComponents(node: TemplateChildNode): string[] {
   const current
     = node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.COMPONENT
@@ -375,7 +367,7 @@ export async function parseSFC(
             && p.value.content === 'pug',
       )
         ? baseParse(
-          (await getRequire())('pug').compile(
+          (await import('pug')).compile(
             templateNode.children.map(x => x.loc.source).join(''),
             {
               filename: id,

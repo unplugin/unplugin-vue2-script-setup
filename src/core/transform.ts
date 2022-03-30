@@ -20,7 +20,7 @@ export async function transform(input: string, id: string, options?: ScriptSetup
     return null
   const resolved = resolveOptions(options)
   if (id.endsWith('.vue') || id.includes('.vue?vue'))
-    return transformVue(input, id, resolved)
+    return await transformVue(input, id, resolved)
   else
     return transformNonVue(input, id, resolved)
 }
