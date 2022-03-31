@@ -15,8 +15,8 @@ function requireVueJest() {
 }
 
 module.exports = {
-  process(source, filename, ...args) {
-    const transformed = transform(source, filename)
+  async process(source, filename, ...args) {
+    const transformed = await transform(source, filename)
     const code = transformed ? transformed.code : source
     return requireVueJest().process.call(this, code, filename, ...args)
   },
