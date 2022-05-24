@@ -67,7 +67,8 @@ export function transformScriptSetup(
       const identifier = declarationArray.find(
         declaration => declaration === `v${capitalize(directive)}`,
       )
-      if (identifier === undefined) return undefined
+      if (identifier === undefined)
+        return undefined
 
       return { identifier, directive }
     })

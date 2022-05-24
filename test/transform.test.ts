@@ -16,7 +16,7 @@ describe('transform', () => {
     })
 
     for (const file of files) {
-      it(file.replace(/\\/g, '/'), async() => {
+      it(file.replace(/\\/g, '/'), async () => {
         const fixture = await fs.readFile(resolve(root, file), 'utf-8')
         const result = (await transform(fixture, file, { reactivityTransform: true }))?.code || fixture
         expect(result).toMatchSnapshot()

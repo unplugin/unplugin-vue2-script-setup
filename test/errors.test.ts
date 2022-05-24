@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { transform as t } from '../src'
 
 describe('errors', () => {
-  it('langs', async() => {
+  it('langs', async () => {
     await expect(() =>
       t(`
 <script setup>
@@ -15,7 +15,7 @@ export default {}
 `, 'Lang.vue')).rejects.toThrowError('<script setup> language must be the same as <script>')
   })
 
-  it('defineProps', async() => {
+  it('defineProps', async () => {
     await expect(() =>
       t(`
 <script setup>
@@ -26,7 +26,7 @@ const a = defineProps()
       .rejects.toThrowError('duplicate defineProps() call')
   })
 
-  it('top-level await', async() => {
+  it('top-level await', async () => {
     await expect(() =>
       t(`
 <script setup>
@@ -46,7 +46,7 @@ const {data} = await something()
       .rejects.toThrowError('top-level await is not supported in Vue 2')
   })
 
-  it('ref sugar', async() => {
+  it('ref sugar', async () => {
     const consoleWarnMock = vi.spyOn(console, 'warn')
 
     await t(`
