@@ -4,6 +4,8 @@
 
 Bring [`<script setup>`](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to Vue 2. Works for Vite, Nuxt, Vue CLI, Webpack, esbuild and more, powered by [unplugin](https://github.com/unjs/unplugin).
 
+> ⚠️ With the release of [Vue 2.7](https://blog.vuejs.org/posts/vue-2-7-naruto.html), which has Composition API and `<script setup>` built-in, **you no longer need this plugin**. Thereby this plugin has entered maintenance mode and will only support Vue 2.6 or earlier. This project will reach End of Life by the end of 2022.
+
 ## Install
 
 ```bash
@@ -56,7 +58,7 @@ Example: [`playground/`](./playground/)
 const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 
 module.exports = {
-  parallel: false,  // disable thread-loader, which is not compactible with this plugin
+  parallel: false, // disable thread-loader, which is not compactible with this plugin
   configureWebpack: {
     plugins: [
       ScriptSetup({ /* options */ }),
