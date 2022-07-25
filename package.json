@@ -95,7 +95,7 @@
     "@vue/shared": "^3.2.36",
     "defu": "^6.0.0",
     "magic-string": "^0.26.2",
-    "unplugin": "^0.6.3"
+    "unplugin": "^0.7.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.23.1",
