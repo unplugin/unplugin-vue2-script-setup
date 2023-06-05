@@ -31,7 +31,7 @@ function transformNonVue(input: string, id: string, options: ResolvedOptions): T
       filename: id,
       sourceMap: options.sourceMap,
       importHelpersFrom: options.importHelpersFrom,
-    })
+    }) as any
   }
   return null
 }
@@ -76,7 +76,7 @@ async function transformVue(input: string, id: string, options: ResolvedOptions)
       ? s.generateMap({
         source: id,
         includeContent: true,
-      })
+      }) as any
       : null,
   }
 }

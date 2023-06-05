@@ -1,11 +1,12 @@
-import ts from 'rollup-plugin-typescript2'
+import fs from 'node:fs'
+import ts from 'rollup-plugin-esbuild'
 import dts from 'rollup-plugin-dts'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
 
-import pkg from './package.json'
+const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
 const entries = [
   'src/index.ts',
@@ -13,7 +14,7 @@ const entries = [
   'src/vite.ts',
   'src/rollup.ts',
   'src/esbuild.ts',
-  'src/nuxt.ts'
+  'src/nuxt.ts',
 ]
 
 const dtsEntries = [
@@ -30,8 +31,6 @@ const external = [
   'webpack',
   '@nuxt/kit',
 ]
-
-
 
 const defaults = {
   external,
