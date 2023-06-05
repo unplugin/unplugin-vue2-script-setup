@@ -217,8 +217,7 @@ function getFreeVariablesForNode(
     // But we use `baseParse` now. So this branch will never be reached.
     // `NodeTypes.IF` and `NodeTypes.IF_BRANCH` will never be reached, also.
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { keyAlias, valueAlias } = node
+    // const { keyAlias, valueAlias } = node
     return [node.source, ...node.children].flatMap(getFreeVariablesForNode)
   }
   else if (node.type === NodeTypes.IF) {

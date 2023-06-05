@@ -48,8 +48,8 @@ export function applyMacros(nodes: Statement[]) {
 
   function error(
     msg: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    node: Node,
+
+    _node: Node,
   ): never {
     throw new Error(msg)
   }

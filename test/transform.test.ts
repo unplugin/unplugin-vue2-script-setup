@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { promises as fs } from 'fs'
+import { resolve } from 'node:path'
+import { promises as fs } from 'node:fs'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
 import { transform } from '../src'

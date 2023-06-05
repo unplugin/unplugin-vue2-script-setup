@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable prefer-const */
 import { ref } from '@vue/composition-api'
 
