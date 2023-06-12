@@ -6,9 +6,9 @@ import { transformScriptSetup } from './transformScriptSetup'
 import { transformSfcRefSugar } from './transformSfcRefSugar'
 import { resolveOptions } from './options'
 
-const scriptSetupRE = /<script\s(.*\s)?setup(\s.*)?>/
+export const scriptSetupRE = /<script\s+(.*\s+)?setup(\s+.*)?\s*>/
 
-export function shouldTransform(code: string, id: string, options?: ScriptSetupTransformOptions): boolean {
+export function shouldTransform(code: string, options?: ScriptSetupTransformOptions): boolean {
   // avoid transforming twice
   if (code.includes('export default __sfc_main'))
     return false
@@ -16,7 +16,7 @@ export function shouldTransform(code: string, id: string, options?: ScriptSetupT
 }
 
 export async function transform(input: string, id: string, options?: ScriptSetupTransformOptions): Promise<TransformResult> {
-  if (!shouldTransform(input, id, options))
+  if (!shouldTransform(input, options))
     return null
   const resolved = resolveOptions(options)
   if (id.endsWith('.vue') || id.includes('.vue?vue'))
