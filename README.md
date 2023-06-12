@@ -79,6 +79,7 @@ npm i -D @vue/cli-plugin-typescript vue-tsc
 
 ```ts
 const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
+
 module.exports = {
   parallel: false,
   configureWebpack: {
@@ -113,6 +114,7 @@ And then use [`vue-tsc`](https://github.com/johnsoncodehk/volar) to do the type 
 ```ts
 // webpack.config.js
 const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
+
 module.exports = {
   /* ... */
   plugins: [
@@ -148,6 +150,7 @@ export default {
 // esbuild.config.js
 import { build } from 'esbuild'
 import ScriptSetup from 'unplugin-vue2-script-setup/esbuild'
+
 build({
   /* ... */
   plugins: [
@@ -230,11 +233,11 @@ Volar preferentially supports Vue 3. Vue 3 and Vue 2 template has some different
 ```jsonc
 {
   "compilerOptions": {
-    ...
+    // ...
   },
   "vueCompilerOptions": {
     "experimentalCompatMode": 2
-  },
+  }
 }
 ```
 

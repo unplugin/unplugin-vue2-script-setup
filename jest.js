@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { transform } = require('./dist/index')
 
 function requireVueJest() {
