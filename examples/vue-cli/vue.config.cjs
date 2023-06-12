@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const { defineConfig } = require('@vue/cli-service')
 const ScriptSetup = require('unplugin-vue2-script-setup/webpack').default
 

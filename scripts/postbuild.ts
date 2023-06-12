@@ -1,5 +1,5 @@
-import { resolve, basename } from 'path'
-import { promises as fs } from 'fs'
+import { basename, resolve } from 'node:path'
+import { promises as fs } from 'node:fs'
 import fg from 'fast-glob'
 
 async function run() {
@@ -10,7 +10,6 @@ async function run() {
     cwd: resolve(__dirname, '../dist'),
   })
   for (const file of files) {
-    // eslint-disable-next-line no-console
     console.log('[postbuild]', basename(file))
     const name = basename(file, '.js')
     let code = await fs.readFile(file, 'utf8')
