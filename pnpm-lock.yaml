@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -47,6 +47,9 @@ importers:
       defu:
         specifier: ^6.1.2
         version: 6.1.2
+      html-tags:
+        specifier: ^3.3.1
+        version: 3.3.1
       magic-string:
         specifier: ^0.30.0
         version: 0.30.0
@@ -2400,7 +2403,7 @@ packages:
       '@babel/types': 7.22.4
       '@vue/babel-helper-vue-transform-on': 1.0.2
       camelcase: 6.2.0
-      html-tags: 3.1.0
+      html-tags: 3.3.1
       svg-tags: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
@@ -5999,10 +6002,9 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /html-tags@3.1.0:
-    resolution: {integrity: sha512-1qYz89hW3lFDEazhjW0yVAV87lw8lVkrJocr72XmBkMKsoSVJCQx3W8BXsC7hO2qAt8BoVjYjtAcZ9perqGnNg==}
+  /html-tags@3.3.1:
+    resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
-    dev: true
 
   /html-webpack-plugin@5.5.0(webpack@5.69.1):
     resolution: {integrity: sha512-sy88PC2cRTVxvETRgUHFrL4No3UxvcH8G1NepGhqaTT+GXN2kTamqasot0inS5hXeg1cMbFDt27zzo9p35lZVw==}

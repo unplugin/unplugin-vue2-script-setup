@@ -330,6 +330,33 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform > fixtures > test/fixtures/HtmlTag.vue 1`] = `
+"<script lang=\\"ts\\">
+import Enum from './Enum.vue';
+import { ref } from '@vue/composition-api';
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  let p = \\"hello word\\";
+  let div = ref(\\"hello word\\");
+  return {
+    p
+  };
+};
+__sfc_main.components = Object.assign({
+  Enum
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <div>
+    <Enum/>
+    <p>{{ p }}</p>
+  </div>
+</template>
+"
+`;
+
 exports[`transform > fixtures > test/fixtures/JSLongComment.vue 1`] = `
 "<script lang=\\"ts\\">
 const __sfc_main = {};
