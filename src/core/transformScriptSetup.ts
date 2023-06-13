@@ -1,6 +1,7 @@
 import { capitalize } from '@vue/shared'
 import type { Node, ObjectExpression, Statement } from '@babel/types'
 import { notNullish, partition, uniq } from '@antfu/utils'
+import htmlTags from 'html-tags'
 import type { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
@@ -54,7 +55,9 @@ export function transformScriptSetup(
       return t.objectProperty(id, id, false, true)
     })
 
+  const pascalizeHtmlTags = htmlTags.map(pascalize)
   const components = Array.from(template.components)
+    .filter(component => !pascalizeHtmlTags.includes(component))
     .map(
       component =>
         declarationArray.find(declare => declare === component)
