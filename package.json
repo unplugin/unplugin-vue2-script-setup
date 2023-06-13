@@ -3,66 +3,66 @@
   "version": "0.11.4",
   "packageManager": "pnpm@8.6.0",
   "description": "Bring <script setup> to Vue 2",
-  "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
-  "bugs": {
-    "url": "https://github.com/antfu/unplugin-vue2-script-setup/issues"
-  },
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/antfu",
+  "homepage": "https://github.com/antfu/unplugin-vue2-script-setup#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antfu/unplugin-vue2-script-setup.git"
   },
-  "funding": "https://github.com/sponsors/antfu",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
-  "files": [
-    "dist",
-    "jest.js",
-    "*.d.ts"
-  ],
+  "bugs": {
+    "url": "https://github.com/antfu/unplugin-vue2-script-setup/issues"
+  },
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./*": "./*",
     "./esbuild": {
+      "types": "./esbuild.d.ts",
       "require": "./dist/esbuild.js",
-      "import": "./dist/esbuild.mjs",
-      "types": "./esbuild.d.ts"
+      "import": "./dist/esbuild.mjs"
     },
     "./jest": "./jest.js",
     "./nuxt": {
+      "types": "./nuxt.d.ts",
       "require": "./dist/nuxt.js",
-      "import": "./dist/nuxt.mjs",
-      "types": "./nuxt.d.ts"
+      "import": "./dist/nuxt.mjs"
     },
     "./rollup": {
+      "types": "./rollup.d.ts",
       "require": "./dist/rollup.js",
-      "import": "./dist/rollup.mjs",
-      "types": "./rollup.d.ts"
+      "import": "./dist/rollup.mjs"
     },
     "./types": {
       "types": "./types.d.ts"
     },
     "./vite": {
+      "types": "./vite.d.ts",
       "require": "./dist/vite.js",
-      "import": "./dist/vite.mjs",
-      "types": "./vite.d.ts"
+      "import": "./dist/vite.mjs"
     },
     "./webpack": {
+      "types": "./webpack.d.ts",
       "require": "./dist/webpack.js",
-      "import": "./dist/webpack.mjs",
-      "types": "./webpack.d.ts"
+      "import": "./dist/webpack.mjs"
     }
   },
   "main": "dist/index.js",
   "types": "index.d.ts",
+  "files": [
+    "dist",
+    "jest.js",
+    "*.d.ts"
+  ],
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "dev": "rollup -c --watch",
-    "lint": "eslint \"{src,test}/**/*.ts\"",
-    "lint:fix": "nr lint -- --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build:examples": "pnpm -r --filter=!unplugin-vue2-script-setup run build",
     "play": "npm -C playground run dev",
     "prepublishOnly": "nr build",
