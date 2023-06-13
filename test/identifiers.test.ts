@@ -9,6 +9,8 @@ describe('identifiers', () => {
       ['var a = 1', ['a']],
       ['import { foo, t as bar } from "z"', ['foo', 'bar']],
       ['import foo from "z"', ['foo']],
+      ['import Button from \'./DynamicStyle.vue\'', ['Button']],
+      ['import button from \'./DynamicStyle.vue\'', ['button']],
       ['import * as foo from "z"', ['foo']],
       ['function foo(bar) {const a = z}', ['foo']],
       ['console.log(foo)', []],

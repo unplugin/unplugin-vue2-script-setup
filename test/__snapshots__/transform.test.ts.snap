@@ -337,9 +337,14 @@ import { ref } from '@vue/composition-api';
 const __sfc_main = {};
 __sfc_main.setup = (__props, __ctx) => {
   let p = \\"hello word\\";
-  let div = ref(\\"hello word\\");
+  let Div = ref(\\"hello word\\");
+  let h3 = 'test';
+  let H3 = '';
   return {
-    p
+    p,
+    Div,
+    h3,
+    H3
   };
 };
 __sfc_main.components = Object.assign({
@@ -351,7 +356,41 @@ export default __sfc_main;
 <template>
   <div>
     <Enum/>
+    <h3></h3>
+    {{ H3 }}
+    {{ h3 }}
+    {{ Div }}
     <p>{{ p }}</p>
+  </div>
+</template>
+"
+`;
+
+exports[`transform > fixtures > test/fixtures/HtmlTag2.vue 1`] = `
+"<script lang=\\"ts\\">
+import Button from './DynamicStyle.vue';
+import button from './DynamicStyle.vue';
+import { defineAsyncComponent } from '@vue/composition-api';
+const footer = defineAsyncComponent(() => import('./ScriptOnly.vue'));
+import { ref } from '@vue/composition-api';
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  const p = ref(\\"hello word\\");
+  return {
+    Button,
+    button,
+    p
+  };
+};
+export default __sfc_main;
+</script>
+
+<template>
+  <div>
+    <p>{{ p }}</p>
+    <button>{{ Button }}</button>
+    <Button>{{ button }}</Button>
+    <footer>FOOTER</footer>
   </div>
 </template>
 "

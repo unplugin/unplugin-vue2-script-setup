@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -47,9 +47,6 @@ importers:
       defu:
         specifier: ^6.1.2
         version: 6.1.2
-      html-tags:
-        specifier: ^3.3.1
-        version: 3.3.1
       magic-string:
         specifier: ^0.30.0
         version: 0.30.0
@@ -6005,6 +6002,7 @@ packages:
   /html-tags@3.3.1:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
+    dev: true
 
   /html-webpack-plugin@5.5.0(webpack@5.69.1):
     resolution: {integrity: sha512-sy88PC2cRTVxvETRgUHFrL4No3UxvcH8G1NepGhqaTT+GXN2kTamqasot0inS5hXeg1cMbFDt27zzo9p35lZVw==}
