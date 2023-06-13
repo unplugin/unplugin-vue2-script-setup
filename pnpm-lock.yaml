@@ -2400,7 +2400,7 @@ packages:
       '@babel/types': 7.22.4
       '@vue/babel-helper-vue-transform-on': 1.0.2
       camelcase: 6.2.0
-      html-tags: 3.3.1
+      html-tags: 3.1.0
       svg-tags: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
@@ -5999,8 +5999,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /html-tags@3.3.1:
-    resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
+  /html-tags@3.1.0:
+    resolution: {integrity: sha512-1qYz89hW3lFDEazhjW0yVAV87lw8lVkrJocr72XmBkMKsoSVJCQx3W8BXsC7hO2qAt8BoVjYjtAcZ9perqGnNg==}
     engines: {node: '>=8'}
     dev: true
 
