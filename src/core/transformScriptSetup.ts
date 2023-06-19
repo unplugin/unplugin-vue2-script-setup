@@ -55,8 +55,9 @@ export function transformScriptSetup(
       return t.objectProperty(id, id, false, true)
     })
 
-  const components = Array.from(template.components)
-    .filter(component => !parserOptions.isNativeTag!(component.toLowerCase()))
+  const components = Array.from(template.tags)
+    .filter(tag => !parserOptions.isNativeTag!(tag))
+    .map(pascalize)
     .map(
       component =>
         declarationArray.find(declare => declare === component)

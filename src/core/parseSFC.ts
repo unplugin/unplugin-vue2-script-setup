@@ -383,6 +383,7 @@ export async function parseSFC(
   return {
     id,
     template: {
+      tags: new Set(result?.components),
       components: new Set(result?.components.map(pascalize)),
       directives: new Set(
         result?.directives

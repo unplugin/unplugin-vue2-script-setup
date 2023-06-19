@@ -382,6 +382,9 @@ __sfc_main.setup = (__props, __ctx) => {
     p
   };
 };
+__sfc_main.components = Object.assign({
+  Button
+}, __sfc_main.components);
 export default __sfc_main;
 </script>
 

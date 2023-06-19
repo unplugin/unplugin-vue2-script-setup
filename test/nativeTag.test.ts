@@ -6,20 +6,11 @@ describe('filter native tags as vue components', () => {
     const cases: string[] = [
       `
       <script setup lang="ts">
-      import Button from './DynamicStyle.vue';
-      </script>
-      
-      <template>
-        <button>{{ Button }}</button>
-      </template>
-      `,
-      `
-      <script setup lang="ts">
       import button from './DynamicStyle.vue';
       </script>
       
       <template>
-        <Button>{{ button }}</Button>
+        <button>{{ Button }}</button>
       </template>
       `,
       `
@@ -64,6 +55,20 @@ describe('filter native tags as vue components', () => {
         expect(result?.code.includes('__sfc_main.components')).toEqual(false)
       })
     }
+  })
+
+  it('capitalized native tags as components', async () => {
+    const input = `
+    <script setup lang="ts">
+    import Button from './DynamicStyle.vue';
+    </script>
+    
+    <template>
+      <Button>{{ Button }}</Button>
+    </template>
+    `
+    const result = await transform(input, 'Lang.vue', { reactivityTransform: true })
+    expect(result?.code.includes('__sfc_main.components = Object.assign({\n  Button\n}, __sfc_main.components);')).toEqual(true)
   })
 
   it('keep non-native components', async () => {
