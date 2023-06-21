@@ -1,6 +1,7 @@
 import { capitalize } from '@vue/shared'
 import type { Node, ObjectExpression, Statement } from '@babel/types'
 import { notNullish, partition, uniq } from '@antfu/utils'
+import { parserOptions } from '@vue/compiler-dom'
 import type { ParsedSFC, ScriptSetupTransformOptions } from '../types'
 import { applyMacros } from './macros'
 import { getIdentifierDeclarations } from './identifiers'
@@ -54,7 +55,13 @@ export function transformScriptSetup(
       return t.objectProperty(id, id, false, true)
     })
 
-  const components = Array.from(template.components)
+  const nonNativeTags = new Set(
+    Array.from(template.tags)
+      .filter(tag => !parserOptions.isNativeTag!(tag))
+      .map(pascalize),
+  )
+
+  const components = Array.from(nonNativeTags)
     .map(
       component =>
         declarationArray.find(declare => declare === component)

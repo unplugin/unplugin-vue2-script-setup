@@ -18,6 +18,7 @@ export interface ParsedSFC {
   template: {
     /** foo-bar -> FooBar */
     components: Set<string>
+    tags: Set<string>
     /** v-foo-bar -> fooBar */
     directives: Set<string>
     identifiers: Set<string>

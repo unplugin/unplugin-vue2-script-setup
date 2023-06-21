@@ -3,6 +3,7 @@
 exports[`transform > fixtures > playground/src/App.vue 1`] = `
 "<script lang=\\"ts\\">
 import { defineAsyncComponent } from '@vue/composition-api';
+import ButtonTest from './ButtonTest.vue';
 import HelloWorld from './HelloWorld.vue';
 const AsyncComponent = defineAsyncComponent(() => import('./Async.vue'));
 const __sfc_main = {};
@@ -16,6 +17,7 @@ __sfc_main.setup = (__props, __ctx) => {
   };
 };
 __sfc_main.components = Object.assign({
+  ButtonTest,
   HelloWorld,
   AsyncComponent
 }, __sfc_main.components);
@@ -23,6 +25,8 @@ export default __sfc_main;
 </script>
 <template>
   <div>
+    <ButtonTest />
+
     <HelloWorld name=\\"Vue 2\\" @update=\\"onUpdate\\" />
 
     <AsyncComponent />
@@ -45,9 +49,41 @@ exports[`transform > fixtures > playground/src/Bar.vue 1`] = `
 "
 `;
 
+exports[`transform > fixtures > playground/src/ButtonTest.vue 1`] = `
+"<script lang=\\"ts\\">
+import Button from './Foo.vue';
+import button from './Foo.vue';
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  return {
+    Button,
+    button
+  };
+};
+__sfc_main.components = Object.assign({
+  Button
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <div>
+    <button>{{ Button }}</button>
+    <Button>{{ button }}</Button>
+  </div>
+</template>
+"
+`;
+
 exports[`transform > fixtures > playground/src/Foo.vue 1`] = `
-"<template>
-  <div>Foo</div>
+"<script lang=\\"ts\\">
+const __sfc_main = {};
+export default __sfc_main;
+</script>
+<template>
+  <div>
+    Button Component: <slot></slot>
+  </div>
 </template>
 "
 `;
@@ -327,6 +363,75 @@ __sfc_main.setup = (__props, __ctx) => {
 };
 export default __sfc_main;
 </script>
+"
+`;
+
+exports[`transform > fixtures > test/fixtures/HtmlTag.vue 1`] = `
+"<script lang=\\"ts\\">
+import Enum from './Enum.vue';
+import { ref } from '@vue/composition-api';
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  let p = \\"hello word\\";
+  let Div = ref(\\"hello word\\");
+  let h3 = 'test';
+  let H3 = '';
+  return {
+    p,
+    Div,
+    h3,
+    H3
+  };
+};
+__sfc_main.components = Object.assign({
+  Enum
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <div>
+    <Enum />
+    <h3></h3>
+    {{ H3 }}
+    {{ h3 }}
+    {{ Div }}
+    <p>{{ p }}</p>
+  </div>
+</template>
+"
+`;
+
+exports[`transform > fixtures > test/fixtures/HtmlTag2.vue 1`] = `
+"<script lang=\\"ts\\">
+import Button from './DynamicStyle.vue';
+import button from './DynamicStyle.vue';
+import { defineAsyncComponent } from '@vue/composition-api';
+const footer = defineAsyncComponent(() => import('./ScriptOnly.vue'));
+import { ref } from '@vue/composition-api';
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  const p = ref(\\"hello word\\");
+  return {
+    Button,
+    button,
+    p
+  };
+};
+__sfc_main.components = Object.assign({
+  Button
+}, __sfc_main.components);
+export default __sfc_main;
+</script>
+
+<template>
+  <div>
+    <p>{{ p }}</p>
+    <button>{{ Button }}</button>
+    <Button>{{ button }}</Button>
+    <footer>FOOTER</footer>
+  </div>
+</template>
 "
 `;
 
