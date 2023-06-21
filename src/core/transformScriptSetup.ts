@@ -55,9 +55,13 @@ export function transformScriptSetup(
       return t.objectProperty(id, id, false, true)
     })
 
-  const components = Array.from(template.tags)
-    .filter(tag => !parserOptions.isNativeTag!(tag))
-    .map(pascalize)
+  const nonNativeTags = new Set(
+    Array.from(template.tags)
+      .filter(tag => !parserOptions.isNativeTag!(tag))
+      .map(pascalize),
+  )
+
+  const components = Array.from(nonNativeTags)
     .map(
       component =>
         declarationArray.find(declare => declare === component)
