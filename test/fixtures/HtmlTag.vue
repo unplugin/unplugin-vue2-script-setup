@@ -10,7 +10,7 @@ let H3 = ''
 
 <template>
   <div>
-    <Enum/>
+    <Enum />
     <h3></h3>
     {{ H3 }}
     {{ h3 }}

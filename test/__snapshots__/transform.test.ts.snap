@@ -391,7 +391,7 @@ export default __sfc_main;
 
 <template>
   <div>
-    <Enum/>
+    <Enum />
     <h3></h3>
     {{ H3 }}
     {{ h3 }}

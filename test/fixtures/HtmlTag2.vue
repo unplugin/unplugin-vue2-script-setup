@@ -6,7 +6,7 @@ const footer = defineAsyncComponent(() => import('./ScriptOnly.vue'))
 
 import { ref } from '@vue/composition-api';
 
-const p =ref("hello word") ;
+const p = ref("hello word");
 
 </script>
 
