@@ -18,6 +18,7 @@ const DEFINE_PROPS = 'defineProps'
 const DEFINE_EMITS = 'defineEmits'
 const DEFINE_EXPOSE = 'defineExpose'
 const WITH_DEFAULTS = 'withDefaults'
+const DEFINE_SLOTS = 'defineSlots'
 
 export interface PropTypeData {
   key: string
@@ -28,6 +29,7 @@ export interface PropTypeData {
 export function applyMacros(nodes: Statement[]) {
   let hasDefinePropsCall = false
   let hasDefineEmitCall = false
+  let hasDefineSlotsCall = false
   let propsRuntimeDecl: Node | undefined
   let propsRuntimeDefaults: Node | undefined
   let propsTypeDecl: TSTypeLiteral | TSInterfaceBody | undefined
@@ -204,6 +206,23 @@ export function applyMacros(nodes: Statement[]) {
     return true
   }
 
+  function processDefineSlots(
+    node: Node,
+  ): boolean {
+    if (!isCallOf(node, DEFINE_SLOTS))
+      return false
+
+    if (hasDefineSlotsCall)
+      error(`duplicate ${DEFINE_SLOTS}() call`, node)
+
+    hasDefineSlotsCall = true
+
+    if (node.arguments.length > 0)
+      error(`${DEFINE_SLOTS}() cannot accept arguments`, node)
+
+    return true
+  }
+
   function genRuntimeProps(props: Record<string, PropTypeData>) {
     const keys = Object.keys(props)
     if (!keys.length)
@@ -270,7 +289,9 @@ export function applyMacros(nodes: Statement[]) {
           const decl = node.declarations[i]
           if (decl.init) {
             if (processDefineEmits(decl.init))
-              decl.init = t.memberExpression(t.identifier('__ctx'), t.identifier('emit')) as any
+              decl.init = t.memberExpression(t.identifier('__ctx'), t.identifier('emit'))
+            else if (processDefineSlots(decl.init))
+              decl.init = t.memberExpression(t.identifier('__ctx'), t.identifier('slots'))
             else if (processDefineProps(decl.init) || processWithDefaults(decl.init))
               decl.init = t.identifier('__props') as any
             else
@@ -279,7 +300,7 @@ export function applyMacros(nodes: Statement[]) {
         }
       }
 
-      if (processWithDefaults(node) || processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node))
+      if (processWithDefaults(node) || processDefineEmits(node) || processDefineProps(node) || processDefineExpose(node) || processDefineSlots(node))
         return null
 
       throwIfAwait(node)

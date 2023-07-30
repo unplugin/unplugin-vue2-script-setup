@@ -677,6 +677,36 @@ export default __sfc_main;
 "
 `;
 
+exports[`transform > fixtures > test/fixtures/MacrosType5.vue 1`] = `
+"<script lang=\\"ts\\">
+const __sfc_main = {};
+export default __sfc_main;
+</script>
+"
+`;
+
+exports[`transform > fixtures > test/fixtures/MacrosType6.vue 1`] = `
+"<script lang=\\"ts\\">
+const __sfc_main = {};
+__sfc_main.setup = (__props, __ctx) => {
+  const slots = __ctx.slots;
+  return {
+    slots
+  };
+};
+export default __sfc_main;
+</script>
+<template>
+  <template v-if=\\"slots.default\\">
+    <slot name=\\"default\\" msg=\\"hello\\"></slot>
+  </template>
+  <div v-else>
+    fallback
+  </div>
+</template>
+"
+`;
+
 exports[`transform > fixtures > test/fixtures/MacrosTypeAny.vue 1`] = `
 "<template>
   <div>
