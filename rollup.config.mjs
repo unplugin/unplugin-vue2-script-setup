@@ -1,4 +1,5 @@
-import fs from 'node:fs'
+// @ts-check
+import * as fs from 'node:fs'
 import ts from 'rollup-plugin-esbuild'
 import dts from 'rollup-plugin-dts'
 import resolve from '@rollup/plugin-node-resolve'
@@ -6,81 +7,83 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
 
+/** @type {import('./package.json')} */
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
-const entries = [
-  'src/index.ts',
-  'src/webpack.ts',
-  'src/vite.ts',
-  'src/rollup.ts',
-  'src/esbuild.ts',
-  'src/nuxt.ts',
-]
-
-const dtsEntries = [
-  ...entries,
-  'src/types.ts',
-]
+const entries = {
+  index: 'src/index.ts',
+  webpack: 'src/webpack.ts',
+  vite: 'src/vite.ts',
+  rollup: 'src/rollup.ts',
+  esbuild: 'src/esbuild.ts',
+  nuxt: 'src/nuxt.ts',
+  types: 'src/types.ts',
+}
 
 const external = [
   ...Object.keys(pkg.dependencies),
   ...Object.keys(pkg.peerDependencies),
-  '@babel/parser',
-  'worker_threads',
+  'esbuild',
+  'rollup',
   'vite',
   'webpack',
   '@nuxt/kit',
 ]
 
-const defaults = {
-  external,
-  plugins: [
-    alias({
-      entries: [
-        { find: /^node:(.+)$/, replacement: '$1' },
-      ],
-    }),
-    resolve({
-      preferBuiltins: true,
-    }),
-    json(),
-    commonjs(),
-    ts(),
-  ],
-  onwarn(message) {
-    if (/Circular dependencies/.test(message))
-      return
-    console.error(message)
-  },
-}
 
+/** @type {import('rollup').RollupOptions[]} */
 export default [
-  ...entries.map(input => ({
-    input,
-    output: [
+  {
+    input: entries,
+    external,
+    plugins: [
+      alias({
+        entries: [
+          { find: /^node:(.+)$/, replacement: '$1' },
+        ],
+      }),
+      resolve({
+        preferBuiltins: true,
+      }),
+      json(),
+      commonjs(),
+      ts(),
+    ],
+    onwarn({ code, message }) {
+      if(code === 'EMPTY_BUNDLE') return
+      console.error(message)
+    },
+    output:[
       {
-        file: input.replace('src/', 'dist/').replace('.ts', '.mjs'),
+        dir: 'dist',
         format: 'esm',
         sourcemap: 'inline',
+        entryFileNames: "[name].mjs",
       },
       {
-        file: input.replace('src/', 'dist/').replace('.ts', '.js'),
+        dir: 'dist',
         format: 'cjs',
-        sourcemap: 'inline',
         exports: 'named',
+        sourcemap: 'inline',
+        entryFileNames: "[name].js",
       },
-    ],
-    ...defaults,
-  })),
-  ...dtsEntries.map(input => ({
-    input,
-    output: {
-      file: input.replace('src/', 'dist/').replace('.ts', '.d.ts'),
-      format: 'esm',
-    },
+    ]
+  },
+  {
+    input: entries,
     external,
     plugins: [
       dts({ respectExternal: true }),
     ],
-  })),
+    output: [
+      {
+        dir: 'dist',
+        entryFileNames: "[name].d.mts",
+      },
+      {
+        dir: 'dist',
+        entryFileNames: "[name].d.ts",
+      },
+    ],
+  },
 ]
