@@ -1,7 +1,7 @@
 {
   "name": "unplugin-vue2-script-setup",
   "version": "0.11.4",
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@8.6.11",
   "description": "Bring <script setup> to Vue 2",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -16,43 +16,37 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./*": "./*",
     "./esbuild": {
-      "types": "./esbuild.d.ts",
-      "require": "./dist/esbuild.js",
-      "import": "./dist/esbuild.mjs"
+      "import": "./dist/esbuild.mjs",
+      "require": "./dist/esbuild.js"
     },
     "./jest": "./jest.js",
     "./nuxt": {
-      "types": "./nuxt.d.ts",
-      "require": "./dist/nuxt.js",
-      "import": "./dist/nuxt.mjs"
+      "import": "./dist/nuxt.mjs",
+      "require": "./dist/nuxt.js"
     },
     "./rollup": {
-      "types": "./rollup.d.ts",
-      "require": "./dist/rollup.js",
-      "import": "./dist/rollup.mjs"
+      "import": "./dist/rollup.mjs",
+      "require": "./dist/rollup.js"
     },
     "./types": {
-      "types": "./types.d.ts"
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.js"
     },
     "./vite": {
-      "types": "./vite.d.ts",
-      "require": "./dist/vite.js",
-      "import": "./dist/vite.mjs"
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.js"
     },
     "./webpack": {
-      "types": "./webpack.d.ts",
-      "require": "./dist/webpack.js",
-      "import": "./dist/webpack.mjs"
+      "import": "./dist/webpack.mjs",
+      "require": "./dist/webpack.js"
     }
   },
   "main": "dist/index.js",
-  "types": "index.d.ts",
   "files": [
     "dist",
     "jest.js",
@@ -97,7 +91,7 @@
     "unplugin": "^1.4.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.39.8",
+    "@antfu/eslint-config": "^0.40.0",
     "@antfu/ni": "^0.21.5",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-commonjs": "^25.0.3",
@@ -111,17 +105,19 @@
     "@vue/composition-api": "^1.7.1",
     "@vue/runtime-dom": "^3.3.4",
     "bumpp": "^9.1.1",
+    "esbuild": "^0.18.17",
     "eslint": "^8.46.0",
     "fast-glob": "^3.3.1",
     "pug": "^3.0.2",
     "rimraf": "^5.0.1",
     "rollup": "^3.27.0",
-    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-typescript2": "^0.35.0",
     "typescript": "^5.1.6",
-    "vite": "^4.4.7",
-    "vitest": "^0.33.0"
+    "vite": "^4.4.8",
+    "vitest": "^0.33.0",
+    "webpack": "^5.88.2"
   },
   "pnpm": {
     "overrides": {
